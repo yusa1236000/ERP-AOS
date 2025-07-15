@@ -354,7 +354,7 @@ export default {
       isLoading.value = true;
 
       try {
-        const response = await axios.get('/inventory/items');
+        const response = await axios.get('/items');
         items.value = response.data.data;
         // Map unitOfMeasure to each item after fetching unitOfMeasures
         if (unitOfMeasures.value.length > 0) {
@@ -383,7 +383,7 @@ export default {
 
       try {
         // Batch fetch prices for all items that need prices
-        const response = await axios.get(`/inventory/items/${itemIds[0]}/prices-in-currencies`, {
+        const response = await axios.get(`/items/${itemIds[0]}/prices-in-currencies`, {
           params: {
             currencies: [currency]
           }
@@ -401,7 +401,7 @@ export default {
 
         // For other items, fetch one by one (in a production app, you'd want a batch API)
         for (let i = 1; i < itemIds.length; i++) {
-          const itemResponse = await axios.get(`/inventory/items/${itemIds[i]}/prices-in-currencies`, {
+          const itemResponse = await axios.get(`/items/${itemIds[i]}/prices-in-currencies`, {
             params: {
               currencies: [currency]
             }
@@ -598,7 +598,7 @@ export default {
       try {
         if (isEditMode.value) {
           const itemId = formData.get('item_id');
-          await axios.post(`/inventory/items/${itemId}?_method=PUT`, formData, {
+          await axios.post(`/items/${itemId}?_method=PUT`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -615,7 +615,7 @@ export default {
           // Show success message
           alert('Item updated successfully!');
         } else {
-          await axios.post('/inventory/items', formData, {
+          await axios.post('/items', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -652,7 +652,7 @@ export default {
 
     const deleteItem = async () => {
       try {
-        await axios.delete(`/inventory/items/${itemToDelete.value.item_id}`);
+        await axios.delete(`/items/${itemToDelete.value.item_id}`);
 
         // Remove item from the list
         items.value = items.value.filter(item => item.item_id !== itemToDelete.value.item_id);
