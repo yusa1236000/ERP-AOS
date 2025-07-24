@@ -130,14 +130,14 @@
                             </div>
                             <div class="submenu-section">
                                 <h4>Stock Operations</h4>
-                                <!-- <router-link to="/item-stocks/transfer" class="submenu-link">
+                                <router-link to="/item-stocks/transfer" class="submenu-link">
                                     <i class="fas fa-exchange-alt"></i>
-                                    <span>Stock Transfer</span>
+                                    <span>Transfer</span>
                                 </router-link>
                                 <router-link to="/item-stocks/adjust" class="submenu-link">
                                     <i class="fas fa-sliders-h"></i>
                                     <span>Stock Adjustment</span>
-                                </router-link> -->
+                                </router-link>
                                 <router-link to="/item-stocks/reserve" class="submenu-link">
                                     <i class="fas fa-lock"></i>
                                     <span>Stock Reservation</span>

@@ -34,12 +34,14 @@ use App\Http\Controllers\Api\Manufacturing\ProductionConsumptionController;
 use App\Http\Controllers\Api\Manufacturing\QualityInspectionController;
 use App\Http\Controllers\Api\Manufacturing\QualityParameterController;
 use App\Http\Controllers\Api\Manufacturing\MaintenanceScheduleController;
-use App\Http\Controllers\Api\Manufacturing\MaterialPlanningController;
+use App\Http\Controllers\Api\MaterialPlanningController;
 use App\Http\Controllers\Api\Manufacturing\JobTicketController;
 
 // Sales Controllers
 use App\Http\Controllers\Api\Sales\CustomerController;
 use App\Http\Controllers\Api\Sales\SalesOrderController;
+use App\Http\Controllers\Api\Sales\DeliveryController;
+use App\Http\Controllers\Api\Sales\SalesInvoiceController;
 use App\Http\Controllers\Api\Sales\SalesReturnController;
 use App\Http\Controllers\Api\Sales\CustomerInteractionController;
 use App\Http\Controllers\Api\Sales\SalesCommissionController;
@@ -47,11 +49,17 @@ use App\Http\Controllers\Api\Sales\SalesForecastController;
 use App\Http\Controllers\Api\Sales\AIExcelForecastController;
 
 // Procurement Controllers
-use App\Http\Controllers\Api\Procurement\VendorController;
-use App\Http\Controllers\Api\Procurement\PurchaseOrderController;
-use App\Http\Controllers\Api\Procurement\PurchaseReceiptController;
-use App\Http\Controllers\Api\Procurement\PurchaseReturnController;
-use App\Http\Controllers\Api\Procurement\PurchaseRequisitionController;
+use App\Http\Controllers\Api\VendorController;
+use App\Http\Controllers\Api\PurchaseOrderController;
+use App\Http\Controllers\Api\GoodsReceiptController;
+use App\Http\Controllers\Api\PurchaseReturnController;
+use App\Http\Controllers\Api\PurchaseRequisitionController;
+use App\Http\Controllers\Api\RequestForQuotationController;
+use App\Http\Controllers\Api\InvoiceController;
+use App\Http\Controllers\Api\VendorInvoiceController;
+use App\Http\Controllers\Api\VendorContractController;
+use App\Http\Controllers\Api\VendorEvaluationController;
+use App\Http\Controllers\API\VendorQuotationController;
 
 // Accounting Controllers
 use App\Http\Controllers\Api\Accounting\ChartOfAccountController;
@@ -71,7 +79,7 @@ use App\Http\Controllers\Api\Accounting\FinancialReportController;
 
 // Special Controllers
 use App\Http\Controllers\Api\PDFOrderCaptureController;
-use App\Http\Controllers\Api\DashboardController;
+// use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ReportController;
 
 /*
@@ -135,9 +143,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('profile', [UserController::class, 'updateProfile']);
 
     // Dashboard Routes
-    Route::get('dashboard', [DashboardController::class, 'index']);
-    Route::get('dashboard/stats', [DashboardController::class, 'getStats']);
-    Route::get('dashboard/widgets', [DashboardController::class, 'getWidgets']);
+    // Route::get('dashboard', [DashboardController::class, 'index']);
+    // Route::get('dashboard/stats', [DashboardController::class, 'getStats']);
+    // Route::get('dashboard/widgets', [DashboardController::class, 'getWidgets']);
 
     /*
     |--------------------------------------------------------------------------
@@ -343,6 +351,12 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/reserve', [ItemStockController::class, 'reserveStock'])->middleware('permission:inventory.update');
             Route::post('/release-reservation', [ItemStockController::class, 'releaseReservation'])->middleware('permission:inventory.update');
         });
+
+        // Cycle Counting Routes
+        // Route::post('cycle-counts/generate', [CycleCountingController::class, 'generateTasks']);
+        // Route::post('cycle-counts/{id}/submit', [CycleCountingController::class, 'submit']);
+        // Route::post('cycle-counts/{id}/approve', [CycleCountingController::class, 'approve']);
+        // Route::post('cycle-counts/{id}/reject', [CycleCountingController::class, 'reject']);
     });
 
     /*
@@ -524,6 +538,9 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/{jobTicket}', [JobTicketController::class, 'show']); // manufacturing.read
             Route::put('/{jobTicket}', [JobTicketController::class, 'update'])->middleware('permission:manufacturing.update');
             Route::delete('/{jobTicket}', [JobTicketController::class, 'destroy'])->middleware('permission:manufacturing.delete');
+            Route::get('/{jobTicket}', [JobTicketController::class, 'statistics']);
+            Route::get('/{id}/print', [JobTicketController::class, 'print']);
+            // Route::apiResource('job-tickets', JobTicketController::class);
         });
     });
 
@@ -535,25 +552,13 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::middleware(['module_access:sales'])->prefix('sales')->group(function () {
 
-        // Customers
-        Route::prefix('customers')->group(function () {
-            Route::get('/', [CustomerController::class, 'index']); // sales.read
-            Route::post('/', [CustomerController::class, 'store'])->middleware('permission:sales.create');
-            Route::get('/{customer}', [CustomerController::class, 'show']); // sales.read
-            Route::put('/{customer}', [CustomerController::class, 'update'])->middleware('permission:sales.update');
-            Route::delete('/{customer}', [CustomerController::class, 'destroy'])->middleware('permission:sales.delete');
 
-            // Customer Operations
-            Route::get('/{customer}/orders', [CustomerController::class, 'getOrders']); // sales.read
-            Route::get('/{customer}/balance', [CustomerController::class, 'getBalance']); // sales.read
-            Route::post('/{customer}/credit-limit', [CustomerController::class, 'updateCreditLimit'])->middleware('permission:sales.approve');
-        });
 
         // Sales Orders
         Route::prefix('orders')->group(function () {
             Route::get('/', [SalesOrderController::class, 'index']); // sales.read
             Route::post('/', [SalesOrderController::class, 'store'])->middleware('permission:sales.create');
-            Route::get('/next-number', [SalesOrderController::class, 'getNextOrderNumber']); // sales.read
+            Route::get('/next-number', [SalesOrderController::class, 'getNextSalesOrderNumber']); // sales.read
             Route::get('/{order}', [SalesOrderController::class, 'show']); // sales.read
             Route::put('/{order}', [SalesOrderController::class, 'update'])->middleware('permission:sales.update');
             Route::delete('/{order}', [SalesOrderController::class, 'destroy'])->middleware('permission:sales.delete');
@@ -568,6 +573,39 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/{order}/apply-discount', [SalesOrderController::class, 'applyDiscount'])->middleware('permission:sales.discount');
         });
 
+        //Deliveries
+        Route::prefix('deliveries')->group(function () {
+            Route::get('/', [DeliveryController::class, 'index']);
+            Route::post('/', [DeliveryController::class, 'store']);
+
+            // ===== PENTING: Route spesifik HARUS sebelum route dengan {id} =====
+            Route::get('outstanding-so', [DeliveryController::class, 'getOutstandingSalesOrders']);
+            Route::get('outstanding-items/{soId}', [DeliveryController::class, 'getOutstandingItemsForDelivery']);
+            Route::post('from-outstanding', [DeliveryController::class, 'storeFromOutstanding']);
+
+            // Route dengan parameter {id} harus di akhir
+            Route::get('/{id}', [DeliveryController::class, 'show']);
+            Route::put('/{id}', [DeliveryController::class, 'update']);
+            Route::delete('/{id}', [DeliveryController::class, 'destroy']);
+            Route::post('/{id}/complete', [DeliveryController::class, 'complete']);
+        });
+
+        // Sales Invoice routes
+        Route::prefix('invoices')->group(function () {
+            Route::get('/', [SalesInvoiceController::class, 'index']);
+            Route::post('/', [SalesInvoiceController::class, 'store']);
+            Route::post('/from-order', [SalesInvoiceController::class, 'createFromOrder']);
+            Route::post('/from-deliveries', [SalesInvoiceController::class, 'createFromDeliveries']);
+            Route::delete('/{id}', [SalesInvoiceController::class, 'destroy']);
+            Route::get('/{id}/payment-info', [SalesInvoiceController::class, 'paymentInfo']);
+            // Add these routes BEFORE the {id} routes to ensure proper route matching
+            Route::get('getDeliveriesForInvoicing', [SalesInvoiceController::class, 'getDeliveriesForInvoicing']);
+            Route::get('getDeliveryLinesByItem', [SalesInvoiceController::class, 'getDeliveryLinesByItem']);
+            // Then the normal {id} routes
+            Route::get('/{id}', [SalesInvoiceController::class, 'show']);
+            Route::put('/{id}', [SalesInvoiceController::class, 'update']);
+        });
+
         // Sales Returns
         Route::prefix('returns')->group(function () {
             Route::get('/', [SalesReturnController::class, 'index']); // sales.read
@@ -578,6 +616,18 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::post('/{return}/approve', [SalesReturnController::class, 'approve'])->middleware('permission:sales.approve');
             Route::post('/{return}/process', [SalesReturnController::class, 'process'])->middleware('permission:sales.approve');
+        });
+
+        //Sales customer
+        Route::prefix('customers')->group(function () {
+            Route::get('/', [CustomerController::class, 'index']);
+            Route::post('/', [CustomerController::class, 'store']);
+            Route::get('/{id}', [CustomerController::class, 'show']);
+            Route::put('/{id}', [CustomerController::class, 'update']);
+            Route::delete('/{id}', [CustomerController::class, 'destroy']);
+            Route::get('/{id}/quotations', [CustomerController::class, 'quotations']);
+            Route::get('/{id}/orders', [CustomerController::class, 'orders']);
+            Route::get('/{id}/invoices', [CustomerController::class, 'invoices']);
         });
 
         // Customer Interactions
@@ -604,14 +654,110 @@ Route::middleware('auth:sanctum')->group(function () {
 
         // Sales Forecasts
         Route::middleware(['permission:sales.forecast'])->prefix('forecasts')->group(function () {
+            Route::get('/accuracy', [SalesForecastController::class, 'getForecastAccuracy']);
+            Route::get('/consolidated', [SalesForecastController::class, 'getConsolidatedForecast']);
+            Route::get('/history', [SalesForecastController::class, 'getForecastHistory']);
+            Route::post('/import', [SalesForecastController::class, 'importCustomerForecasts']);
+            Route::post('/generate', [SalesForecastController::class, 'generateForecasts']);
+            Route::post('/update-actuals', [SalesForecastController::class, 'updateActuals']);
+            Route::get('/trend', [SalesForecastController::class, 'getForecastTrend']);
+            Route::get('/volatility-summary', [SalesForecastController::class, 'getVolatilitySummary']);
+
+            // Then define the generic routes
             Route::get('/', [SalesForecastController::class, 'index']);
             Route::post('/', [SalesForecastController::class, 'store']);
-            Route::get('/{forecast}', [SalesForecastController::class, 'show']);
-            Route::put('/{forecast}', [SalesForecastController::class, 'update']);
-            Route::delete('/{forecast}', [SalesForecastController::class, 'destroy']);
 
-            // AI Forecast
-            Route::post('/ai-excel-forecast', [AIExcelForecastController::class, 'process']);
+            // Finally define the parameter routes that will capture anything else
+            Route::get('/{id}', [SalesForecastController::class, 'show']);
+            Route::put('/{id}', [SalesForecastController::class, 'update']);
+            Route::delete('/{id}', [SalesForecastController::class, 'destroy']);
+        });
+
+        // AI Excel Forecast Processing Routes
+        Route::prefix('ai-excel-forecast')->group(function () {
+            Route::post('/process', [App\Http\Controllers\Api\sales\AIExcelForecastController::class, 'processExcelWithAI']);
+            Route::post('/save', [App\Http\Controllers\Api\sales\AIExcelForecastController::class, 'saveExtractedForecasts']);
+            Route::get('/history', [App\Http\Controllers\Api\sales\AIExcelForecastController::class, 'getProcessingHistory']);
+        });
+
+        // PDF Order Capture Routes (FIXED - Exact Match Only for Items)
+        Route::middleware(['permission:procurement.create,sales.create'])->prefix('pdf-order-capture')->group(function () {
+            // Main processing endpoint (ONLY EXTRACTS DATA - NO SO CREATION)
+            Route::post('/', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'processPdf']);
+
+            // FIXED: Create Sales Order from extracted data (separate step, exact match required)
+            Route::post('/{id}/create-sales-order', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'createSalesOrderFromCapture']);
+
+            // History and listing
+            Route::get('/', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'index']);
+            Route::get('/{id}', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'show']);
+
+            // Actions
+            Route::post('/{id}/retry', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'retry']);
+            Route::delete('/{id}', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'destroy']);
+
+            // File operations
+            Route::get('/{id}/download', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'downloadFile']);
+
+            // FIXED: Enhanced reprocessing with exact match validation
+            Route::post('/{id}/reprocess-with-validation', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'reprocessWithValidation']);
+
+            // Bulk operations
+            Route::post('/bulk/retry', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'bulkRetry']);
+
+            // Statistics and health check
+            Route::get('/statistics/overview', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'getStatistics']);
+            Route::get('/health/ai-service', [App\Http\Controllers\Api\PdfOrderCaptureController::class, 'checkAiServiceHealth']);
+        });
+
+        // Packing List CRUD operations
+        Route::apiResource('packing-lists', 'App\Http\Controllers\Api\Sales\PackingListController');
+
+        // Special packing list operations
+        Route::post('packing-lists/from-delivery', 'App\Http\Controllers\Api\Sales\PackingListController@createFromDelivery');
+        Route::put('packing-lists/{id}/complete', 'App\Http\Controllers\Api\Sales\PackingListController@completePacking');
+        Route::put('packing-lists/{id}/ship', 'App\Http\Controllers\Api\Sales\PackingListController@markAsShipped');
+
+        // Packing list utilities
+        Route::get('packing-lists-available-deliveries', 'App\Http\Controllers\Api\Sales\PackingListController@getAvailableDeliveries');
+        Route::get('packing-lists-progress', 'App\Http\Controllers\Api\Sales\PackingListController@getPackingProgress');
+
+        // Integration with existing delivery routes
+        Route::get('deliveries/{id}/packing-list', function ($deliveryId) {
+            $packingList = \App\Models\Sales\PackingList::with(['packingListLines.item', 'customer'])
+                ->where('delivery_id', $deliveryId)
+                ->first();
+
+            if (!$packingList) {
+                return response()->json(['message' => 'No packing list found for this delivery'], 404);
+            }
+
+            return response()->json(['data' => $packingList], 200);
+        });
+
+        // Bulk operations
+        Route::post('packing-lists/bulk-ship', function (\Illuminate\Http\Request $request) {
+            $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+                'packing_list_ids' => 'required|array',
+                'packing_list_ids.*' => 'exists:PackingList,packing_list_id'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $packingLists = \App\Models\Sales\PackingList::whereIn('packing_list_id', $request->packing_list_ids)
+                ->where('status', \App\Models\Sales\PackingList::STATUS_COMPLETED)
+                ->get();
+
+            foreach ($packingLists as $packingList) {
+                $packingList->update(['status' => \App\Models\Sales\PackingList::STATUS_SHIPPED]);
+            }
+
+            return response()->json([
+                'message' => 'Packing lists marked as shipped successfully',
+                'count' => $packingLists->count()
+            ], 200);
         });
     });
 
@@ -632,44 +778,107 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/{vendor}', [VendorController::class, 'destroy'])->middleware('permission:procurement.delete');
         });
 
-        // Purchase Requisitions
-        Route::prefix('requisitions')->group(function () {
-            Route::get('/', [PurchaseRequisitionController::class, 'index']); // procurement.read
-            Route::post('/', [PurchaseRequisitionController::class, 'store'])->middleware('permission:procurement.create');
-            Route::get('/{requisition}', [PurchaseRequisitionController::class, 'show']); // procurement.read
-            Route::put('/{requisition}', [PurchaseRequisitionController::class, 'update'])->middleware('permission:procurement.update');
-            Route::delete('/{requisition}', [PurchaseRequisitionController::class, 'destroy'])->middleware('permission:procurement.delete');
-
-            Route::post('/{requisition}/approve', [PurchaseRequisitionController::class, 'approve'])->middleware('permission:procurement.approve');
-            Route::post('/{requisition}/reject', [PurchaseRequisitionController::class, 'reject'])->middleware('permission:procurement.approve');
-            Route::post('/{requisition}/convert-to-po', [PurchaseRequisitionController::class, 'convertToPO'])->middleware('permission:procurement.create');
+        // Purchase Requisition - Vendor Management Routes
+        Route::prefix('purchase-requisitions')->group(function () {
+            Route::get('{purchaseRequisition}/vendor-recommendations', [PurchaseRequisitionController::class, 'getVendorRecommendations']);
+            Route::post('{purchaseRequisition}/multi-vendor-rfq', [PurchaseRequisitionController::class, 'createMultiVendorRFQ']);
+            Route::get('{purchaseRequisition}/procurement-path', [PurchaseRequisitionController::class, 'getProcurementPath']);
         });
+
+        // Purchase Order - Create from PR Routes
+        Route::prefix('purchase-orders')->group(function () {
+            Route::post('create-from-pr', [PurchaseOrderController::class, 'createFromPR']);
+            Route::post('create-split-from-pr', [PurchaseOrderController::class, 'createSplitPOFromPR']);
+        });
+
+        // Purchase Requisitions
+        Route::apiResource('purchase-requisitions', PurchaseRequisitionController::class);
+        Route::patch('purchase-requisitions/{purchaseRequisition}/status', [PurchaseRequisitionController::class, 'updateStatus']);
+        // Route::prefix('requisitions')->group(function () {
+        //     Route::get('/', [PurchaseRequisitionController::class, 'index']); // procurement.read
+        //     Route::post('/', [PurchaseRequisitionController::class, 'store'])->middleware('permission:procurement.create');
+        //     Route::get('/{requisition}', [PurchaseRequisitionController::class, 'show']); // procurement.read
+        //     Route::put('/{requisition}', [PurchaseRequisitionController::class, 'update'])->middleware('permission:procurement.update');
+        //     Route::delete('/{requisition}', [PurchaseRequisitionController::class, 'destroy'])->middleware('permission:procurement.delete');
+
+        //     Route::post('/{requisition}/approve', [PurchaseRequisitionController::class, 'approve'])->middleware('permission:procurement.approve');
+        //     Route::post('/{requisition}/reject', [PurchaseRequisitionController::class, 'reject'])->middleware('permission:procurement.approve');
+        //     Route::post('/{requisition}/convert-to-po', [PurchaseRequisitionController::class, 'convertToPO'])->middleware('permission:procurement.create');
+        // });
 
         // Purchase Orders
-        Route::prefix('orders')->group(function () {
-            Route::get('/', [PurchaseOrderController::class, 'index']); // procurement.read
-            Route::post('/', [PurchaseOrderController::class, 'store'])->middleware('permission:procurement.create');
-            Route::get('/next-number', [PurchaseOrderController::class, 'getNextOrderNumber']); // procurement.read
-            Route::get('/{order}', [PurchaseOrderController::class, 'show']); // procurement.read
-            Route::put('/{order}', [PurchaseOrderController::class, 'update'])->middleware('permission:procurement.update');
-            Route::delete('/{order}', [PurchaseOrderController::class, 'destroy'])->middleware('permission:procurement.delete');
+        // Route::prefix('orders')->group(function () {
+        //     Route::get('/', [PurchaseOrderController::class, 'index']); // procurement.read
+        //     Route::post('/', [PurchaseOrderController::class, 'store'])->middleware('permission:procurement.create');
+        //     Route::get('/next-number', [PurchaseOrderController::class, 'getNextOrderNumber']); // procurement.read
+        //     Route::get('/{order}', [PurchaseOrderController::class, 'show']); // procurement.read
+        //     Route::put('/{order}', [PurchaseOrderController::class, 'update'])->middleware('permission:procurement.update');
+        //     Route::delete('/{order}', [PurchaseOrderController::class, 'destroy'])->middleware('permission:procurement.delete');
 
-            // Order Operations
-            Route::post('/{order}/confirm', [PurchaseOrderController::class, 'confirm'])->middleware('permission:procurement.approve');
-            Route::post('/{order}/cancel', [PurchaseOrderController::class, 'cancel'])->middleware('permission:procurement.update');
-            Route::post('/{order}/close', [PurchaseOrderController::class, 'close'])->middleware('permission:procurement.approve');
+        //     // Order Operations
+        //     Route::post('/{order}/confirm', [PurchaseOrderController::class, 'confirm'])->middleware('permission:procurement.approve');
+        //     Route::post('/{order}/cancel', [PurchaseOrderController::class, 'cancel'])->middleware('permission:procurement.update');
+        //     Route::post('/{order}/close', [PurchaseOrderController::class, 'close'])->middleware('permission:procurement.approve');
+        // });
+
+        // Purchase Orders
+        Route::apiResource('purchase-orders', PurchaseOrderController::class);
+        Route::patch('purchase-orders/{purchaseOrder}/status', [PurchaseOrderController::class, 'updateStatus']);
+        Route::post('purchase-orders/create-from-quotation', [PurchaseOrderController::class, 'createFromQuotation']);
+        // Route untuk outstanding PO
+        Route::get('purchase-orders/{purchaseOrder}/outstanding', [PurchaseOrderController::class, 'showOutstanding']);
+        Route::get('purchase-orders/outstanding/all', [PurchaseOrderController::class, 'getAllOutstanding']);
+        Route::get('purchase-orders/reports/outstanding-items', [PurchaseOrderController::class, 'outstandingItemsReport']);
+        // New route for currency conversion
+        Route::post('purchase-orders/{purchaseOrder}/convert-currency', [PurchaseOrderController::class, 'convertCurrency']);
+        Route::get('purchase-orders/template/download', [PurchaseOrderController::class, 'downloadTemplate']);
+        Route::post('purchase-orders/import', [PurchaseOrderController::class, 'importFromExcel']);
+        Route::post('purchase-orders/export', [PurchaseOrderController::class, 'exportToExcel']);
+
+        // Request For Quotations - Enhanced vendor management
+        Route::prefix('request-for-quotations')->group(function () {
+            // Existing routes
+            Route::apiResource('/', RequestForQuotationController::class)->parameters(['' => 'requestForQuotation']);
+            Route::patch('{requestForQuotation}/status', [RequestForQuotationController::class, 'updateStatus']);
+
+            // Enhanced vendor management routes - TAMBAHAN BARU
+            Route::get('{id}/vendors', [RequestForQuotationController::class, 'getVendors']);
+            Route::patch('{id}/vendors', [RequestForQuotationController::class, 'updateVendors']);
+            Route::patch('{id}/vendors/mark-sent', [RequestForQuotationController::class, 'markVendorsAsSent']);
+            Route::post('{id}/vendors', [RequestForQuotationController::class, 'addVendor']);
+            Route::delete('{id}/vendors/{vendorId}', [RequestForQuotationController::class, 'removeVendor']);
+
+            // Existing vendor quotation related routes
+            Route::get('{rfqId}/available-vendors', [RequestForQuotationController::class, 'getAvailableVendors']);
+            Route::get('{rfqId}/vendors-with-quotations', [RequestForQuotationController::class, 'getVendorsWithQuotations']);
         });
 
-        // Purchase Receipts
-        Route::prefix('receipts')->group(function () {
-            Route::get('/', [PurchaseReceiptController::class, 'index']); // procurement.read
-            Route::post('/', [PurchaseReceiptController::class, 'store'])->middleware('permission:procurement.receive');
-            Route::get('/{receipt}', [PurchaseReceiptController::class, 'show']); // procurement.read
-            Route::put('/{receipt}', [PurchaseReceiptController::class, 'update'])->middleware('permission:procurement.receive');
-            Route::delete('/{receipt}', [PurchaseReceiptController::class, 'destroy'])->middleware('permission:procurement.delete');
-
-            Route::post('/{receipt}/confirm', [PurchaseReceiptController::class, 'confirm'])->middleware('permission:procurement.approve');
+        // Goods Receipts
+        Route::prefix('goods-receipts')->group(function () {
+            Route::get('/', 'App\Http\Controllers\API\GoodsReceiptController@index');
+            Route::post('/', 'App\Http\Controllers\API\GoodsReceiptController@store');
+            Route::get('/available-items', 'App\Http\Controllers\API\GoodsReceiptController@getAvailableItems');
+            Route::get('/{goodsReceipt}', 'App\Http\Controllers\API\GoodsReceiptController@show');
+            Route::put('/{goodsReceipt}', 'App\Http\Controllers\API\GoodsReceiptController@update');
+            Route::delete('/{goodsReceipt}', 'App\Http\Controllers\API\GoodsReceiptController@destroy');
+            Route::post('/{goodsReceipt}/confirm', 'App\Http\Controllers\API\GoodsReceiptController@confirm');
         });
+
+        // Vendor Invoices
+        Route::get('vendor-invoices/uninvoiced-receipts', [VendorInvoiceController::class, 'getUninvoicedReceipts']);
+        Route::apiResource('vendor-invoices', VendorInvoiceController::class);
+        Route::post('vendor-invoices/{vendorInvoice}/approve', [VendorInvoiceController::class, 'approve']);
+        Route::post('vendor-invoices/{vendorInvoice}/pay', [VendorInvoiceController::class, 'pay']);
+        Route::patch('vendor-invoices/{vendorInvoice}/status', [VendorInvoiceController::class, 'updateStatus']);
+
+        // Vendor Contracts
+        Route::apiResource('vendor-contracts', VendorContractController::class);
+        Route::post('vendor-contracts/{vendorContract}/activate', [VendorContractController::class, 'activate']);
+        Route::post('vendor-contracts/{vendorContract}/terminate', [VendorContractController::class, 'terminate']);
+
+        // Vendor Evaluations
+        Route::apiResource('vendor-evaluations', VendorEvaluationController::class);
+        Route::get('vendor-performance', [VendorEvaluationController::class, 'vendorPerformance']);
 
         // Purchase Returns
         Route::prefix('returns')->group(function () {
@@ -681,6 +890,33 @@ Route::middleware('auth:sanctum')->group(function () {
 
             Route::post('/{return}/approve', [PurchaseReturnController::class, 'approve'])->middleware('permission:procurement.approve');
             Route::post('/{return}/process', [PurchaseReturnController::class, 'process'])->middleware('permission:procurement.approve');
+        });
+
+        // Enhanced Vendor Quotations with Multi-Currency Support
+        Route::prefix('vendor-quotations')->group(function () {
+            // Basic CRUD operations
+            Route::get('/', [VendorQuotationController::class, 'index']);
+            Route::post('/', [VendorQuotationController::class, 'store']);
+            Route::post('/create-from-rfq', [VendorQuotationController::class, 'createFromRFQ']);
+            Route::get('/{vendorQuotation}', [VendorQuotationController::class, 'show']);
+            Route::put('/{vendorQuotation}', [VendorQuotationController::class, 'update']);
+            Route::delete('/{vendorQuotation}', [VendorQuotationController::class, 'destroy']);
+
+            // Status management
+            Route::patch('/{vendorQuotation}/status', [VendorQuotationController::class, 'updateStatus']);
+
+            // Multi-currency features
+            Route::post('/{vendorQuotation}/convert-currency', [VendorQuotationController::class, 'convertCurrency']);
+            Route::get('/compare/in-currency', [VendorQuotationController::class, 'compareInCurrency']);
+            Route::get('/available-currencies', [VendorQuotationController::class, 'getAvailableCurrencies']);
+
+            // Export functionality
+            Route::get('/export', [VendorQuotationController::class, 'exportToExcel']);
+            Route::get('/export/comparison', [VendorQuotationController::class, 'exportComparison']);
+
+            // Template and import
+            Route::get('/template/download', [VendorQuotationController::class, 'downloadTemplate']);
+            Route::post('/import', [VendorQuotationController::class, 'importFromExcel']);
         });
     });
 
@@ -828,6 +1064,20 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/accounts-receivable-aging', [FinancialReportController::class, 'receivableAging']); // accounting.read
             Route::get('/accounts-payable-aging', [FinancialReportController::class, 'payableAging']); // accounting.read
         });
+
+        // Currency Rates Management
+        Route::get('currency-rates', [App\Http\Controllers\Api\CurrencyRateController::class, 'index']);
+        Route::post('currency-rates', [App\Http\Controllers\Api\CurrencyRateController::class, 'store']);
+
+        // Currency Converter utility
+        Route::get('currency-rates/current-rate', [App\Http\Controllers\Api\CurrencyRateController::class, 'getCurrentRate']);
+
+        Route::get('currency-rates/{id}', [App\Http\Controllers\Api\CurrencyRateController::class, 'show']);
+        Route::put('currency-rates/{id}', [App\Http\Controllers\Api\CurrencyRateController::class, 'update']);
+        Route::delete('currency-rates/{id}', [App\Http\Controllers\Api\CurrencyRateController::class, 'destroy']);
+
+        // Add missing system-currencies route
+        Route::get('system-currencies', [App\Http\Controllers\Api\Accounting\SystemCurrencyController::class, 'index']);
     });
 
     /*
@@ -836,11 +1086,12 @@ Route::middleware('auth:sanctum')->group(function () {
     |--------------------------------------------------------------------------
     */
 
+
     // PDF Order Capture (AI Processing)
-    Route::middleware(['permission:procurement.create,sales.create'])->prefix('ai')->group(function () {
-        Route::post('/pdf-order-capture', [PDFOrderCaptureController::class, 'process']);
-        Route::get('/pdf-order-capture/history', [PDFOrderCaptureController::class, 'getHistory']);
-    });
+    // Route::middleware(['permission:procurement.create,sales.create'])->prefix('ai')->group(function () {
+    //     Route::post('/pdf-order-capture', [PDFOrderCaptureController::class, 'process']);
+    //     Route::get('/pdf-order-capture/history', [PDFOrderCaptureController::class, 'getHistory']);
+    // });
 
     // Global Reports (Multi-module access)
     Route::middleware(['role:admin,super_admin,inventory_manager,production_manager,sales_manager,finance_manager'])->prefix('reports')->group(function () {

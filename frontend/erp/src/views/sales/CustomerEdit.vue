@@ -65,7 +65,7 @@
         isLoading.value = true;
         
         try {
-          const response = await axios.get(`/api/customers/${customerId}`);
+          const response = await axios.get(`/sales/api/customers/${customerId}`);
           customer.value = response.data.data;
         } catch (error) {
           console.error('Error fetching customer:', error);
@@ -82,7 +82,7 @@
         successMessage.value = '';
         
         try {
-          await axios.put(`/api/customers/${customerId}`, formData);
+          await axios.put(`/sales/api/customers/${customerId}`, formData);
           
           successMessage.value = 'Customer updated successfully!';
           

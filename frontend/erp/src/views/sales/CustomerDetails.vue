@@ -560,7 +560,7 @@ export default {
     const fetchCustomer = async () => {
       isLoading.value = true;
       try {
-        const response = await axios.get(`/customers/${customerId.value}`);
+        const response = await axios.get(`/sales/customers/${customerId.value}`);
         customer.value = response.data.data;
       } catch (error) {
         console.error('Error fetching customer:', error);
@@ -573,7 +573,7 @@ export default {
     const fetchOrders = async () => {
       isLoadingOrders.value = true;
       try {
-        const response = await axios.get(`/customers/${customerId.value}/orders`);
+        const response = await axios.get(`/sales/customers/${customerId.value}/orders`);
         orders.value = response.data.data;
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -625,7 +625,7 @@ export default {
     const fetchQuotations = async () => {
       isLoadingQuotations.value = true;
       try {
-        const response = await axios.get(`/customers/${customerId.value}/quotations`);
+        const response = await axios.get(`/sales/customers/${customerId.value}/quotations`);
         quotations.value = response.data.data;
       } catch (error) {
         console.error('Error fetching quotations:', error);
@@ -638,7 +638,7 @@ export default {
     const fetchInteractions = async () => {
       isLoadingInteractions.value = true;
       try {
-        const response = await axios.get(`/interactions/customer/${customerId.value}`);
+        const response = await axios.get(`/sales/interactions/customer/${customerId.value}`);
         interactions.value = response.data.data;
       } catch (error) {
         console.error('Error fetching interactions:', error);
@@ -801,7 +801,7 @@ export default {
       try {
         if (editingInteraction.value) {
           // Update existing interaction
-          await axios.put(`/interactions/${interactionToEdit.value.interaction_id}`, {
+          await axios.put(`/sales/interactions/${interactionToEdit.value.interaction_id}`, {
             ...interactionForm.value,
             customer_id: customerId.value
           });
@@ -818,7 +818,7 @@ export default {
           alert('Interaction updated successfully!');
         } else {
           // Create new interaction
-          const response = await axios.post('/interactions', {
+          const response = await axios.post('/sales/interactions', {
             ...interactionForm.value,
             customer_id: customerId.value
           });
@@ -849,7 +849,7 @@ export default {
 
     const confirmDeleteInteraction = async () => {
       try {
-        await axios.delete(`/interactions/${interactionToDelete.value.interaction_id}`);
+        await axios.delete(`/sales/interactions/${interactionToDelete.value.interaction_id}`);
 
         // Remove from local state
         interactions.value = interactions.value.filter(

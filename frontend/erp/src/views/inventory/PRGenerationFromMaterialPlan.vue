@@ -354,7 +354,7 @@ export default {
     
     async fetchAvailablePeriods() {
       try {
-        const response = await axios.get('/api/material-plans/periods');
+        const response = await axios.get('/inventory/material-planning/generate-pr-by-period');
         this.availablePeriods = response.data.data || [];
       } catch (error) {
         console.error('Error fetching periods:', error);
@@ -366,7 +366,7 @@ export default {
       
       this.isLoading = true;
       try {
-        const response = await axios.get('/api/material-plans', {
+        const response = await axios.get('/inventory/material-planning', {
           params: {
             planning_period: this.formData.selectedPeriod,
             material_type: 'RM',
@@ -483,7 +483,7 @@ export default {
           plan_items: planItems
         };
         
-        const response = await axios.post('/api/material-planning/purchase-requisition', payload);
+        const response = await axios.post('/inventory/material-planning/generate-pr', payload);
         
         this.prResult = response.data.data;
         this.showSuccess = true;

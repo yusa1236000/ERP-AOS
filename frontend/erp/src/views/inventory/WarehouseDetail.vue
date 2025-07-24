@@ -207,7 +207,7 @@ export default {
       error.value = null;
 
       try {
-        const response = await axios.get(`/warehouses/${warehouseId.value}`);
+        const response = await axios.get(`/inventory/warehouses/${warehouseId.value}`);
         warehouse.value = response.data.data;
       } catch (err) {
         console.error('Error fetching warehouse:', err);
@@ -229,7 +229,7 @@ export default {
       isSubmitting.value = true;
 
       try {
-        const response = await axios.put(`/warehouses/${warehouseId.value}`, warehouseForm);
+        const response = await axios.put(`/inventory/warehouses/${warehouseId.value}`, warehouseForm);
         warehouse.value = response.data.data;
         showEditModal.value = false;
       } catch (err) {

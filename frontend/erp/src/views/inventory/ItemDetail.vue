@@ -851,7 +851,7 @@ const fetchTransactions = async () => {
 
       isLoadingUsedIn.value = true;
       try {
-        const response = await axios.get(`/items/${itemId}/used-in-finished-goods`);
+        const response = await axios.get(`/inventory/items/${itemId}/used-in-finished-goods`);
         usedInFinishedGoods.value = response.data.data.used_in_finished_goods || [];
         console.log('📊 Used in finished goods loaded:', usedInFinishedGoods.value.length);
       } catch (error) {
@@ -916,7 +916,7 @@ const fetchTransactions = async () => {
 
       isLoadingCurrencies.value = true;
       try {
-        const response = await axios.get(`/items/${item.value.item_id}/prices-in-currencies`);
+        const response = await axios.get(`/inventory/items/${item.value.item_id}/prices-in-currencies`);
         multiCurrencyPrices.value = response.data;
         showMultiCurrencyPrices.value = true;
       } catch (error) {

@@ -363,7 +363,7 @@ export default {
       isLoading.value = true;
       
       try {
-        const response = await axios.get(`/boms/${bomId}`);
+        const response = await axios.get(`/manufacturing/boms/${bomId}`);
         bom.value = response.data.data;
         
         // If BOM lines are included in the response
@@ -385,7 +385,7 @@ export default {
       isLoadingLines.value = true;
       
       try {
-        const response = await axios.get(`/boms/${bomId}/lines`);
+        const response = await axios.get(`/manufacturing/boms/${bomId}/lines`);
         bomLines.value = response.data.data;
       } catch (error) {
         console.error('Error fetching BOM lines:', error);
@@ -399,7 +399,7 @@ export default {
       isLoadingCapacity.value = true;
       
       try {
-        const response = await axios.get(`/boms/${bomId}/maximum-yield`);
+        const response = await axios.get(`/manufacturing/boms/${bomId}/maximum-yield`);
         capacityData.value = response.data.data;
       } catch (error) {
         console.error('Error calculating capacity:', error);
@@ -432,7 +432,7 @@ export default {
           return;
         }
         
-        const response = await axios.post(`/boms/${bomId}/lines/${line.line_id}/calculate-yield`, {
+        const response = await axios.post(`/manufacturing/boms/${bomId}/lines/${line.line_id}/calculate-yield`, {
           material_quantity: quantity
         });
         
@@ -459,7 +459,7 @@ export default {
     
     const deleteBOM = async () => {
       try {
-        await axios.delete(`/boms/${bomId}`);
+        await axios.delete(`/manufacturing/boms/${bomId}`);
         router.push('/manufacturing/boms');
       } catch (error) {
         console.error('Error deleting BOM:', error);
@@ -488,7 +488,7 @@ export default {
       if (!lineToDelete.value) return;
       
       try {
-        await axios.delete(`/boms/${bomId}/lines/${lineToDelete.value.line_id}`);
+        await axios.delete(`/manufacturing/boms/${bomId}/lines/${lineToDelete.value.line_id}`);
         await fetchBOMLines();
       } catch (error) {
         console.error('Error deleting BOM line:', error);
@@ -514,10 +514,10 @@ export default {
       try {
         if (showEditLineModal.value) {
           // Update existing line
-          await axios.put(`/boms/${bomId}/lines/${formData.line_id}`, formData);
+          await axios.put(`/manufacturing/boms/${bomId}/lines/${formData.line_id}`, formData);
         } else {
           // Add new line
-          await axios.post(`/boms/${bomId}/lines`, formData);
+          await axios.post(`/manufacturing/boms/${bomId}/lines`, formData);
         }
         
         // Refresh BOM lines

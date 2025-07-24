@@ -316,7 +316,7 @@
             sort_order: this.sortOrder
           };
 
-          const response = await axios.get('/production-orders', { params });
+          const response = await axios.get('/manufacturing/production-orders', { params });
 
           // Check if API returns paginated data or just an array
           if (response.data.data && response.data.meta) {
@@ -426,7 +426,7 @@
 
       async deleteProductionOrder() {
         try {
-          await axios.delete(`/production-orders/${this.selectedOrder.production_id}`);
+          await axios.delete(`/manufacturing/production-orders/${this.selectedOrder.production_id}`);
           this.$toast.success('Production order deleted successfully');
           this.fetchProductionOrders();
         } catch (error) {

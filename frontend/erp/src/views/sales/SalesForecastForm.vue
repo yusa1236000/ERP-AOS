@@ -337,11 +337,11 @@ export default {
     async loadDropdownData() {
       try {
         // Load customers
-        const customersResponse = await axios.get('/customers');
+        const customersResponse = await axios.get('/sales/customers');
         this.customers = customersResponse.data.data || customersResponse.data;
 
         // Load items (sellable items only)
-        const itemsResponse = await axios.get('/items', {
+        const itemsResponse = await axios.get('/inventory/items', {
           params: { is_sellable: true }
         });
         this.items = itemsResponse.data.data || itemsResponse.data;
@@ -354,7 +354,7 @@ export default {
     async loadForecast() {
       try {
         this.isLoading = true;
-        const response = await axios.get(`/forecasts/${this.id}`);
+        const response = await axios.get(`/sales/forecasts/${this.id}`);
         const forecast = response.data.data;
 
         this.form = {
@@ -425,9 +425,9 @@ export default {
         }
 
         if (this.isEdit) {
-          await axios.put(`/forecasts/${this.id}`, formData);
+          await axios.put(`/sales/forecasts/${this.id}`, formData);
         } else {
-          await axios.post('/forecasts', formData);
+          await axios.post('/sales/forecasts', formData);
         }
 
         this.$toast?.success(`Forecast ${this.isEdit ? 'updated' : 'created'} successfully`);

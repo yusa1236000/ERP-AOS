@@ -358,7 +358,7 @@ export default {
     async loadInvoice() {
       try {
         const invoiceId = this.$route.params.id;
-        const response = await axios.get(`/vendor-invoices/${invoiceId}`);
+        const response = await axios.get(`/procurement/vendor-invoices/${invoiceId}`);
         
         if (response.data.status === 'success') {
           this.invoice = response.data.data.invoice;
@@ -394,7 +394,7 @@ export default {
           data.tax_account_id = this.journalEntry.tax_account_id;
         }
         
-        await axios.patch(`/vendor-invoices/${this.invoice.invoice_id}/status`, data);
+        await axios.patch(`/procurement/vendor-invoices/${this.invoice.invoice_id}/status`, data);
         
         this.showApproveModal = false;
         
@@ -419,7 +419,7 @@ export default {
       this.rejecting = true;
       
       try {
-        await axios.patch(`/vendor-invoices/${this.invoice.invoice_id}/status`, {
+        await axios.patch(`/procurement/vendor-invoices/${this.invoice.invoice_id}/status`, {
           status: 'cancelled',
           comments: this.rejectionReason
         });

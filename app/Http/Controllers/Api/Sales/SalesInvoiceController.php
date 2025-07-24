@@ -30,7 +30,12 @@ class SalesInvoiceController extends Controller
 
         // Filter by status
         if ($request->has('status') && $request->status) {
-            $query->where('status', $request->status);
+            $statuses = explode(',', $request->status);
+            if (count($statuses) > 1) {
+                $query->whereIn('status', $statuses);
+            } else {
+                $query->whereIn('status', $request->status);
+            }
         }
 
         // Search by invoice number or customer name

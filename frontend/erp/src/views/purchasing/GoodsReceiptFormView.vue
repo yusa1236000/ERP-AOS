@@ -372,7 +372,7 @@
     },
     methods: {
 fetchVendors() {
-        axios.get('/vendors')
+        axios.get('/procurement/vendors')
           .then(response => {
             // Correctly assign vendors from paginated response data.data.data (array)
             const vendorsData = response.data.data && response.data.data.data ? response.data.data.data : [];
@@ -389,7 +389,7 @@ fetchVendors() {
           });
       },
       fetchWarehouses() {
-        axios.get('/warehouses')
+        axios.get('/inventory/warehouses')
           .then(response => {
             this.warehouses = response.data.data;
           })
@@ -399,7 +399,7 @@ fetchVendors() {
           });
       },
       fetchReceipt() {
-        axios.get(`/goods-receipts/${this.id}`)
+        axios.get(`/procurement/goods-receipts/${this.id}`)
           .then(response => {
             const data = response.data.data;
 
@@ -456,7 +456,7 @@ fetchVendors() {
         this.selectedPOs = [];
 
         // Fetch outstanding POs for this vendor
-        axios.get('/purchase-orders', {
+        axios.get('/procurement/purchase-orders', {
           params: {
             vendor_id: this.receipt.vendor_id,
             status: ['sent', 'partial'],
@@ -486,7 +486,7 @@ fetchVendors() {
         this.loading = true;
 
         try {
-          const response = await axios.get('/goods-receipts/available-items', {
+          const response = await axios.get('/procurement/goods-receipts/available-items', {
             params: {
               po_ids: this.selectedPOs
             }
@@ -564,8 +564,8 @@ fetchVendors() {
         this.saving = true;
 
         const request = this.isEdit
-          ? axios.put(`/goods-receipts/${this.id}`, formData)
-          : axios.post('/goods-receipts', formData);
+          ? axios.put(`/procurement/goods-receipts/${this.id}`, formData)
+          : axios.post('/procurement/goods-receipts', formData);
 
         request
           .then(response => {

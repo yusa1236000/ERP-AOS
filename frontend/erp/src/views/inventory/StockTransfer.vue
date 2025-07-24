@@ -364,13 +364,13 @@
 
         try {
           // Fetch all items
-          const itemsResponse = await axios.get('/items');
+          const itemsResponse = await axios.get('/inventory/items');
           if (itemsResponse.data && itemsResponse.data.data) {
             this.items = itemsResponse.data.data;
           }
 
           // Fetch all warehouses
-          const warehousesResponse = await axios.get('/warehouses');
+          const warehousesResponse = await axios.get('/inventory/warehouses');
           if (warehousesResponse.data && warehousesResponse.data.data) {
             this.warehouses = warehousesResponse.data.data;
             this.destinationWarehouses = [...this.warehouses];
@@ -435,13 +435,13 @@
 
         try {
           // Get the selected item details
-          const itemResponse = await axios.get(`/items/${this.form.itemId}`);
+          const itemResponse = await axios.get(`/inventory/items/${this.form.itemId}`);
           if (itemResponse.data && itemResponse.data.data) {
             this.selectedItem = itemResponse.data.data;
           }
 
           // Get the item's stock in all warehouses
-          const stockResponse = await axios.get(`/item-stocks/item/${this.form.itemId}`);
+          const stockResponse = await axios.get(`/inventory/item-stocks/item/${this.form.itemId}`);
           if (stockResponse.data && stockResponse.data.data) {
             const itemStock = stockResponse.data.data;
 
@@ -477,7 +477,7 @@
 
         try {
           // Get the item's stock in the selected warehouse
-          const stockResponse = await axios.get(`/item-stocks/item/${this.form.itemId}`);
+          const stockResponse = await axios.get(`/inventory/item-stocks/item/${this.form.itemId}`);
           if (stockResponse.data && stockResponse.data.data) {
             const itemStock = stockResponse.data.data;
 
@@ -526,7 +526,7 @@
 
         try {
           // Get the item's stock in the destination warehouse
-          const stockResponse = await axios.get(`/item-stocks/item/${this.form.itemId}`);
+          const stockResponse = await axios.get(`/inventory/item-stocks/item/${this.form.itemId}`);
           if (stockResponse.data && stockResponse.data.data) {
             const itemStock = stockResponse.data.data;
 
@@ -576,7 +576,7 @@
         this.loading = true;
 
         try {
-          const response = await axios.post('/item-stocks/transfer', {
+          const response = await axios.post('/inventory/item-stocks/transfer', {
             item_id: this.form.itemId,
             from_warehouse_id: this.form.fromWarehouseId,
             to_warehouse_id: this.form.toWarehouseId,

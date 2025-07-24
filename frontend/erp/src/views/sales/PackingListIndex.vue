@@ -285,7 +285,7 @@ export default {
 
     const loadCustomers = async () => {
       try {
-        const response = await axios.get('/customers')
+        const response = await axios.get('/sales/customers')
         customers.value = response.data.data
       } catch (error) {
         console.error('Error loading customers:', error)

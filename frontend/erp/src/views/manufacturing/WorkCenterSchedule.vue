@@ -548,7 +548,7 @@
       const loadWorkCenter = async () => {
         isLoading.value = true;
         try {
-          const response = await axios.get(`/work-centers/${workCenterId}`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId}`);
           const data = response.data.data;
           
           // Update the reactive object properties
@@ -576,7 +576,7 @@
       
       const loadMaintenanceData = async () => {
         try {
-          const response = await axios.get(`/work-centers/${workCenterId}/maintenance-schedules`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId}/maintenance-schedules`);
           maintenanceSchedules.value = response.data.data;
         } catch (error) {
           console.error('Error loading maintenance schedules:', error);
@@ -586,7 +586,7 @@
       const loadOperationsData = async () => {
         try {
           // This endpoint might need adjustment based on your API structure
-          const response = await axios.get(`/work-centers/${workCenterId}/operations`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId}/operations`);
           workOrderOperations.value = response.data.data || [];
         } catch (error) {
           console.error('Error loading work order operations:', error);
@@ -788,7 +788,7 @@
             notes: maintenanceForm.notes
           };
           
-          const response = await axios.post('/maintenance-schedules', payload);
+          const response = await axios.post('/manufacturing/maintenance-schedules', payload);
           
           // Add the new maintenance to the list and refresh events
           maintenanceSchedules.value.push(response.data.data);

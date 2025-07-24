@@ -210,7 +210,7 @@ export default {
     async downloadTemplate() {
   this.downloadingTemplate = true;
   try {
-    const response = await axios.get('/orders/excel/template', {
+    const response = await axios.get('/sales/orders/excel/template', {
       responseType: 'blob'
     });
 
@@ -305,7 +305,7 @@ export default {
         formData.append('file', this.selectedFile);
         formData.append('update_existing', this.updateExisting ? '1' : '0');
 
-        const response = await axios.post('/orders/excel/import', formData, {
+        const response = await axios.post('/sales/orders/excel/import', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

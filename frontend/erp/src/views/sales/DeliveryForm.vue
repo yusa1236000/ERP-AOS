@@ -354,7 +354,7 @@ export default {
         console.log('🔄 Loading outstanding sales orders...');
 
         // Load sales orders that have outstanding items
-        const soResponse = await axios.get('/deliveries/outstanding-so');
+        const soResponse = await axios.get('/sales/deliveries/outstanding-so');
 
         // ⭐ TRANSFORM: Convert flat structure to nested structure
         const rawData = soResponse.data.data || [];
@@ -373,7 +373,7 @@ export default {
         console.log('✨ Transformed orders:', salesOrders.value);
 
         // Load warehouses
-        const warehouseResponse = await axios.get('/warehouses');
+        const warehouseResponse = await axios.get('/inventory/warehouses');
         warehouses.value = warehouseResponse.data.data || [];
 
       } catch (err) {
@@ -406,7 +406,7 @@ export default {
       error.value = '';
 
       try {
-        const response = await axios.get(`/deliveries/${route.params.id}`);
+        const response = await axios.get(`/sales/deliveries/${route.params.id}`);
         let delivery = response.data.data;
 
         // Convert delivery object to camelCase
@@ -456,7 +456,7 @@ export default {
           await Promise.all(form.value.lines.map(async (line) => {
             if (!line.item) {
               try {
-                const response = await axios.get(`/items/${line.item_id}`);
+                const response = await axios.get(`/inventory/items/${line.item_id}`);
                 line.item = toCamelCase(response.data.data);
                 console.log(`Fetched item for item_id ${line.item_id}:`, line.item);
               } catch (err) {
@@ -504,7 +504,7 @@ export default {
     // Fetch outstanding items for a sales order
     const fetchOutstandingItems = async (soId) => {
       try {
-        const response = await axios.get(`/deliveries/outstanding-items/${soId}`);
+        const response = await axios.get(`/sales/deliveries/outstanding-items/${soId}`);
         const outstandingData = response.data.data;
 
         // Map outstanding data to existing lines or add new lines
@@ -538,7 +538,7 @@ export default {
 
       try {
         // First load basic sales order details
-        const response = await axios.get(`/orders/${form.value.so_id}`);
+        const response = await axios.get(`/sales/orders/${form.value.so_id}`);
         let salesOrder = response.data.data;
 
         // Convert keys to camelCase
@@ -552,7 +552,7 @@ export default {
         await fetchOutstandingItems(form.value.so_id);
 
         // Create lines based on outstanding items
-        const outstandingResponse = await axios.get(`/deliveries/outstanding-items/${form.value.so_id}`);
+        const outstandingResponse = await axios.get(`/sales/deliveries/outstanding-items/${form.value.so_id}`);
         const outstandingData = outstandingResponse.data.data;
 
         if (outstandingData && outstandingData.outstanding_items) {
@@ -669,11 +669,11 @@ export default {
       try {
         if (isEditMode.value) {
           // Update existing delivery
-          await axios.put(`/deliveries/${form.value.delivery_id}`, form.value);
+          await axios.put(`/sales/deliveries/${form.value.delivery_id}`, form.value);
           alert('Delivery updated successfully!');
         } else {
           // Create new delivery
-          await axios.post('/deliveries', form.value);
+          await axios.post('/sales/deliveries', form.value);
           alert('Delivery created successfully!');
         }
 

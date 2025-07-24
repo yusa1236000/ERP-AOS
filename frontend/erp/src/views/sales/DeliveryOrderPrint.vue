@@ -238,7 +238,7 @@ export default {
       error.value = '';
 
       try {
-        const response = await axios.get(`/deliveries/${route.params.id}`);
+        const response = await axios.get(`/sales/deliveries/${route.params.id}`);
         delivery.value = response.data.data;
 
         // Convert any snake_case properties to camelCase if needed

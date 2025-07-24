@@ -18,16 +18,16 @@
         <h2 class="card-title">
           <i class="fas fa-file-alt"></i> Quotation Information
         </h2>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="rfq_id">
               <i class="fas fa-clipboard-list"></i> Request for Quotation
             </label>
-            <select 
-              id="rfq_id" 
-              v-model="form.rfq_id" 
-              required 
+            <select
+              id="rfq_id"
+              v-model="form.rfq_id"
+              required
               :disabled="isEditMode"
               @change="loadRfqDetails"
               class="form-control"
@@ -39,14 +39,14 @@
             </select>
             <div v-if="errors.rfq_id" class="error-message">{{ errors.rfq_id[0] }}</div>
           </div>
-          
+
           <div class="form-group">
             <label for="vendor_id">
               <i class="fas fa-building"></i> Vendor
             </label>
-            <select 
-              id="vendor_id" 
-              v-model="form.vendor_id" 
+            <select
+              id="vendor_id"
+              v-model="form.vendor_id"
               required
               :disabled="isEditMode"
               @change="handleVendorChange"
@@ -60,30 +60,30 @@
             <div v-if="errors.vendor_id" class="error-message">{{ errors.vendor_id[0] }}</div>
           </div>
         </div>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="quotation_date">
               <i class="fas fa-calendar"></i> Quotation Date
             </label>
-            <input 
-              type="date" 
-              id="quotation_date" 
-              v-model="form.quotation_date" 
+            <input
+              type="date"
+              id="quotation_date"
+              v-model="form.quotation_date"
               required
               class="form-control"
             />
             <div v-if="errors.quotation_date" class="error-message">{{ errors.quotation_date[0] }}</div>
           </div>
-          
+
           <div class="form-group">
             <label for="validity_date">
               <i class="fas fa-clock"></i> Validity Date
             </label>
-            <input 
-              type="date" 
-              id="validity_date" 
-              v-model="form.validity_date" 
+            <input
+              type="date"
+              id="validity_date"
+              v-model="form.validity_date"
               required
               :min="form.quotation_date"
               class="form-control"
@@ -98,15 +98,15 @@
         <h2 class="card-title">
           <i class="fas fa-coins"></i> Currency & Exchange Rate Information
         </h2>
-        
+
         <div class="form-row">
           <div class="form-group">
             <label for="currency_code">
               <i class="fas fa-money-bill-wave"></i> Quotation Currency
             </label>
-            <select 
-              id="currency_code" 
-              v-model="form.currency_code" 
+            <select
+              id="currency_code"
+              v-model="form.currency_code"
               required
               @change="handleCurrencyChange"
               class="form-control"
@@ -118,25 +118,25 @@
             </select>
             <div v-if="errors.currency_code" class="error-message">{{ errors.currency_code[0] }}</div>
           </div>
-          
+
           <div class="form-group">
             <label for="exchange_rate">
               <i class="fas fa-exchange-alt"></i> Exchange Rate to {{ baseCurrency }}
             </label>
             <div class="exchange-rate-input">
-              <input 
-                type="number" 
-                id="exchange_rate" 
-                v-model.number="form.exchange_rate" 
+              <input
+                type="number"
+                id="exchange_rate"
+                v-model.number="form.exchange_rate"
                 required
                 min="0.000001"
                 step="0.000001"
                 class="form-control"
                 @input="calculateBaseCurrencyAmounts"
               />
-              <button 
-                type="button" 
-                @click="fetchCurrentExchangeRate" 
+              <button
+                type="button"
+                @click="fetchCurrentExchangeRate"
                 class="btn-fetch-rate"
                 :disabled="!form.currency_code || form.currency_code === baseCurrency"
                 title="Fetch current exchange rate"
@@ -173,7 +173,7 @@
         <h2 class="card-title">
           <i class="fas fa-list"></i> Quotation Items
         </h2>
-        
+
         <div v-if="form.lines && form.lines.length > 0" class="table-wrapper">
           <table class="line-items-table">
             <thead>
@@ -201,10 +201,10 @@
                   </div>
                 </td>
                 <td>
-                  <input 
-                    type="number" 
-                    v-model.number="line.quantity" 
-                    required 
+                  <input
+                    type="number"
+                    v-model.number="line.quantity"
+                    required
                     min="0.01"
                     step="0.01"
                     :disabled="true"
@@ -212,8 +212,8 @@
                   />
                 </td>
                 <td>
-                  <select 
-                    v-model="line.uom_id" 
+                  <select
+                    v-model="line.uom_id"
                     required
                     :disabled="true"
                     class="form-control uom-select"
@@ -224,10 +224,10 @@
                   </select>
                 </td>
                 <td>
-                  <input 
-                    type="number" 
-                    v-model.number="line.unit_price" 
-                    required 
+                  <input
+                    type="number"
+                    v-model.number="line.unit_price"
+                    required
                     min="0"
                     step="0.01"
                     @input="calculateLineAmounts(index)"
@@ -240,8 +240,8 @@
                   </span>
                 </td>
                 <td>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     v-model="line.delivery_date"
                     :min="form.quotation_date"
                     class="form-control date-input"
@@ -285,12 +285,12 @@
         <h2 class="card-title">
           <i class="fas fa-info-circle"></i> Additional Information
         </h2>
-        
+
         <div class="form-group">
           <label for="notes">
             <i class="fas fa-sticky-note"></i> Notes / Comments
           </label>
-          <textarea 
+          <textarea
             id="notes"
             v-model="form.notes"
             rows="3"
@@ -304,22 +304,22 @@
             <label for="payment_terms">
               <i class="fas fa-credit-card"></i> Payment Terms
             </label>
-            <input 
-              type="text" 
-              id="payment_terms" 
+            <input
+              type="text"
+              id="payment_terms"
               v-model="form.payment_terms"
               class="form-control"
               placeholder="e.g., NET 30, COD, etc."
             />
           </div>
-          
+
           <div class="form-group">
             <label for="delivery_terms">
               <i class="fas fa-truck"></i> Delivery Terms
             </label>
-            <input 
-              type="text" 
-              id="delivery_terms" 
+            <input
+              type="text"
+              id="delivery_terms"
               v-model="form.delivery_terms"
               class="form-control"
               placeholder="e.g., FOB, CIF, EXW, etc."
@@ -327,7 +327,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Form Actions -->
       <div class="form-actions">
         <router-link to="/purchasing/quotations" class="btn btn-secondary">
@@ -410,7 +410,7 @@ export default {
     initializeForm() {
       this.loading = true;
       this.fetchDropdownOptions();
-      
+
       if (this.localId) {
         this.isEditMode = true;
         this.fetchQuotationDetails();
@@ -419,23 +419,23 @@ export default {
         // Set default dates
         const today = new Date().toISOString().split('T')[0];
         this.form.quotation_date = today;
-        
+
         // Set default validity date (30 days from now)
         const validityDate = new Date();
         validityDate.setDate(validityDate.getDate() + 30);
         this.form.validity_date = validityDate.toISOString().split('T')[0];
-        
+
         this.loading = false;
       }
     },
-    
+
     // Fetch options for dropdowns
     fetchDropdownOptions() {
       Promise.all([
-        axios.get('/request-for-quotations?status=sent'),
-        axios.get('/vendors?is_active=1'),
-        axios.get('/items'),
-        axios.get('/uoms')
+        axios.get('/inventory/request-for-quotations?status=sent'),
+        axios.get('/procurement/vendors?is_active=1'),
+        axios.get('/inventory/items'),
+        axios.get('/inventory/uom')
       ])
       .then(([rfqResponse, vendorResponse, itemsResponse, uomResponse]) => {
         this.rfqOptions = rfqResponse.data.data.data || rfqResponse.data.data;
@@ -448,14 +448,14 @@ export default {
         this.$toasted.error('Failed to load form options');
       });
     },
-    
+
     // Fetch quotation details for edit mode
 fetchQuotationDetails() {
-  axios.get(`/vendor-quotations/${this.localId}`)
+  axios.get(`/procuremment/vendors/${this.localId}`)
     .then(response => {
       if (response.data.status === 'success') {
         const quotation = response.data.data;
-        
+
         // Format dates for the form inputs
         this.form = {
           ...quotation,
@@ -468,7 +468,7 @@ fetchQuotationDetails() {
           delivery_terms: quotation.delivery_terms || '',
           lines: quotation.lines || []
         };
-        
+
         // Ensure date fields are in yyyy-MM-dd format
         if (this.form.quotation_date && this.form.quotation_date.length > 10) {
           this.form.quotation_date = this.form.quotation_date.substring(0, 10);
@@ -489,7 +489,7 @@ fetchQuotationDetails() {
             return line;
           });
         }
-        
+
         this.loading = false;
       }
     })
@@ -499,15 +499,15 @@ fetchQuotationDetails() {
       this.loading = false;
     });
 },
-    
+
     // Load RFQ details when RFQ is selected
     loadRfqDetails() {
       if (!this.form.rfq_id) return;
-      
-      axios.get(`/request-for-quotations/${this.form.rfq_id}`)
+
+      axios.get(`/procurement/request-for-quotations/${this.form.rfq_id}`)
         .then(response => {
           this.rfqDetails = response.data.data;
-          
+
           // Copy line items from RFQ
           this.form.lines = this.rfqDetails.lines.map(line => ({
             item_id: line.item_id,
@@ -516,7 +516,7 @@ fetchQuotationDetails() {
             unit_price: 0,
             delivery_date: '',
           }));
-          
+
           this.calculateBaseCurrencyAmounts();
         })
         .catch(error => {
@@ -553,7 +553,7 @@ async fetchCurrentExchangeRate() {
 
   this.fetchingRate = true;
 
-  
+
 
   try {
     const response = await axios.get(`/accounting/currency-rates/current-rate`, {
@@ -628,13 +628,13 @@ handleExchangeRateResponse(response) {
     calculateBaseCurrencyTotal() {
       return this.calculateTotal() * (parseFloat(this.form.exchange_rate) || 1);
     },
-    
+
     // Get item details
     getItemCode(itemId) {
       const item = this.itemOptions.find(i => i.item_id === itemId);
       return item ? item.item_code : '';
     },
-    
+
     getItemName(itemId) {
       const item = this.itemOptions.find(i => i.item_id === itemId);
       return item ? item.name : '';
@@ -644,18 +644,18 @@ handleExchangeRateResponse(response) {
       const item = this.itemOptions.find(i => i.item_id === itemId);
       return item ? item.description : '';
     },
-    
+
     // Format currency for display
     formatCurrency(value, currency) {
       if (value === undefined || value === null || value === 'N/A') return 'N/A';
-      
+
       const formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: currency || this.form.currency_code || 'USD',
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
-      
+
       return formatter.format(value);
     },
 
@@ -663,13 +663,13 @@ handleExchangeRateResponse(response) {
     formatDate(dateString) {
       if (!dateString) return 'N/A';
       const date = new Date(dateString);
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
       });
     },
-    
+
     // Save as draft
     saveDraft() {
       this.form.status = 'draft';
@@ -680,7 +680,7 @@ handleExchangeRateResponse(response) {
 saveQuotation() {
   this.submitting = true;
   this.errors = {};
-  
+
   // Prepare form data
   const formData = {
     ...this.form,
@@ -698,11 +698,11 @@ saveQuotation() {
     total_amount: this.calculateTotal(),
     base_currency_total: this.calculateBaseCurrencyTotal()
   };
-  
+
   // Use appropriate HTTP method based on mode - FIXED API ENDPOINTS
   const method = this.isEditMode ? 'put' : 'post';
   const url = this.isEditMode ? `/vendor-quotations/${this.localId}` : '/vendor-quotations';
-  
+
   axios[method](url, formData)
     .then(response => {
       if (response && response.data && response.data.status === 'success' && response.data.data && response.data.data.quotation_id) {
@@ -716,7 +716,7 @@ saveQuotation() {
     })
     .catch(error => {
       console.error('API Error:', error);
-      
+
       if (error.response && error.response.data && error.response.data.errors) {
         this.errors = error.response.data.errors;
         if (this.$toasted) {
@@ -744,7 +744,7 @@ saveQuotation() {
         this.initializeForm();
       }
     },
-    
+
     // Watch exchange rate changes
     'form.exchange_rate'() {
       this.calculateBaseCurrencyAmounts();
@@ -1097,20 +1097,20 @@ saveQuotation() {
   .quotation-form-container {
     padding: 0.5rem;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .currency-summary {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .page-header {
     flex-direction: column;
     gap: 1rem;

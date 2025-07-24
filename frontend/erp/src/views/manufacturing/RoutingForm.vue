@@ -246,7 +246,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue';
     // Load items
     const loadItems = async () => {
       try {
-        const response = await axios.get('/items');
+        const response = await axios.get('/inventory/items');
         items.value = response.data.data || [];
       } catch (error) {
         console.error('Error loading items:', error);
@@ -256,7 +256,7 @@ import { ref, reactive, computed, onMounted, watch } from 'vue';
     // Load routing data for edit mode
     const loadRoutingData = async () => {
       try {
-        const response = await axios.get(`/routings/${routingId.value}`);
+        const response = await axios.get(`/manufacturing/routings/${routingId.value}`);
         Object.assign(routing, response.data.data);
         updateSearchQueryFromItemId();
       } catch (error) {

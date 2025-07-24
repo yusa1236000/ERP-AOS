@@ -441,7 +441,7 @@ export default {
       error.value = null;
 
       try {
-        const response = await axios.get(`/items/${itemId.value}`);
+        const response = await axios.get(`/inventory/items/${itemId.value}`);
         item.value = response.data.data;
 
         // After fetching the item, fetch its movement history
@@ -466,7 +466,7 @@ export default {
         if (filters.value.end_date) params.end_date = filters.value.end_date;
         if (filters.value.warehouse_id) params.warehouse_id = filters.value.warehouse_id;
 
-        const response = await axios.get(`/transactions/items/${itemId.value}/movement`, { params });
+        const response = await axios.get(`/inventory/transactions/items/${itemId.value}/movement`, { params });
         transactions.value = response.data.data.transactions.data;
         totalPages.value = Math.ceil(response.data.data.transactions.total / response.data.data.transactions.per_page);
         totalItems.value = response.data.data.transactions.total;
@@ -487,7 +487,7 @@ export default {
     const fetchWarehouses = async () => {
       warehousesLoading.value = true;
       try {
-        const response = await axios.get('/warehouses');
+        const response = await axios.get('/inventory/warehouses');
         warehouses.value = response.data.data;
       } catch (err) {
         console.error('Error fetching warehouses:', err);

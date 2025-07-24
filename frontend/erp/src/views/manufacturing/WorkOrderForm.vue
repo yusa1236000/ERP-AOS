@@ -316,7 +316,7 @@
       // Methods
       const loadItems = async () => {
         try {
-          const response = await axios.get('/items', { params: { type: 'manufactureable' } });
+          const response = await axios.get('/inventory/items', { params: { type: 'manufactureable' } });
           items.value = response.data.data;
         } catch (error) {
           console.error('Error loading items:', error);
@@ -327,7 +327,7 @@
       const loadNextWorkOrderNumber = async () => {
         if (!isEditMode.value) {
           try {
-            const response = await axios.get('/work-orders/next-number');
+            const response = await axios.get('/manufacturing/work-orders/next-number');
             nextWoNumber.value = response.data.next_wo_number;
           } catch (error) {
             console.error('Error loading next job order number:', error);
@@ -360,13 +360,13 @@
 
         try {
           // Load BOMs for the selected product
-          const bomsResponse = await axios.get('/boms', {
+          const bomsResponse = await axios.get('/manufacturing/boms', {
             params: { item_id: workOrder.value.item_id, status: 'Active' }
           });
           boms.value = bomsResponse.data.data;
 
           // Load routings for the selected product
-          const routingsResponse = await axios.get('/routings', {
+          const routingsResponse = await axios.get('/manufacturing/routings', {
             params: { item_id: workOrder.value.item_id, status: 'Active' }
           });
           routings.value = routingsResponse.data.data;
@@ -388,7 +388,7 @@
         if (!isEditMode.value) return;
 
         try {
-          const response = await axios.get(`/work-orders/${route.params.id}`);
+          const response = await axios.get(`/manufacturing/work-orders/${route.params.id}`);
           const data = response.data.data;
 
           // Update the Job Orders form with the retrieved data
@@ -456,7 +456,7 @@
             const updateData = { ...workOrder.value };
             delete updateData.wo_number;
 
-            await axios.put(`/work-orders/${workOrder.value.wo_id}`, updateData);
+            await axios.put(`/manufacturing/work-orders/${workOrder.value.wo_id}`, updateData);
             router.push(`/manufacturing/work-orders/${workOrder.value.wo_id}`);
           } else {
             // Create new Job Orders
@@ -464,7 +464,7 @@
             const createData = { ...workOrder.value };
             delete createData.wo_number;
 
-            const response = await axios.post('/work-orders', createData);
+            const response = await axios.post('/manufacturing/work-orders', createData);
             router.push(`/manufacturing/work-orders/${response.data.data.wo_id}`);
           }
         } catch (error) {

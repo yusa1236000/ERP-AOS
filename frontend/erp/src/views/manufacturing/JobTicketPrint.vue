@@ -205,6 +205,7 @@ export default {
           console.warn('Print endpoint failed, using detail endpoint:', printError);
           response = await axios.get(`/manufacturing/job-tickets/${this.$route.params.id}`);
 
+          
           if (response.data.success) {
             this.jobTicket = response.data.data;
             // Assign production_number from nested production_order if exists

@@ -168,7 +168,7 @@ export default {
             params.is_active = statusFilter.value;
           }
   
-          const response = await axios.get('/work-centers', { params });
+          const response = await axios.get('/manufacturing/work-centers', { params });
           workCenters.value = response.data.data;
           
           // Check if pagination data is available
@@ -221,7 +221,7 @@ export default {
         if (!workCenterToDelete.value) return;
         
         try {
-          await axios.delete(`/work-centers/${workCenterToDelete.value.workcenter_id}`);
+          await axios.delete(`/manufacturing/work-centers/${workCenterToDelete.value.workcenter_id}`);
           showDeleteModal.value = false;
           loadWorkCenters();
         } catch (error) {

@@ -185,7 +185,7 @@ export default {
     async loadInvoice() {
       try {
         const invoiceId = this.$route.params.id;
-        const response = await axios.get(`/vendor-invoices/${invoiceId}`);
+        const response = await axios.get(`/procurement/vendor-invoices/${invoiceId}`);
 
         if (response.data.status === 'success') {
           this.invoice = response.data.data.invoice;

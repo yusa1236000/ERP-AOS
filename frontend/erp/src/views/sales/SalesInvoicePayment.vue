@@ -431,11 +431,11 @@
         
         try {
           // First get the invoice details
-          const invoiceResponse = await axios.get(`/invoices/${this.id}`);
+          const invoiceResponse = await axios.get(`/sales/invoices/${this.id}`);
           this.invoice = invoiceResponse.data.data;
           
           // Then get payment information
-          const paymentResponse = await axios.get(`/invoices/${this.id}/payment-info`);
+          const paymentResponse = await axios.get(`/sales/invoices/${this.id}/payment-info`);
           this.receivable = paymentResponse.data.data;
           
           // Set payment currency to invoice currency by default
@@ -533,7 +533,7 @@
         this.recording = true;
         
         try {
-          await axios.post(`/invoices/${this.id}/recordPayment`, {
+          await axios.post(`/sales/invoices/${this.id}/recordPayment`, {
             amount: this.paymentData.amount,
             payment_date: this.paymentData.payment_date,
             payment_method: this.paymentData.payment_method,

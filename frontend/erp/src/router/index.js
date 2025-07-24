@@ -1664,12 +1664,14 @@ const routes = [
                 path: "/manufacturing/job-tickets/:id",
                 name: "JobTicketDetail",
                 component: JobTicketDetail,
+                props: true,
                 meta: { requiresAuth: true },
             },
             {
                 path: "/manufacturing/job-tickets/:id/print",
                 name: "JobTicketPrint",
                 component: JobTicketPrint,
+                props: true,
                 meta: { requiresAuth: true },
             },
             // {

@@ -168,7 +168,7 @@ export default {
       this.error = null;
       
       try {
-        const response = await axios.get('/quality-inspections');
+        const response = await axios.get('/manufacturing/quality/inspections');
         // Ensure inspections is always an array
         if (Array.isArray(response.data)) {
           this.inspections = response.data;
@@ -297,7 +297,7 @@ export default {
     
     async deleteInspection() {
       try {
-        await axios.delete(`/quality-inspections/${this.inspectionToDelete}`);
+        await axios.delete(`/manufacturing/quality/inspections/${this.inspectionToDelete}`);
         this.showDeleteModal = false;
         this.inspectionToDelete = null;
         this.fetchInspections();

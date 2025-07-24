@@ -394,7 +394,7 @@ export default {
     // Data fetching methods
     async fetchCustomers() {
       try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || [];
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -402,7 +402,7 @@ export default {
     },
     async fetchItems() {
       try {
-        const response = await axios.get('/items', {
+        const response = await axios.get('/inventory/items', {
             params: { sellable: true }
           });
         this.items = response.data.data || [];
@@ -433,7 +433,7 @@ export default {
         formData.append('csv_file', this.importForm.csv_file);
         formData.append('fill_missing_periods', this.importForm.fill_missing_periods ? 1 : 0);
 
-        const response = await axios.post('/forecasts/import', formData, {
+        const response = await axios.post('/sales/forecasts/import', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -506,7 +506,7 @@ export default {
           payload.forecast_issue_date = this.generateForm.forecast_issue_date;
         }
 
-        const response = await axios.post('/forecasts/generate', payload);
+        const response = await axios.post('/sales/forecasts/generate', payload);
 
         if (response.data.message) {
           this.generateSuccess = response.data.message;

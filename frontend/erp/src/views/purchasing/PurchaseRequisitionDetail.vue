@@ -634,7 +634,7 @@ export default {
     async fetchPRData() {
       try {
         this.loading = true;
-        const response = await axios.get(`/purchase-requisitions/${this.id}`);
+        const response = await axios.get(`/procurement/purchase-requisitions/${this.id}`);
 
         this.pr = response.data.data;
 
@@ -690,7 +690,7 @@ export default {
 
       this.processing = true;
       try {
-        const response = await axios.patch(`/purchase-requisitions/${this.id}/status`, {
+        const response = await axios.patch(`/procurement/purchase-requisitions/${this.id}/status`, {
           status: 'pending'
         });
 
@@ -711,7 +711,7 @@ export default {
 
       this.processing = true;
       try {
-        const response = await axios.patch(`/purchase-requisitions/${this.id}/status`, {
+        const response = await axios.patch(`/procurement/purchase-requisitions/${this.id}/status`, {
           status: 'canceled'
         });
 

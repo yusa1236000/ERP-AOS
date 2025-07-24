@@ -236,7 +236,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await axios.get(`/item-stocks/item/${this.itemId}`);
+        const response = await axios.get(`/inventory/item-stocks/item/${this.itemId}`);
 
         if (response.data && response.data.data) {
           this.item = response.data.data;

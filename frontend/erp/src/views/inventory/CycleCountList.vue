@@ -292,7 +292,7 @@
     methods: {
       async loadItems() {
         try {
-          const response = await axios.get('/items');
+          const response = await axios.get('/inventory/items');
           this.items = response.data.data || [];
         } catch (error) {
           console.error('Error loading items:', error);
@@ -300,7 +300,7 @@
       },
       async loadWarehouses() {
         try {
-          const response = await axios.get('/warehouses');
+          const response = await axios.get('/inventory/warehouses');
           this.warehouses = response.data.data || [];
         } catch (error) {
           console.error('Error loading warehouses:', error);
@@ -322,7 +322,7 @@
           queryParams.append('page', this.currentPage);
           queryParams.append('per_page', this.perPage);
           
-          const response = await axios.get(`/cycle-counts?${queryParams.toString()}`);
+          const response = await axios.get(`/inventory/cycle-counts?${queryParams.toString()}`);
           
           if (response.data.success) {
             this.cycleCounts = response.data.data.data || [];
@@ -413,7 +413,7 @@
       },
       async doSubmitCount(count) {
         try {
-          const response = await axios.post(`/cycle-counts/${count.count_id}/submit`);
+          const response = await axios.post(`/inventory/cycle-counts/${count.count_id}/submit`);
           
           if (response.data.success) {
             this.showSuccessToast('Cycle count submitted for approval.');
@@ -435,7 +435,7 @@
       },
       async doDeleteCount(count) {
         try {
-          const response = await axios.delete(`/cycle-counts/${count.count_id}`);
+          const response = await axios.delete(`/inventory/cycle-counts/${count.count_id}`);
           
           if (response.data.success) {
             this.showSuccessToast('Cycle count deleted successfully.');

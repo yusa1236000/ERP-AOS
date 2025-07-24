@@ -226,7 +226,7 @@ export default {
         
         async loadItems() {
             try {
-                const response = await axios.get('/items', {
+                const response = await axios.get('/inventory/items', {
                     params: { per_page: 1000 }
                 });
                 this.items = response.data.data || response.data;
@@ -265,7 +265,7 @@ export default {
                     show_percentage_change: this.filters.show_percentage_change
                 };
                 
-                const response = await axios.get('/forecasts/trend', { params });
+                const response = await axios.get('/sales/forecasts/trend', { params });
                 const data = response.data.data;
                 
                 this.trendData = data.trend_data || [];

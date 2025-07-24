@@ -224,7 +224,7 @@ export default {
     async downloadTemplate() {
       this.downloadingTemplate = true;
       try {
-        const response = await axios.get('/purchase-orders/template/download', {
+        const response = await axios.get('/procurement/purchase-orders/template/download', {
           responseType: 'blob'
         });
 
@@ -331,7 +331,7 @@ export default {
         formData.append('validate_vendors', this.validateVendors ? '1' : '0');
         formData.append('validate_items', this.validateItems ? '1' : '0');
 
-        const response = await axios.post('/purchase-orders/import', formData, {
+        const response = await axios.post('/procurement/purchase-orders/import', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

@@ -260,11 +260,11 @@ export default {
     const fetchReferenceData = async () => {
       try {
         // Fetch items
-        const itemsResponse = await axios.get('/items');
+        const itemsResponse = await axios.get('/inventory/items');
         items.value = itemsResponse.data.data || itemsResponse.data;
         
         // Fetch UOMs
-        const uomsResponse = await axios.get('/unit-of-measures');
+        const uomsResponse = await axios.get('inventory/uom');
         uoms.value = uomsResponse.data.data || uomsResponse.data;
       } catch (error) {
         console.error('Error fetching reference data:', error);

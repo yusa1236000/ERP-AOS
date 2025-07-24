@@ -657,7 +657,7 @@ export default {
     async loadCustomers() {
       try {
         console.log('Loading customers...');
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || response.data || [];
         console.log('Customers loaded:', this.customers.length);
       } catch (error) {
@@ -670,7 +670,7 @@ export default {
     async loadItems() {
       try {
         console.log('Loading items...');
-        const response = await axios.get('/items', {
+        const response = await axios.get('/inventory/items', {
           params: { sellable: true }
         });
         this.items = response.data.data || response.data || [];
@@ -690,7 +690,7 @@ export default {
           throw new Error('No invoice ID provided');
         }
 
-        const response = await axios.get(`/invoices/${this.id}`);
+        const response = await axios.get(`/sales/invoices/${this.id}`);
         const invoice = response?.data?.data;
 
         if (!invoice) {
@@ -833,7 +833,7 @@ export default {
         }
 
         // If not found or no UOM, fetch from API
-        const response = await axios.get(`/items/${itemId}`);
+        const response = await axios.get(`/inventory/items/${itemId}`);
         const item = response.data.data || response.data;
 
         if (item && item.uom_id) {
@@ -942,7 +942,7 @@ export default {
         this.deliveries = [];
         this.selectedDeliveries = [];
 
-        const response = await axios.get('/invoices/getDeliveriesForInvoicing', {
+        const response = await axios.get('/sales/invoices/getDeliveriesForInvoicing', {
           params: { customer_id: this.invoice.customer_id }
         });
 
@@ -970,7 +970,7 @@ export default {
         if (this.selectedDeliveries.length > 0) {
           this.isLoadingItems = true;
 
-          const response = await axios.get('/invoices/getDeliveryLinesByItem', {
+          const response = await axios.get('/sales/invoices/getDeliveryLinesByItem', {
             params: {
               customer_id: this.invoice.customer_id,
               delivery_ids: this.selectedDeliveries
@@ -1258,7 +1258,7 @@ export default {
 
         if (this.isEditing) {
           console.log('📝 Updating existing invoice...');
-          response = await axios.put(`/invoices/${this.id}`, payload);
+          response = await axios.put(`/sales/invoices/${this.id}`, payload);
           this.showMessage('Invoice updated successfully', 'success');
           } else if (this.createFromDelivery && this.selectedDeliveries.length > 0) {
             console.log('🚚 Creating invoice from deliveries...');
@@ -1273,11 +1273,11 @@ export default {
               payment_terms: this.invoice.payment_terms,
               delivery_ids: this.selectedDeliveries
             };
-            response = await axios.post('/invoices/from-deliveries', deliveryPayload);
+            response = await axios.post('/sales/invoices/from-deliveries', deliveryPayload);
             this.showMessage('Invoice created successfully', 'success');
           } else {
           console.log('📄 Creating new invoice...');
-          response = await axios.post('/invoices', payload);
+          response = await axios.post('/sales/invoices', payload);
           this.showMessage('Invoice created successfully', 'success');
         }
 

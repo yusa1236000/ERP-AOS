@@ -360,7 +360,7 @@ export default {
           }
         });
         
-        const response = await axios.get('/stock-adjustments', { params });
+        const response = await axios.get('/inventory/stock-adjustments', { params });
         
         this.adjustments = response.data.data.data || response.data.data;
         this.pagination = {
@@ -425,7 +425,7 @@ export default {
       this.isDeleting = true;
       
       try {
-        await axios.delete(`/stock-adjustments/${this.adjustmentToDelete.adjustment_id}`);
+        await axios.delete(`/inventory/stock-adjustments/${this.adjustmentToDelete.adjustment_id}`);
         this.showDeleteModal = false;
         
         // Remove item from list
@@ -451,7 +451,7 @@ export default {
 
     async submitAdjustment(adjustment) {
       try {
-        await axios.post(`/stock-adjustments/${adjustment.adjustment_id}/submit`);
+        await axios.post(`/inventory/stock-adjustments/${adjustment.adjustment_id}/submit`);
         
         // Update the status in the local list
         const index = this.adjustments.findIndex(a => a.adjustment_id === adjustment.adjustment_id);
@@ -472,7 +472,7 @@ export default {
       }
 
       try {
-        await axios.post(`/stock-adjustments/${adjustment.adjustment_id}/process`);
+        await axios.post(`/inventory/stock-adjustments/${adjustment.adjustment_id}/process`);
         
         // Update the status in the local list
         const index = this.adjustments.findIndex(a => a.adjustment_id === adjustment.adjustment_id);

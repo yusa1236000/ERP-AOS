@@ -30,7 +30,7 @@
 
           <router-link
             v-if="jobTicket"
-            :to="`/manufacturing/job-tickets/${jobTicket.ticket_id}/print`"
+            :to="`/manufacturing/job-tickets/${$route.params.id}/print`"
             class="btn btn-outline btn-print"
           >
             <i class="fas fa-print"></i>

@@ -350,7 +350,7 @@
       
       async loadCustomers() {
         try {
-          const response = await axios.get('/customers');
+          const response = await axios.get('/sales/customers');
           this.customers = response.data.data || response.data;
         } catch (error) {
           console.error('Error loading customers:', error);
@@ -425,7 +425,7 @@
         
         try {
           // API endpoint to get deliveries ready for invoicing for a specific customer
-          const response = await axios.get('/invoices/getDeliveriesForInvoicing', {
+          const response = await axios.get('/sales/invoices/getDeliveriesForInvoicing', {
             params: { customer_id: this.invoice.customer_id }
           });
           
@@ -448,7 +448,7 @@
         
         try {
           // API endpoint to get delivery lines grouped by item
-          const response = await axios.get('/invoices/getDeliveryLinesByItem', {
+          const response = await axios.get('/sales/invoices/getDeliveryLinesByItem', {
             params: { 
               customer_id: this.invoice.customer_id,
               delivery_ids: this.selectedDeliveries
@@ -517,7 +517,7 @@
             delivery_ids: this.selectedDeliveries
           };
           
-          const response = await axios.post('/invoices/from-deliveries', payload);
+          const response = await axios.post('/sales/invoices/from-deliveries', payload);
           
           this.$toast.success('Invoice created successfully');
           

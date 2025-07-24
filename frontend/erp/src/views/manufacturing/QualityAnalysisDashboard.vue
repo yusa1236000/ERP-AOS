@@ -470,15 +470,15 @@ export default {
     async fetchReferenceData() {
       try {
         // Load items bukan products
-        const itemsResponse = await axios.get('/quality-parameters/items');
+        const itemsResponse = await axios.get('/manufacturing/quality-parameters/items');
         this.products = itemsResponse.data;
         
         // Load parameters
-        const parametersResponse = await axios.get('/quality-parameters');
+        const parametersResponse = await axios.get('/manufacturing/quality-parameters');
         this.parameters = parametersResponse.data;
         
         // Load inspectors
-        const inspectorsResponse = await axios.get('/quality-inspections/inspectors');
+        const inspectorsResponse = await axios.get('/manufacturing/quality-inspections/inspectors');
         this.inspectors = inspectorsResponse.data;
       } catch (err) {
         console.error('Failed to load reference data:', err);
@@ -489,7 +489,7 @@ export default {
       this.loading = true;
       
       try {
-        const response = await axios.get('/quality-analysis/dashboard', {
+        const response = await axios.get('/manufacturing/quality-analysis/dashboard', {
           params: this.filters
         });
         
@@ -886,7 +886,7 @@ export default {
       this.exportLoading = true;
       
       try {
-        const response = await axios.post('/quality-analysis/export-report', {
+        const response = await axios.post('/manufacturing/quality-analysis/export-report', {
           format: this.exportFormat,
           options: this.exportOptions,
           dateFrom: this.exportDateFrom,

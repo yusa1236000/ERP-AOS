@@ -306,7 +306,7 @@ export default {
                     params.date_range = dateRangeFilter.value;
                 }
 
-                const response = await axios.get("/orders", {
+                const response = await axios.get("/sales/orders", {
                     params,
                 });
 
@@ -379,7 +379,7 @@ export default {
 
         const deleteOrder = async () => {
             try {
-                await axios.delete(`/orders/${orderToDelete.value.so_id}`);
+                await axios.delete(`/sales/orders/${orderToDelete.value.so_id}`);
                 fetchOrders(); // Refresh list after delete
                 showDeleteModal.value = false;
                 alert("Order successfully deleted");

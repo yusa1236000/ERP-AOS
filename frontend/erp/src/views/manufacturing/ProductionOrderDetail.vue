@@ -573,7 +573,7 @@
       async fetchProductionOrder() {
         this.loading = true;
         try {
-          const response = await axios.get(`/production-orders/${this.productionId}`);
+          const response = await axios.get(`/manufacturing/production-orders/${this.productionId}`);
           this.productionOrder = response.data.data || response.data;
 
           // Get consumptions
@@ -604,7 +604,7 @@
 
       async fetchWorkOrder(workOrderId) {
         try {
-          const response = await axios.get(`/work-orders/${workOrderId}`);
+          const response = await axios.get(`/manufacturing/work-orders/${workOrderId}`);
           this.workOrder = response.data.data || response.data;
         } catch (error) {
           console.error('Error fetching work order:', error);
@@ -614,7 +614,7 @@
 
       async fetchMaterialStatus() {
         try {
-          const response = await axios.get(`/production-orders/${this.productionId}/material-status`);
+          const response = await axios.get(`/manufacturing/production-orders/${this.productionId}/material-status`);
           this.materialStatus = response.data.data || response.data;
         } catch (error) {
           console.error('Error fetching material status:', error);
@@ -681,7 +681,7 @@
           // Save each changed consumption
           for (const change of changedConsumptions) {
             await axios.put(
-              `/production-orders/${this.productionId}/consumptions/${change.consumption_id}`,
+              `/manufacturing/production-orders/${this.productionId}/consumptions/${change.consumption_id}`,
               {
                 actual_quantity: change.actual_quantity
               }
@@ -735,7 +735,7 @@
             actual_quantity: this.editableConsumptions[c.consumption_id] || c.planned_quantity
           }));
 
-          await axios.post(`/production-orders/${this.productionId}/issue-materials`, {
+          await axios.post(`/manufacturing/production-orders/${this.productionId}/issue-materials`, {
             consumptions
           });
 
@@ -759,7 +759,7 @@
 
       async startProduction() {
         try {
-          await axios.post(`/production-orders/${this.productionId}/start-production`);
+          await axios.post(`/manufacturing/production-orders/${this.productionId}/start-production`);
 
           this.showSuccess('Production started successfully');
           this.fetchProductionOrder();
@@ -781,7 +781,7 @@
 
       async completeProduction() {
         try {
-          await axios.post(`/production-orders/${this.productionId}/complete`, this.completionForm);
+          await axios.post(`/manufacturing/production-orders/${this.productionId}/complete`, this.completionForm);
 
           this.showSuccess('Job Order Process completed successfully');
           this.fetchProductionOrder();
@@ -803,7 +803,7 @@
 
       async cancelProduction() {
         try {
-          await axios.patch(`/production-orders/${this.productionId}/status`, {
+          await axios.patch(`/manufacturing/production-orders/${this.productionId}/status`, {
             status: 'Cancelled'
           });
 
@@ -827,7 +827,7 @@
 
       async reactivateProduction() {
         try {
-          await axios.patch(`/production-orders/${this.productionId}/status`, {
+          await axios.patch(`/manufacturing/production-orders/${this.productionId}/status`, {
             status: 'Draft'
           });
 
@@ -959,7 +959,7 @@
 
       async viewProductionSummary() {
         try {
-          const response = await axios.get(`/production-orders/${this.productionId}/production-summary`);
+          const response = await axios.get(`/manufacturing/production-orders/${this.productionId}/production-summary`);
           // Could navigate to a detailed summary page or show in modal
           console.log('Job Order Process Summary:', response.data);
           this.showInfo('Job Order Process summary loaded - check console for details');
@@ -974,7 +974,7 @@
 
       async deleteProductionOrder() {
         try {
-          await axios.delete(`/production-orders/${this.productionId}`);
+          await axios.delete(`/manufacturing/production-orders/${this.productionId}`);
           this.showSuccess('Production order deleted successfully');
           this.$router.push('/manufacturing/production-orders');
         } catch (error) {

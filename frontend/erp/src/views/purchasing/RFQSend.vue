@@ -56,12 +56,12 @@
               <label>RFQ Number</label>
               <div class="detail-value">{{ rfq.rfq_number }}</div>
             </div>
-            
+
             <div class="detail-group">
               <label>RFQ Date</label>
               <div class="detail-value">{{ formatDate(rfq.rfq_date) }}</div>
             </div>
-            
+
             <div class="detail-group">
               <label>Validity Date</label>
               <div class="detail-value">{{ formatDate(rfq.validity_date) || 'Not specified' }}</div>
@@ -102,10 +102,10 @@
             <i class="fas fa-lightbulb"></i>
             These vendors were selected during PR to RFQ conversion. You can modify the selection below if needed.
           </p>
-          
+
           <div class="pre-selected-vendors-list">
-            <div 
-              v-for="vendor in preSelectedVendors" 
+            <div
+              v-for="vendor in preSelectedVendors"
               :key="vendor.vendor_id"
               class="pre-selected-vendor-item"
             >
@@ -162,33 +162,33 @@
             <div class="control-row">
               <div class="search-input">
                 <i class="fas fa-search search-icon"></i>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   v-model="vendorSearchQuery"
                   placeholder="Search vendors by name, code, or email..."
                   class="form-control"
                 >
               </div>
-              
+
               <div class="bulk-actions">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-outline-primary btn-sm"
                   @click="selectAllFilteredVendors"
                   :disabled="filteredVendors.length === 0 || areAllFilteredSelected"
                 >
                   Select All {{ filteredVendors.length > 0 ? `(${filteredVendors.length})` : '' }}
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-outline-secondary btn-sm"
                   @click="deselectAllVendors"
                   :disabled="selectedVendors.length === 0"
                 >
                   Deselect All
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-outline-info btn-sm"
                   @click="resetToPreSelected"
                   :disabled="preSelectedVendors.length === 0 || !isSelectionChanged"
@@ -220,11 +220,11 @@
 
             <!-- Vendor List -->
             <div class="vendors-list" v-if="filteredVendors.length > 0">
-              <div 
-                v-for="vendor in filteredVendors" 
+              <div
+                v-for="vendor in filteredVendors"
                 :key="vendor.vendor_id"
                 class="vendor-item"
-                :class="{ 
+                :class="{
                   'selected': isVendorSelected(vendor.vendor_id),
                   'pre-selected': isPreSelected(vendor.vendor_id),
                   'newly-added': isNewlyAdded(vendor.vendor_id)
@@ -232,14 +232,14 @@
                 @click="toggleVendorSelection(vendor.vendor_id)"
               >
                 <div class="vendor-checkbox">
-                  <input 
-                    type="checkbox" 
+                  <input
+                    type="checkbox"
                     :checked="isVendorSelected(vendor.vendor_id)"
                     @change="toggleVendorSelection(vendor.vendor_id)"
                     @click.stop
                   >
                 </div>
-                
+
                 <div class="vendor-info">
                   <div class="vendor-name">
                     {{ vendor.name }}
@@ -265,12 +265,12 @@
                 </div>
 
                 <div class="vendor-status">
-                  <i 
-                    v-if="isVendorSelected(vendor.vendor_id)" 
+                  <i
+                    v-if="isVendorSelected(vendor.vendor_id)"
                     class="fas fa-check-circle text-success"
                   ></i>
-                  <i 
-                    v-else 
+                  <i
+                    v-else
                     class="far fa-circle text-muted"
                   ></i>
                 </div>
@@ -297,16 +297,16 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons">
-        <router-link 
-          :to="`/purchasing/rfqs/${rfqId}`" 
+        <router-link
+          :to="`/purchasing/rfqs/${rfqId}`"
           class="btn btn-secondary"
           :class="{ 'disabled': isSending }"
         >
           Cancel
         </router-link>
-        
-        <button 
-          type="button" 
+
+        <button
+          type="button"
           class="btn btn-primary"
           @click="confirmSendRFQ"
           :disabled="selectedVendors.length === 0 || isSending"
@@ -331,13 +331,13 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-        
+
         <div class="modal-body">
           <p>Are you sure you want to send this RFQ to the following vendors?</p>
-          
+
           <div class="selected-vendors-summary">
-            <div 
-              v-for="vendor in getSelectedVendorObjects()" 
+            <div
+              v-for="vendor in getSelectedVendorObjects()"
               :key="vendor.vendor_id"
               class="vendor-summary-item"
             >
@@ -365,11 +365,11 @@
             </p>
           </div>
         </div>
-        
+
         <div class="modal-actions">
-          <button 
-            type="button" 
-            class="btn btn-secondary" 
+          <button
+            type="button"
+            class="btn btn-secondary"
             @click="showConfirmationModal = false"
             :disabled="isSending"
           >
@@ -398,11 +398,11 @@
             RFQ Sent Successfully
           </h2>
         </div>
-        
+
         <div class="modal-body">
           <p>RFQ <strong>{{ rfq.rfq_number }}</strong> has been successfully sent to {{ selectedVendors.length }} vendor{{ selectedVendors.length > 1 ? 's' : '' }}.</p>
           <p>Vendors can now submit their quotations for this RFQ. You will be notified when quotations are received.</p>
-          
+
           <div class="success-actions">
             <h4>What's next?</h4>
             <ul>
@@ -413,7 +413,7 @@
             </ul>
           </div>
         </div>
-        
+
         <div class="modal-actions">
           <router-link :to="`/purchasing/rfqs/${rfqId}`" class="btn btn-primary">
             View RFQ Details
@@ -469,10 +469,10 @@ export default {
       if (!this.vendorSearchQuery.trim()) {
         return this.vendors;
       }
-      
+
       const searchTerm = this.vendorSearchQuery.toLowerCase();
-      return this.vendors.filter(vendor => 
-        vendor.name.toLowerCase().includes(searchTerm) || 
+      return this.vendors.filter(vendor =>
+        vendor.name.toLowerCase().includes(searchTerm) ||
         vendor.vendor_code.toLowerCase().includes(searchTerm) ||
         (vendor.email && vendor.email.toLowerCase().includes(searchTerm)) ||
         (vendor.contact_person && vendor.contact_person.toLowerCase().includes(searchTerm))
@@ -484,30 +484,30 @@ export default {
       const total = this.vendors.length;
       const selected = this.selectedVendors.length;
       const preSelected = this.preSelectedVendors.length;
-      
+
       let summary = `${selected} of ${total} vendors selected`;
-      
+
       if (preSelected > 0) {
         summary += ` (${preSelected} pre-selected from conversion)`;
       }
-      
+
       return summary;
     },
-    
+
     // Check if current selection differs from pre-selected
     isSelectionChanged() {
       if (this.preSelectedVendors.length === 0) return false;
-      
+
       const preSelectedIds = this.preSelectedVendors.map(v => v.vendor_id).sort();
       const currentIds = [...this.selectedVendors].sort();
-      
+
       return JSON.stringify(preSelectedIds) !== JSON.stringify(currentIds);
     },
 
     // Check if all filtered vendors are selected
     areAllFilteredSelected() {
       if (this.filteredVendors.length === 0) return false;
-      return this.filteredVendors.every(vendor => 
+      return this.filteredVendors.every(vendor =>
         this.selectedVendors.includes(vendor.vendor_id)
       );
     }
@@ -515,7 +515,7 @@ export default {
 
   mounted() {
     this.loadRFQ();
-    
+
     // Initialize toast if available
     if (this.$toast) {
       this.toast = this.$toast;
@@ -527,24 +527,24 @@ export default {
     async loadRFQ() {
       this.loading = true;
       this.error = null;
-      
+
       try {
-        const response = await axios.get(`/request-for-quotations/${this.rfqId}`);
-        
+        const response = await axios.get(`/procurement/request-for-quotations/${this.rfqId}`);
+
         if (response.data.status === 'success' && response.data.data) {
           this.rfq = response.data.data;
-          
+
           // Load pre-selected vendors from RFQ data
           if (this.rfq.selected_vendors && Array.isArray(this.rfq.selected_vendors)) {
             this.preSelectedVendors = this.rfq.selected_vendors;
             this.selectedVendors = this.rfq.selected_vendors.map(vendor => vendor.vendor_id);
-            
+
             console.log('Pre-selected vendors loaded:', this.preSelectedVendors.length);
           }
-          
+
           // Load all available vendors
           await this.loadVendors();
-          
+
         } else {
           this.rfq = null;
           throw new Error(response.data.message || 'Failed to load RFQ');
@@ -552,13 +552,13 @@ export default {
       } catch (error) {
         console.error('Error loading RFQ:', error);
         this.rfq = null;
-        
+
         if (error.response && error.response.status === 404) {
           this.error = 'Request for Quotation not found';
         } else {
           this.error = 'Failed to load RFQ details. Please try again.';
         }
-        
+
         if (this.toast) {
           this.toast.error(this.error);
         }
@@ -571,20 +571,20 @@ export default {
     async loadVendors() {
       this.loadingVendors = true;
       this.vendorsError = null;
-      
+
       try {
         // Use the new endpoint to get vendor data with pre-selected info
-        const response = await axios.get(`/request-for-quotations/${this.rfqId}/vendors`);
-        
+        const response = await axios.get(`/procurement/request-for-quotations/${this.rfqId}/vendors`);
+
         if (response.data.status === 'success') {
           this.vendors = response.data.data.all_vendors || [];
-          
+
           // If no vendors were pre-selected from RFQ load, use the API response
           if (this.selectedVendors.length === 0 && response.data.data.selected_vendor_ids) {
             this.selectedVendors = [...response.data.data.selected_vendor_ids];
             this.preSelectedVendors = response.data.data.selected_vendors || [];
           }
-          
+
           console.log('Vendors loaded:', this.vendors.length);
           console.log('Final selected vendors:', this.selectedVendors.length);
         } else {
@@ -593,7 +593,7 @@ export default {
       } catch (error) {
         console.error('Error loading vendors:', error);
         this.vendorsError = 'Failed to load vendors. Please try again.';
-        
+
         if (this.toast) {
           this.toast.error(this.vendorsError);
         }
@@ -620,7 +620,7 @@ export default {
     // Toggle vendor selection
     toggleVendorSelection(vendorId) {
       const index = this.selectedVendors.indexOf(vendorId);
-      
+
       if (index === -1) {
         this.selectedVendors.push(vendorId);
       } else {
@@ -649,7 +649,7 @@ export default {
 
     // Get selected vendor objects
     getSelectedVendorObjects() {
-      return this.vendors.filter(vendor => 
+      return this.vendors.filter(vendor =>
         this.selectedVendors.includes(vendor.vendor_id)
       );
     },
@@ -662,7 +662,7 @@ export default {
         }
         return;
       }
-      
+
       this.showConfirmationModal = true;
     },
 
@@ -677,9 +677,9 @@ async sendRFQ() {
     }
     return;
   }
-  
+
   this.isSending = true;
-  
+
   try {
     // Update selected vendors if changed from original selection
     if (this.isSelectionChanged) {
@@ -688,7 +688,7 @@ async sendRFQ() {
 
     // STEP 1: Update RFQ status to 'sent' FIRST (required before creating quotations)
     try {
-      await axios.patch(`/request-for-quotations/${this.rfqId}/status`, {
+      await axios.patch(`/procurement/request-for-quotations/${this.rfqId}/status`, {
         status: 'sent'
       });
     } catch (error) {
@@ -702,7 +702,7 @@ async sendRFQ() {
 
     for (const vendorId of this.selectedVendors) {
       try {
-        const response = await axios.post('/vendor-quotations/create-from-rfq', {
+        const response = await axios.post('/procurement/vendor-quotations/create-from-rfq', {
           rfq_id: this.rfqId,
           vendor_id: vendorId,  // Send individual vendor_id
           quotation_date: quotationDate,  // Add required quotation_date
@@ -747,7 +747,7 @@ async sendRFQ() {
 
     // Close confirmation modal
     this.showConfirmationModal = false;
-    
+
     // Show appropriate success/error messages
     if (successfulVendors.length === this.selectedVendors.length) {
       // All vendors successful
@@ -764,13 +764,13 @@ async sendRFQ() {
     } else {
       // All failed - rollback RFQ status to draft
       try {
-        await axios.patch(`/request-for-quotations/${this.rfqId}/status`, {
+        await axios.patch(`/procurement/request-for-quotations/${this.rfqId}/status`, {
           status: 'draft'
         });
       } catch (rollbackError) {
         console.error('Failed to rollback RFQ status:', rollbackError);
       }
-      
+
       const firstError = failedVendors[0]?.error || 'Unknown error';
       if (this.toast) {
         this.toast.error(`Failed to send RFQ to all vendors: ${firstError}`);
@@ -784,11 +784,11 @@ async sendRFQ() {
 
   } catch (error) {
     console.error('Error in sendRFQ:', error);
-    
+
     this.showConfirmationModal = false;
-    
+
     const errorMessage = error.response?.data?.message || 'Failed to send RFQ to vendors. Please try again.';
-    
+
     if (this.toast) {
       this.toast.error('Failed to send RFQ: ' + errorMessage);
     }
@@ -800,10 +800,10 @@ async sendRFQ() {
     // Update selected vendors if selection changed
     async updateSelectedVendors() {
       try {
-        await axios.patch(`/request-for-quotations/${this.rfqId}/vendors`, {
+        await axios.patch(`/procurement/request-for-quotations/${this.rfqId}/vendors`, {
           vendor_ids: this.selectedVendors
         });
-        
+
         console.log('Vendor selection updated');
       } catch (error) {
         console.error('Error updating vendor selection:', error);
@@ -814,10 +814,10 @@ async sendRFQ() {
     // Mark vendors as sent
     async markVendorsAsSent() {
       try {
-        await axios.patch(`/request-for-quotations/${this.rfqId}/vendors/mark-sent`, {
+        await axios.patch(`/procurement/request-for-quotations/${this.rfqId}/vendors/mark-sent`, {
           vendor_ids: this.selectedVendors
         });
-        
+
         console.log('Vendors marked as sent');
       } catch (error) {
         console.error('Error marking vendors as sent:', error);
@@ -828,7 +828,7 @@ async sendRFQ() {
     // Format date for display
     formatDate(dateString) {
       if (!dateString) return null;
-      
+
       const date = new Date(dateString);
       return date.toLocaleDateString('id-ID', {
         year: 'numeric',
@@ -1514,35 +1514,35 @@ async sendRFQ() {
   .rfq-send-container {
     padding: 16px;
   }
-  
+
   .page-header {
     flex-direction: column;
     gap: 16px;
     align-items: flex-start;
   }
-  
+
   .control-row {
     flex-direction: column;
   }
-  
+
   .bulk-actions {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .detail-row {
     grid-template-columns: 1fr;
   }
-  
+
   .selection-stats {
     flex-direction: column;
     gap: 8px;
   }
-  
+
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .modal-content {
     width: 95%;
     margin: 16px;

@@ -287,7 +287,7 @@
         isLoading.value = true;
 
         try {
-          const response = await axios.get(`/deliveries/${route.params.id}`);
+          const response = await axios.get(`/sales/deliveries/${route.params.id}`);
           const data = response.data.data;
           // Convert snake_case delivery_lines to camelCase deliveryLines
           if (data.delivery_lines) {
@@ -348,7 +348,7 @@
       // Actions
       const markAsInTransit = async () => {
         try {
-          await axios.put(`/deliveries/${delivery.value.delivery_id}`, {
+          await axios.put(`/sales/deliveries/${delivery.value.delivery_id}`, {
             ...delivery.value,
             status: 'In Transit'
           });
@@ -367,7 +367,7 @@
 
       const confirmCompleteDelivery = async () => {
         try {
-          await axios.post(`/deliveries/${delivery.value.delivery_id}/complete`);
+          await axios.post(`/sales/deliveries/${delivery.value.delivery_id}/complete`);
 
           delivery.value.status = 'Completed';
           showCompleteModal.value = false;
@@ -384,7 +384,7 @@
 
       const cancelDelivery = async () => {
         try {
-          await axios.put(`/deliveries/${delivery.value.delivery_id}`, {
+          await axios.put(`/sales/deliveries/${delivery.value.delivery_id}`, {
             ...delivery.value,
             status: 'Cancelled'
           });

@@ -361,7 +361,7 @@ export default {
       this.error = null;
       
       try {
-        const response = await axios.get(`/quality-inspections/${this.id}`);
+        const response = await axios.get(`/manufacturing/quality/inspections/${this.id}`);
         
         // Map API data to form structure
         const inspection = response.data;
@@ -592,13 +592,13 @@ export default {
         
         let response;
         if (this.isEditMode) {
-          response = await axios.post(`/quality-inspections/${this.id}?_method=PUT`, formData, {
+          response = await axios.post(`/manufacturing/quality/inspections/${this.id}?_method=PUT`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           });
         } else {
-          response = await axios.post('/quality-inspections', formData, {
+          response = await axios.post('/manufacturing/quality/inspections', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }

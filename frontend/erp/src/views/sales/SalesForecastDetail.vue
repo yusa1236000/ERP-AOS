@@ -293,7 +293,7 @@ export default {
     async loadForecast() {
       try {
         this.isLoading = true;
-        const response = await axios.get(`/forecasts/${this.id}`);
+        const response = await axios.get(`/sales/forecasts/${this.id}`);
         this.forecast = response.data.data;
       } catch (error) {
         console.error('Error loading forecast:', error);
@@ -308,7 +308,7 @@ export default {
       if (!this.forecast) return;
       
       try {
-        const response = await axios.get('/forecasts/history', {
+        const response = await axios.get('/sales/forecasts/history', {
           params: {
             item_id: this.forecast.item_id,
             customer_id: this.forecast.customer_id,
@@ -329,7 +329,7 @@ export default {
 
     async deleteForecast() {
       try {
-        await axios.delete(`/forecasts/${this.forecast.forecast_id}`);
+        await axios.delete(`/sales/forecasts/${this.forecast.forecast_id}`);
         this.$toast?.success('Forecast deleted successfully');
         this.showDeleteModal = false;
         this.$router.push('/sales/forecasts');

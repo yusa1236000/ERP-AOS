@@ -367,7 +367,7 @@ export default {
 
     async loadVendors() {
       try {
-        const response = await axios.get('/vendors');
+        const response = await axios.get('/procurement/vendors');
 
         // Handle paginated response structure
         if (response.data && response.data.data && response.data.data.data) {
@@ -391,7 +391,7 @@ export default {
 
     async loadItems() {
       try {
-        const response = await axios.get('/items?is_purchasable=1');
+        const response = await axios.get('/inventory/items?is_purchasable=1');
         this.items = response.data.data;
       } catch (error) {
         console.error('Error loading items:', error);
@@ -400,7 +400,7 @@ export default {
 
     async loadUoms() {
       try {
-        const response = await axios.get('/uoms');
+        const response = await axios.get('/inventory/uom');
         this.uoms = response.data.data;
       } catch (error) {
         console.error('Error loading UOMs:', error);
@@ -410,7 +410,7 @@ export default {
     async loadPurchaseOrder(poId) {
       this.isLoading = true;
       try {
-        const response = await axios.get(`/purchase-orders/${poId}`);
+        const response = await axios.get(`/procurement/purchase-orders/${poId}`);
 
         if (response.data.status === 'success') {
           this.purchaseOrder = response.data.data;
@@ -607,11 +607,11 @@ export default {
 
         if (this.isEditMode) {
           response = await axios.put(
-            `/purchase-orders/${this.purchaseOrder.po_id}`,
+            `/procurement/purchase-orders/${this.purchaseOrder.po_id}`,
             this.purchaseOrder
           );
         } else {
-          response = await axios.post('/purchase-orders', this.purchaseOrder);
+          response = await axios.post('/procurement/purchase-orders', this.purchaseOrder);
         }
 
         if (response.data.status === 'success') {

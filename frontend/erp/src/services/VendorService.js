@@ -12,7 +12,9 @@ const VendorService = {
      */
     getAllVendors: async (params = {}) => {
         try {
-            const response = await axios.get("/vendors", { params });
+            const response = await axios.get("/procurement/vendors", {
+                params,
+            });
 
             // Return the response as is, we'll handle the structure in the component
             // This accommodates different axios response structures
@@ -31,7 +33,7 @@ const VendorService = {
      */
     getVendorById: async (id) => {
         try {
-            const response = await axios.get(`/vendors/${id}`);
+            const response = await axios.get(`/procurement/vendors/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching vendor ${id}:`, error);
@@ -46,7 +48,10 @@ const VendorService = {
      */
     createVendor: async (vendorData) => {
         try {
-            const response = await axios.post("/vendors", vendorData);
+            const response = await axios.post(
+                "/procurement/vendors",
+                vendorData
+            );
             return response.data;
         } catch (error) {
             console.error("Error creating vendor:", error);
@@ -62,7 +67,10 @@ const VendorService = {
      */
     updateVendor: async (id, vendorData) => {
         try {
-            const response = await axios.put(`/vendors/${id}`, vendorData);
+            const response = await axios.put(
+                `/procurement/vendors/${id}`,
+                vendorData
+            );
             return response.data;
         } catch (error) {
             console.error(`Error updating vendor ${id}:`, error);
@@ -77,7 +85,7 @@ const VendorService = {
      */
     deleteVendor: async (id) => {
         try {
-            const response = await axios.delete(`/vendors/${id}`);
+            const response = await axios.delete(`/procurement/vendors/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting vendor ${id}:`, error);
@@ -92,7 +100,9 @@ const VendorService = {
      */
     getVendorEvaluations: async (id) => {
         try {
-            const response = await axios.get(`/vendors/${id}/evaluations`);
+            const response = await axios.get(
+                `/procurement/vendors/${id}/evaluations`
+            );
             return response.data;
         } catch (error) {
             console.error(
@@ -110,7 +120,9 @@ const VendorService = {
      */
     getVendorPurchaseOrders: async (id) => {
         try {
-            const response = await axios.get(`/vendors/${id}/purchase-orders`);
+            const response = await axios.get(
+                `/procurement/vendors/${id}/purchase-orders`
+            );
             return response.data;
         } catch (error) {
             console.error(

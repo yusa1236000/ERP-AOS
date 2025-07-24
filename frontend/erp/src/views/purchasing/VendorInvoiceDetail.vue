@@ -360,7 +360,7 @@ export default {
     async loadInvoice() {
       try {
         const invoiceId = this.$route.params.id;
-        const response = await axios.get(`/vendor-invoices/${invoiceId}`);
+        const response = await axios.get(`/procurement/vendor-invoices/${invoiceId}`);
 
         if (response.data.status === 'success') {
           this.invoice = response.data.data.invoice;
@@ -387,7 +387,7 @@ export default {
     },
     async updateStatus() {
       try {
-        const response = await axios.patch(`/vendor-invoices/${this.invoice.invoice_id}/status`, {
+        const response = await axios.patch(`/procurement/vendor-invoices/${this.invoice.invoice_id}/status`, {
           status: this.newStatus
         });
 
@@ -406,7 +406,7 @@ export default {
     },
     async deleteInvoice() {
       try {
-        await axios.delete(`/vendor-invoices/${this.invoice.invoice_id}`);
+        await axios.delete(`/procurement/vendor-invoices/${this.invoice.invoice_id}`);
         this.showDeleteModal = false;
         this.$router.push('/purchasing/vendor-invoices');
       } catch (error) {

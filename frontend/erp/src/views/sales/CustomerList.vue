@@ -925,7 +925,7 @@ export default {
             isLoading.value = true;
 
             try {
-                const response = await axios.get("/customers");
+                const response = await axios.get("/sales/customers");
                 customers.value = response.data.data;
             } catch (error) {
                 console.error("Error fetching customers:", error);
@@ -1037,7 +1037,7 @@ export default {
                 if (isEditMode.value) {
                     // Update existing customer
                      await axios.put(
-                        `/customers/${customerForm.value.customer_id}`,
+                        `/sales/customers/${customerForm.value.customer_id}`,
                         customerForm.value
                     );
                     // console.log(
@@ -1066,7 +1066,7 @@ export default {
                 } else {
                     // Create new customer
                     const response = await axios.post(
-                        "/customers",
+                        "/sales/customers",
                         customerForm.value
                     );
                     // console.log(
@@ -1141,7 +1141,7 @@ export default {
         const deleteCustomer = async () => {
             try {
                 await axios.delete(
-                    `/customers/${customerToDelete.value.customer_id}`
+                    `/sales/customers/${customerToDelete.value.customer_id}`
                 );
 
                 // Remove from local state
@@ -1183,7 +1183,7 @@ export default {
             isLoadingOrders.value = true;
             try {
                 const response = await axios.get(
-                    `/customers/${customerId}/orders`
+                    `/sales/customers/${customerId}/orders`
                 );
                 customerOrders.value = response.data.data;
                 // console.log('Customer orders loaded:', customerOrders.value);
@@ -1275,7 +1275,7 @@ export default {
             isLoadingQuotations.value = true;
             try {
                 const response = await axios.get(
-                    `/customers/${customerId}/quotations`
+                    `/sales/customers/${customerId}/quotations`
                 );
                 customerQuotations.value = response.data.data;
                 // console.log('Customer quotations loaded:', customerQuotations.value);
@@ -1309,7 +1309,7 @@ export default {
             isLoadingInteractions.value = true;
             try {
                 const response = await axios.get(
-                    `/interactions/customer/${customerId}`
+                    `/sales/interactions/customer/${customerId}`
                 );
                 customerInteractions.value = response.data.data;
                 // console.log('Customer interactions loaded:', customerInteractions.value);

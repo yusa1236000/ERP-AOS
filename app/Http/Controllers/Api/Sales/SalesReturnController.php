@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\Sales;
 
+use App\Http\Controllers\Controller;
 use App\Models\Sales\SalesReturn;
 use App\Models\Sales\SalesReturnLine;
 use App\Models\Sales\SalesInvoice;
 use App\Models\Sales\SalesInvoiceLine;
 use App\Models\Item;
-use App\Models\CustomerReceivable;
+use App\Models\Accounting\CustomerReceivable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -71,7 +72,7 @@ class SalesReturnController extends Controller
             // Create return lines
             foreach ($request->lines as $line) {
                 $invoiceLine = SalesInvoiceLine::find($line['invoice_line_id']);
-                
+
                 // Validate if the returned quantity is valid
                 if ($line['returned_quantity'] > $invoiceLine->quantity) {
                     DB::rollBack();
@@ -79,9 +80,9 @@ class SalesReturnController extends Controller
                         'message' => 'Returned quantity exceeds invoiced quantity for item ' . $invoiceLine->item_id
                     ], 400);
                 }
-                
+
                 $returnAmount = ($invoiceLine->total / $invoiceLine->quantity) * $line['returned_quantity'];
-                
+
                 SalesReturnLine::create([
                     'return_id' => $return->return_id,
                     'invoice_line_id' => $line['invoice_line_id'],
@@ -89,14 +90,14 @@ class SalesReturnController extends Controller
                     'returned_quantity' => $line['returned_quantity'],
                     'condition' => $line['condition']
                 ]);
-                
+
                 // Update inventory if the returned items are in good condition
                 if ($line['condition'] === 'Good') {
                     $item = Item::find($invoiceLine->item_id);
                     $item->current_stock += $line['returned_quantity'];
                     $item->save();
                 }
-                
+
                 $totalReturnAmount += $returnAmount;
             }
 
@@ -106,12 +107,12 @@ class SalesReturnController extends Controller
                 // Reduce the balance by the return amount
                 $newBalance = max(0, $receivable->balance - $totalReturnAmount);
                 $newPaidAmount = $receivable->paid_amount + ($receivable->balance - $newBalance);
-                
+
                 $receivable->update([
                     'paid_amount' => $newPaidAmount,
                     'balance' => $newBalance
                 ]);
-                
+
                 // Update status if fully paid
                 if ($newBalance === 0) {
                     $receivable->update(['status' => 'Closed']);
@@ -120,9 +121,9 @@ class SalesReturnController extends Controller
             }
 
             DB::commit();
-            
+
             return response()->json([
-                'data' => $return->load('salesReturnLines'), 
+                'data' => $return->load('salesReturnLines'),
                 'message' => 'Sales return created successfully'
             ], 201);
         } catch (\Exception $e) {
@@ -140,16 +141,16 @@ class SalesReturnController extends Controller
     public function show($id)
     {
         $return = SalesReturn::with([
-            'customer', 
+            'customer',
             'salesInvoice',
             'salesReturnLines.item',
             'salesReturnLines.salesInvoiceLine'
         ])->find($id);
-        
+
         if (!$return) {
             return response()->json(['message' => 'Sales return not found'], 404);
         }
-        
+
         return response()->json(['data' => $return], 200);
     }
 
@@ -163,7 +164,7 @@ class SalesReturnController extends Controller
     public function update(Request $request, $id)
     {
         $return = SalesReturn::find($id);
-        
+
         if (!$return) {
             return response()->json(['message' => 'Sales return not found'], 404);
         }
@@ -172,7 +173,7 @@ class SalesReturnController extends Controller
         if (in_array($return->status, ['Processed', 'Completed'])) {
             return response()->json(['message' => 'Cannot update a ' . $return->status . ' sales return'], 400);
         }
-        
+
         $validator = Validator::make($request->all(), [
             'return_number' => 'required|unique:SalesReturn,return_number,' . $id . ',return_id',
             'return_date' => 'required|date',
@@ -197,25 +198,25 @@ class SalesReturnController extends Controller
     public function process($id)
     {
         $return = SalesReturn::with('salesReturnLines')->find($id);
-        
+
         if (!$return) {
             return response()->json(['message' => 'Sales return not found'], 404);
         }
-        
+
         if ($return->status !== 'Pending') {
             return response()->json(['message' => 'Sales return must be in pending status to be processed'], 400);
         }
-        
+
         try {
             DB::beginTransaction();
-            
+
             $return->update(['status' => 'Processed']);
-            
+
             // Additional processing logic can be added here
             // Such as creating a credit note or refund
-            
+
             DB::commit();
-            
+
             return response()->json(['message' => 'Sales return processed successfully'], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -232,27 +233,27 @@ class SalesReturnController extends Controller
     public function destroy($id)
     {
         $return = SalesReturn::find($id);
-        
+
         if (!$return) {
             return response()->json(['message' => 'Sales return not found'], 404);
         }
-        
+
         // Check if return can be deleted (not processed or completed)
         if (in_array($return->status, ['Processed', 'Completed'])) {
             return response()->json(['message' => 'Cannot delete a ' . $return->status . ' sales return'], 400);
         }
-        
+
         try {
             DB::beginTransaction();
-            
+
             // Delete related return lines
             $return->salesReturnLines()->delete();
-            
+
             // Delete the return
             $return->delete();
-            
+
             DB::commit();
-            
+
             return response()->json(['message' => 'Sales return deleted successfully'], 200);
         } catch (\Exception $e) {
             DB::rollBack();

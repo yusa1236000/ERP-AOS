@@ -385,8 +385,8 @@ export default {
       try {
         // Load items and warehouses
         const [itemsResponse, warehousesResponse] = await Promise.all([
-          axios.get('/items'),
-          axios.get('/warehouses')
+          axios.get('/inventory/items'),
+          axios.get('/inventory/warehouses')
         ]);
         
         this.items = itemsResponse.data.data || itemsResponse.data;
@@ -394,7 +394,7 @@ export default {
         
         // If in edit mode, load the adjustment data
         if (this.isEditMode) {
-          const adjustmentResponse = await axios.get(`/stock-adjustments/${this.$route.params.id}`);
+          const adjustmentResponse = await axios.get(`/inventory/stock-adjustments/${this.$route.params.id}`);
           const adjustment = adjustmentResponse.data.data;
           
           this.form.adjustment_date = adjustment.adjustment_date.split('T')[0];
@@ -449,7 +449,7 @@ export default {
       if (line.item_id && line.warehouse_id) {
         try {
           // Load current stock for this item in this warehouse
-          const response = await axios.get(`/item-stocks/${line.item_id}/warehouse/${line.warehouse_id}`);
+          const response = await axios.get(`/inventory/item-stocks/${line.item_id}/warehouse/${line.warehouse_id}`);
           line.book_quantity = response.data.data ? response.data.data.quantity : 0;
           this.calculateVariance(lineIndex);
         } catch (err) {

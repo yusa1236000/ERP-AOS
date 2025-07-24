@@ -366,7 +366,7 @@
 
       try {
         // Load vendors and filter out null/undefined values
-        const vendorsResponse = await axios.get('/vendors');
+        const vendorsResponse = await axios.get('/procurement/vendors');
         console.log('Full vendors response:', vendorsResponse.data); // Debug log
 
         // Handle the nested response structure berdasarkan struktur API Anda
@@ -399,7 +399,7 @@
 
         if (this.isEditing) {
           // Load invoice data if editing
-          const invoiceResponse = await axios.get(`/vendor-invoices/${invoiceId}`);
+          const invoiceResponse = await axios.get(`/procurement/vendor-invoices/${invoiceId}`);
           const invoice = invoiceResponse.data.data.invoice;
 
           this.form = {
@@ -481,7 +481,7 @@
         }
 
         try {
-          const response = await axios.get('/currency-rates/current-rate', {
+          const response = await axios.get('/accounting/currency-rates/current-rate', {
             params: {
               currency_code: this.form.currency_code,
               date: this.form.invoice_date
@@ -504,7 +504,7 @@
         this.loadingReceipts = true;
 
         try {
-          const response = await axios.get('/vendor-invoices/uninvoiced-receipts', {
+          const response = await axios.get('/procurement/vendor-invoices/uninvoiced-receipts', {
             params: { vendor_id: this.selectedVendorId }
           });
 
@@ -546,9 +546,13 @@
           let response;
           const formData = { ...this.form };
 
+          // Add from_currency and to_currency fields to formData
+          formData.from_currency = 'USD';
+          formData.to_currency = this.form.currency_code;
+
           if (this.isEditing) {
             const invoiceId = this.$route.params.id;
-            response = await axios.put(`/vendor-invoices/${invoiceId}`, formData);
+            response = await axios.put(`/inventory/vendor-invoices/${invoiceId}`, formData);
           } else {
             response = await axios.post('/vendor-invoices', formData);
           }

@@ -283,7 +283,7 @@
     methods: {
       async loadVendors() {
         try {
-          const response = await axios.get('/vendors');
+          const response = await axios.get('/procurement/vendors');
           console.log('Vendors API response:', response);
           // Defensive filter to remove null or malformed vendors
           this.vendors = (response.data.data?.data || response.data.data || []).filter(vendor => vendor && vendor.vendor_id);
@@ -305,7 +305,7 @@
             ...this.filters
           };
 
-          const response = await axios.get('/vendor-invoices', { params });
+          const response = await axios.get('/procurement/vendor-invoices', { params });
           console.log('Vendor invoices API response:', response);
 
           // Handle different possible response structures
@@ -356,7 +356,7 @@
         if (!this.invoiceToDelete) return;
 
         try {
-          await axios.delete(`/vendor-invoices/${this.invoiceToDelete.invoice_id}`);
+          await axios.delete(`/procurement/vendor-invoices/${this.invoiceToDelete.invoice_id}`);
           this.showDeleteModal = false;
           this.invoiceToDelete = null;
           this.loadInvoices(this.currentPage);

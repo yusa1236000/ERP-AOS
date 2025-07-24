@@ -222,7 +222,7 @@ export default {
     async fetchInvoice() {
       this.loading = true;
       try {
-        const response = await axios.get(`/invoices/${this.id}`);
+        const response = await axios.get(`/sales/invoices/${this.id}`);
         this.invoice = response.data.data;
       } catch (error) {
         console.error('Error fetching invoice:', error);

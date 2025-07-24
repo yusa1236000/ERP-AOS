@@ -313,7 +313,7 @@ export default {
           params.end_date = this.filters.endDate;
         }
 
-        const response = await axios.get('/invoices', { params });
+        const response = await axios.get('/sales/invoices', { params });
 
         this.invoices = response.data.data;
         this.currentPage = response.data.current_page;
@@ -429,7 +429,7 @@ export default {
       if (!this.selectedInvoice) return;
 
       try {
-        await axios.delete(`/invoices/${this.selectedInvoice.invoice_id}`);
+        await axios.delete(`/sales/invoices/${this.selectedInvoice.invoice_id}`);
         this.$toast.success(`Invoice ${this.selectedInvoice.invoice_number} deleted successfully`);
         this.showDeleteModal = false;
         this.fetchInvoices();

@@ -15,21 +15,21 @@
           </router-link>
         </div>
       </div>
-  
+
       <div class="filters">
         <div class="search-box">
           <i class="fas fa-search search-icon"></i>
-          <input 
-            type="text" 
-            v-model="searchQuery" 
-            placeholder="Search by item code or name" 
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="Search by item code or name"
             @input="searchItems"
           />
           <button v-if="searchQuery" @click="clearSearch" class="clear-search">
             <i class="fas fa-times"></i>
           </button>
         </div>
-  
+
         <div class="filter-group">
           <label for="warehouseFilter">Warehouse:</label>
           <select id="warehouseFilter" v-model="warehouseFilter" @change="filterByWarehouse">
@@ -39,7 +39,7 @@
             </option>
           </select>
         </div>
-  
+
         <div class="filter-group">
           <label for="stockFilter">Stock Level:</label>
           <select id="stockFilter" v-model="stockFilter" @change="filterByStockLevel">
@@ -50,28 +50,28 @@
           </select>
         </div>
       </div>
-  
+
       <div v-if="loading" class="loading">
         <i class="fas fa-spinner fa-spin"></i> Loading inventory data...
       </div>
-  
+
       <div v-else-if="error" class="error-message">
         <i class="fas fa-exclamation-circle"></i>
         {{ error }}
       </div>
-  
+
       <div v-else-if="filteredStocks.length === 0" class="empty-state">
         <i class="fas fa-box-open"></i>
         <h3>No Stock Items Found</h3>
         <p>Try adjusting your search or filter criteria.</p>
       </div>
-  
+
       <div v-else class="stock-table-container">
         <table class="stock-table">
           <thead>
             <tr>
               <th @click="sortBy('item_code')">
-                Item Code 
+                Item Code
                 <i v-if="sortKey === 'item_code'" :class="sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
               </th>
               <th @click="sortBy('item_name')">
@@ -128,24 +128,24 @@
             </tr>
           </tbody>
         </table>
-  
+
         <div class="pagination">
           <div class="pagination-info">
             Showing {{ startIndex + 1 }} to {{ endIndex }} of {{ filteredStocks.length }} items
           </div>
           <div class="pagination-controls">
-            <button 
-              class="pagination-btn" 
-              :disabled="currentPage === 1" 
+            <button
+              class="pagination-btn"
+              :disabled="currentPage === 1"
               @click="currentPage--"
             >
               <i class="fas fa-chevron-left"></i>
             </button>
-            
+
             <template v-for="page in displayedPages" :key="page">
-              <button 
-                v-if="page !== '...'" 
-                class="pagination-btn" 
+              <button
+                v-if="page !== '...'"
+                class="pagination-btn"
                 :class="{ active: page === currentPage }"
                 @click="currentPage = page"
               >
@@ -153,10 +153,10 @@
               </button>
               <span v-else class="pagination-ellipsis">...</span>
             </template>
-            
-            <button 
-              class="pagination-btn" 
-              :disabled="currentPage === totalPages" 
+
+            <button
+              class="pagination-btn"
+              :disabled="currentPage === totalPages"
               @click="currentPage++"
             >
               <i class="fas fa-chevron-right"></i>
@@ -166,10 +166,10 @@
       </div>
     </div>
   </template>
-  
+
   <script>
   import axios from 'axios';
-  
+
   export default {
     name: 'ItemStockList',
     data() {
@@ -194,21 +194,21 @@
     computed: {
       filteredStocks() {
         let result = this.stocks;
-        
+
         // Search filter
         if (this.searchQuery) {
           const query = this.searchQuery.toLowerCase();
-          result = result.filter(stock => 
-            stock.item_code.toLowerCase().includes(query) || 
+          result = result.filter(stock =>
+            stock.item_code.toLowerCase().includes(query) ||
             stock.item_name.toLowerCase().includes(query)
           );
         }
-        
+
         // Warehouse filter
         if (this.warehouseFilter) {
           result = result.filter(stock => stock.warehouse_id == this.warehouseFilter);
         }
-        
+
         // Stock level filter
         if (this.stockFilter) {
           switch(this.stockFilter) {
@@ -223,23 +223,23 @@
               break;
           }
         }
-        
+
         // Sort
         result = result.sort((a, b) => {
           let aValue = a[this.sortKey];
           let bValue = b[this.sortKey];
-          
+
           // Handle comparison for strings vs numbers
           if (typeof aValue === 'string') {
             aValue = aValue.toLowerCase();
             bValue = bValue.toLowerCase();
           }
-          
+
           if (aValue < bValue) return this.sortOrder === 'asc' ? -1 : 1;
           if (aValue > bValue) return this.sortOrder === 'asc' ? 1 : -1;
           return 0;
         });
-        
+
         return result;
       },
       totalPages() {
@@ -258,7 +258,7 @@
         const total = this.totalPages;
         const current = this.currentPage;
         const pages = [];
-        
+
         if (total <= 7) {
           // Show all pages if 7 or fewer
           for (let i = 1; i <= total; i++) {
@@ -267,31 +267,31 @@
         } else {
           // Always include first page
           pages.push(1);
-          
+
           // Show ellipsis if current page is more than 3
           if (current > 3) {
             pages.push('...');
           }
-          
+
           // Add pages around current page
           const startPage = Math.max(2, current - 1);
           const endPage = Math.min(total - 1, current + 1);
-          
+
           for (let i = startPage; i <= endPage; i++) {
             pages.push(i);
           }
-          
+
           // Show ellipsis if current page is less than total - 2
           if (current < total - 2) {
             pages.push('...');
           }
-          
+
           // Always include last page
           if (total > 1) {
             pages.push(total);
           }
         }
-        
+
         return pages;
       }
     },
@@ -299,11 +299,11 @@
       async fetchData() {
         this.loading = true;
         this.error = null;
-        
+
         try {
           // Get all stocks first
-          const response = await axios.get('/item-stocks');
-          
+          const response = await axios.get('/inventory/item-stocks');
+
           if (response.data && response.data.data) {
             // Transform the data to include available_quantity
             this.stocks = response.data.data.map(stock => ({
@@ -328,7 +328,7 @@
       },
       async fetchWarehouses() {
         try {
-          const response = await axios.get('/warehouses');
+          const response = await axios.get('/inventory/warehouses');
           if (response.data && response.data.data) {
             this.warehouses = response.data.data;
           }
@@ -363,7 +363,7 @@
         // Get the item's minimum and maximum stock levels
         const minStock = stock.item?.minimum_stock || 0;
         const maxStock = stock.item?.maximum_stock || Infinity;
-        
+
         if (stock.quantity <= 0) {
           return 'Out of Stock';
         } else if (stock.quantity < minStock) {
@@ -376,7 +376,7 @@
       },
       getStockStatusClass(stock) {
         const status = this.getStockStatus(stock);
-        
+
         switch(status) {
           case 'Out of Stock': return 'status-danger';
           case 'Low Stock': return 'status-warning';
@@ -387,29 +387,29 @@
     }
   };
   </script>
-  
+
   <style scoped>
   .item-stock-list {
     margin-bottom: 2rem;
   }
-  
+
   .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
   }
-  
+
   .page-header h1 {
     margin: 0;
     font-size: 1.75rem;
   }
-  
+
   .actions {
     display: flex;
     gap: 0.75rem;
   }
-  
+
   .btn {
     display: inline-flex;
     align-items: center;
@@ -422,35 +422,35 @@
     border: none;
     transition: all 0.2s;
   }
-  
+
   .btn-primary {
     background-color: var(--primary-color);
     color: white;
   }
-  
+
   .btn-primary:hover {
     background-color: var(--primary-dark);
   }
-  
+
   .btn-secondary {
     background-color: var(--gray-100);
     color: var(--gray-800);
     border: 1px solid var(--gray-200);
   }
-  
+
   .btn-secondary:hover {
     background-color: var(--gray-200);
   }
-  
+
   .btn-warning {
     background-color: var(--warning-color);
     color: white;
   }
-  
+
   .btn-warning:hover {
     background-color: #b45309;
   }
-  
+
   .filters {
     display: flex;
     flex-wrap: wrap;
@@ -458,13 +458,13 @@
     margin-bottom: 1.5rem;
     align-items: flex-end;
   }
-  
+
   .search-box {
     position: relative;
     flex-grow: 1;
     max-width: 24rem;
   }
-  
+
   .search-icon {
     position: absolute;
     left: 0.75rem;
@@ -472,7 +472,7 @@
     transform: translateY(-50%);
     color: var(--gray-500);
   }
-  
+
   .search-box input {
     width: 100%;
     padding: 0.625rem 2.5rem;
@@ -480,13 +480,13 @@
     border-radius: 0.375rem;
     font-size: 0.875rem;
   }
-  
+
   .search-box input:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   }
-  
+
   .clear-search {
     position: absolute;
     right: 0.75rem;
@@ -498,19 +498,19 @@
     cursor: pointer;
     padding: 0.25rem;
   }
-  
+
   .filter-group {
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
   }
-  
+
   .filter-group label {
     font-size: 0.75rem;
     color: var(--gray-500);
     font-weight: 500;
   }
-  
+
   .filter-group select {
     padding: 0.625rem;
     border: 1px solid var(--gray-200);
@@ -518,7 +518,7 @@
     font-size: 0.875rem;
     min-width: 10rem;
   }
-  
+
   .loading, .error-message, .empty-state {
     display: flex;
     flex-direction: column;
@@ -531,39 +531,39 @@
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
+
   .loading i, .error-message i, .empty-state i {
     font-size: 2.5rem;
     margin-bottom: 1rem;
   }
-  
+
   .error-message {
     color: var(--danger-color);
   }
-  
+
   .empty-state h3 {
     margin: 0 0 0.5rem;
     color: var(--gray-700);
   }
-  
+
   .empty-state p {
     color: var(--gray-500);
     max-width: 20rem;
   }
-  
+
   .stock-table-container {
     overflow-x: auto;
     background-color: white;
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
-  
+
   .stock-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.875rem;
   }
-  
+
   .stock-table th {
     padding: 0.75rem 1rem;
     text-align: left;
@@ -576,21 +576,21 @@
     z-index: 10;
     cursor: pointer;
   }
-  
+
   .stock-table th:hover {
     background-color: var(--gray-100);
   }
-  
+
   .stock-table td {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--gray-100);
     color: var(--gray-800);
   }
-  
+
   .stock-table tbody tr:hover {
     background-color: var(--gray-50);
   }
-  
+
   .status-badge {
     display: inline-block;
     padding: 0.25rem 0.5rem;
@@ -598,32 +598,32 @@
     font-size: 0.75rem;
     font-weight: 500;
   }
-  
+
   .status-success {
     background-color: rgba(5, 150, 105, 0.1);
     color: var(--success-color);
   }
-  
+
   .status-warning {
     background-color: rgba(217, 119, 6, 0.1);
     color: var(--warning-color);
   }
-  
+
   .status-danger {
     background-color: rgba(220, 38, 38, 0.1);
     color: var(--danger-color);
   }
-  
+
   .status-info {
     background-color: rgba(37, 99, 235, 0.1);
     color: var(--primary-color);
   }
-  
+
   .actions-cell {
     display: flex;
     gap: 0.5rem;
   }
-  
+
   .btn-icon {
     display: inline-flex;
     align-items: center;
@@ -636,12 +636,12 @@
     border: 1px solid var(--gray-200);
     transition: all 0.2s;
   }
-  
+
   .btn-icon:hover {
     background-color: var(--gray-100);
     color: var(--gray-800);
   }
-  
+
   .pagination {
     display: flex;
     justify-content: space-between;
@@ -649,17 +649,17 @@
     padding: 1rem;
     border-top: 1px solid var(--gray-200);
   }
-  
+
   .pagination-info {
     color: var(--gray-500);
     font-size: 0.875rem;
   }
-  
+
   .pagination-controls {
     display: flex;
     gap: 0.25rem;
   }
-  
+
   .pagination-btn {
     display: flex;
     justify-content: center;
@@ -672,23 +672,23 @@
     color: var(--gray-500);
     cursor: pointer;
   }
-  
+
   .pagination-btn:hover:not(:disabled) {
     background-color: var(--gray-100);
     color: var(--gray-800);
   }
-  
+
   .pagination-btn.active {
     background-color: var(--primary-color);
     color: white;
     border-color: var(--primary-color);
   }
-  
+
   .pagination-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
   }
-  
+
   .pagination-ellipsis {
     display: flex;
     justify-content: center;
@@ -697,37 +697,37 @@
     height: 2rem;
     color: var(--gray-500);
   }
-  
+
   @media (max-width: 768px) {
     .page-header {
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
     }
-    
+
     .actions {
       width: 100%;
       justify-content: flex-start;
     }
-    
+
     .filters {
       flex-direction: column;
       align-items: stretch;
       gap: 1rem;
     }
-    
+
     .search-box {
       max-width: none;
     }
-    
+
     .filter-group {
       width: 100%;
     }
-    
+
     .filter-group select {
       width: 100%;
     }
-    
+
     .pagination {
       flex-direction: column;
       gap: 1rem;

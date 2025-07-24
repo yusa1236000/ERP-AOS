@@ -400,8 +400,8 @@ export default {
     async loadDropdownData() {
       try {
         const [customersResponse, itemsResponse] = await Promise.all([
-          axios.get('/customers'),
-          axios.get('/items')
+          axios.get('/sales/customers'),
+          axios.get('/inventory/items')
         ]);
 
         this.customers = customersResponse.data.data || customersResponse.data;
@@ -444,7 +444,7 @@ export default {
           params.sort_order = this.sortOrder;
         }
 
-        const response = await axios.get('/forecasts', { params });
+        const response = await axios.get('/sales/forecasts', { params });
 
         if (response.data.data) {
           // Paginated response
@@ -571,7 +571,7 @@ export default {
 
     async deleteForecast() {
       try {
-        await axios.delete(`/forecasts/${this.deleteTarget.forecast_id}`);
+        await axios.delete(`/sales/forecasts/${this.deleteTarget.forecast_id}`);
         this.$toast?.success('Forecast deleted successfully');
         this.showDeleteModal = false;
         this.deleteTarget = null;

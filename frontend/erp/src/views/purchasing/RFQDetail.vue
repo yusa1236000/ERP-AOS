@@ -173,8 +173,8 @@
           </div>
 
           <div v-else class="selected-vendors-list">
-            <div 
-              v-for="vendor in selectedVendors" 
+            <div
+              v-for="vendor in selectedVendors"
               :key="vendor.vendor_id"
               class="vendor-card"
             >
@@ -443,7 +443,7 @@ export default {
       this.loading = true;
 
       try {
-        const response = await axios.get(`/request-for-quotations/${this.id}`);
+        const response = await axios.get(`/procurement/request-for-quotations/${this.id}`);
 
         if (response.data.status === 'success' && response.data.data) {
           this.rfq = response.data.data;
@@ -579,7 +579,7 @@ export default {
       this.isUpdating = true;
 
       try {
-        const response = await axios.patch(`/request-for-quotations/${this.id}/status`, {
+        const response = await axios.patch(`/procurement/request-for-quotations/${this.id}/status`, {
           status: this.newStatus
         });
 
@@ -617,7 +617,7 @@ export default {
 
     async deleteRfq() {
       try {
-        const response = await axios.delete(`/request-for-quotations/${this.id}`);
+        const response = await axios.delete(`/procurement/request-for-quotations/${this.id}`);
 
         if (response.data.status === 'success') {
           if (this.$toast) {

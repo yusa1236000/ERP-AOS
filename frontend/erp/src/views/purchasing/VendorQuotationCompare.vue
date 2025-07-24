@@ -426,7 +426,7 @@ export default {
   methods: {
     // Fetch RFQ options
     fetchRFQOptions() {
-      axios.get('/request-for-quotations?status=sent')
+      axios.get('/procurement/request-for-quotations?status=sent')
         .then(response => {
           this.rfqOptions = response.data.data.data || response.data.data;
         })
@@ -457,8 +457,8 @@ export default {
       }
       
       Promise.all([
-        axios.get('/vendor-quotations', { params }),
-        axios.get(`/request-for-quotations/${this.selectedRFQ}`)
+        axios.get('/procurement/vendor-quotations', { params }),
+        axios.get(`/procurement/request-for-quotations/${this.selectedRFQ}`)
       ])
       .then(([quotationsResponse, rfqResponse]) => {
         this.quotations = quotationsResponse.data.data.data || quotationsResponse.data.data;
@@ -641,7 +641,7 @@ export default {
     changeStatus(id, newStatus) {
       this.processingAction = true;
       
-      axios.patch(`/vendor-quotations/${id}/status`, { status: newStatus })
+      axios.patch(`/procurement/vendor-quotations/${id}/status`, { status: newStatus })
         .then(response => {
           if (response.data.status === 'success') {
             const index = this.quotations.findIndex(q => q.quotation_id === id);

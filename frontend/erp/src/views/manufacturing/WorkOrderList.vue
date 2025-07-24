@@ -292,7 +292,7 @@
             params.date_to = dateTo.value;
           }
 
-          const response = await axios.get('/work-orders', { params });
+          const response = await axios.get('/manufacturing/work-orders', { params });
 
           // Update to preserve the full item object instead of just the name
           workOrders.value = response.data.data.map(wo => ({
@@ -449,13 +449,13 @@
           const woId = selectedItem.value.wo_id;
 
           if (modalAction.value === 'delete') {
-            await axios.delete(`/work-orders/${woId}`);
+            await axios.delete(`/manufacturing/work-orders/${woId}`);
             fetchWorkOrders();
           } else if (modalAction.value === 'release') {
-            await axios.patch(`/work-orders/${woId}`, { status: 'Released' });
+            await axios.patch(`/manufacturing/work-orders/${woId}`, { status: 'Released' });
             fetchWorkOrders();
           } else if (modalAction.value === 'start') {
-            await axios.patch(`/work-orders/${woId}`, { status: 'In Progress' });
+            await axios.patch(`/manufacturing/work-orders/${woId}`, { status: 'In Progress' });
             fetchWorkOrders();
           }
         } catch (error) {

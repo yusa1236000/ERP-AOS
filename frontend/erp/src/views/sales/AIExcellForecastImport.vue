@@ -461,7 +461,7 @@ export default {
   methods: {
     async loadCustomers() {
       try {
-        const response = await axios.get('/customers')
+        const response = await axios.get('/sales/customers')
         this.customers = response.data.data || response.data
       } catch (error) {
         console.error('Error loading customers:', error)
@@ -601,7 +601,7 @@ export default {
           formData.append('forecast_issue_date', this.form.forecast_issue_date)
           formData.append('preview_only', 'true')
 
-          const response = await axios.post('/ai-excel-forecast/process', formData, {
+          const response = await axios.post('/sales/ai-excel-forecast/process', formData, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -716,7 +716,7 @@ export default {
         this.errorMessage = '' // Clear any previous errors
 
         try {
-          const response = await axios.post('/ai-excel-forecast/save', {
+          const response = await axios.post('/sales/ai-excel-forecast/save', {
             customer_id: this.form.customer_id,
             forecast_issue_date: this.form.forecast_issue_date,
             items: this.previewData.items

@@ -482,7 +482,7 @@
     methods: {
       async fetchWarehouses() {
         try {
-          const response = await axios.get('/warehouses');
+          const response = await axios.get('/inventory/warehouses');
           if (response.data && response.data.data) {
             this.warehouses = response.data.data;
           }
@@ -496,7 +496,7 @@
         
         try {
           // Fetch negative stocks
-          const stocksResponse = await axios.get('/item-stocks/negative');
+          const stocksResponse = await axios.get('/inventory/item-stocks/negative');
           if (stocksResponse.data && stocksResponse.data.data) {
             this.negativeStocks = stocksResponse.data.data.map(stock => ({
               ...stock,
@@ -508,7 +508,7 @@
           }
           
           // Fetch summary
-          const summaryResponse = await axios.get('/item-stocks/negative-stock-summary');
+          const summaryResponse = await axios.get('/inventory/item-stocks/negative-stock-summary');
           if (summaryResponse.data && summaryResponse.data.data) {
             this.summary = summaryResponse.data.data;
           } else {
@@ -571,7 +571,7 @@
             : this.correctModal.reason;
           
           // Submit stock adjustment to correct the negative stock
-          const response = await axios.post('/item-stocks/adjust', {
+          const response = await axios.post('/inventory/item-stocks/adjust', {
             item_id: this.correctModal.stock.item_id,
             warehouse_id: this.correctModal.stock.warehouse_id,
             new_quantity: this.correctModal.newQuantity,

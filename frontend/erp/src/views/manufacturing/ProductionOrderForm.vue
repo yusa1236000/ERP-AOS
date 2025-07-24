@@ -340,13 +340,13 @@ export default {
       try {
         // Fetch work orders excluding completed and next production number
         const promises = [
-          axios.get('/work-orders', { params: { exclude_status: 'Completed' } }),
-          axios.get('/warehouses')
+          axios.get('/manufacturing/work-orders', { params: { exclude_status: 'Completed' } }),
+          axios.get('/inventory/warehouses')
         ];
 
         // Add next production number fetch only for create mode
         if (!this.isEditing) {
-          promises.push(axios.get('/production-orders/next-number'));
+          promises.push(axios.get('/manufacturing/production-orders/next-number'));
         }
 
         const responses = await Promise.all(promises);
@@ -373,7 +373,7 @@ export default {
 
     async fetchProductionOrder() {
       try {
-        const response = await axios.get(`/production-orders/${this.id}`);
+        const response = await axios.get(`/manufacturing/production-orders/${this.id}`);
         const productionOrder = response.data.data || response.data;
 
         // Map production order data to form
@@ -447,8 +447,8 @@ export default {
       try {
         // Fetch work order details and existing production orders
         const [workOrderResponse, productionOrdersResponse] = await Promise.all([
-          axios.get(`/work-orders/${this.form.wo_id}`),
-          axios.get('/production-orders', {
+          axios.get(`/manufacturing/work-orders/${this.form.wo_id}`),
+          axios.get('/manufacturing/production-orders', {
             params: { wo_id: this.form.wo_id }
           })
         ]);
@@ -467,7 +467,7 @@ export default {
 
         // Fetch BOM components
         if (this.workOrderDetails.bom_id) {
-          const bomResponse = await axios.get(`/boms/${this.workOrderDetails.bom_id}`);
+          const bomResponse = await axios.get(`/manufacturing/boms/${this.workOrderDetails.bom_id}`);
           const bom = bomResponse.data.data || bomResponse.data;
 
           if (bom && bom.bomLines) {
@@ -475,7 +475,7 @@ export default {
 
             // Fetch items data
             const itemIds = this.bomComponents.map(line => line.item_id);
-            const itemsResponse = await axios.get('/items', { params: { ids: itemIds.join(',') } });
+            const itemsResponse = await axios.get('/inventory/items', { params: { ids: itemIds.join(',') } });
             const items = itemsResponse.data.data || itemsResponse.data;
 
             // Create a lookup object for items
@@ -562,9 +562,9 @@ export default {
 
         let response;
         if (this.isEditing) {
-          response = await axios.put(`/production-orders/${this.id}`, formData);
+          response = await axios.put(`/manufacturing/production-orders/${this.id}`, formData);
         } else {
-          response = await axios.post('/production-orders', formData);
+          response = await axios.post('/manufacturing/production-orders', formData);
         }
 
         if (this.$toast) this.$toast.success(

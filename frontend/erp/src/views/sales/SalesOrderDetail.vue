@@ -551,12 +551,12 @@ export default {
                 console.log('🔄 Loading order data...');
 
                 // Load unit of measures for reference
-                const uomResponse = await axios.get("/unit-of-measures");
+                const uomResponse = await axios.get("/inventory/uom");
                 unitOfMeasures.value = uomResponse.data.data || [];
                 console.log('✅ UOMs loaded:', unitOfMeasures.value.length);
 
                 // Load order details
-                const orderResponse = await axios.get(`orders/${route.params.id}`);
+                const orderResponse = await axios.get(`/sales/orders/${route.params.id}`);
                 order.value = toCamelCase(orderResponse.data.data);
 
                 console.log('✅ Order loaded:', order.value.soNumber);
@@ -868,7 +868,7 @@ export default {
                     }))
                 };
 
-                await axios.put(`orders/${order.value.soId}`, payload);
+                await axios.put(`/sales/orders/${order.value.soId}`, payload);
 
                 // Reload the order to get the updated data
                 loadData();

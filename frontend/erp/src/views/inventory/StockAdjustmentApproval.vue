@@ -65,8 +65,8 @@
               </div>
               <div class="info-item">
                 <div class="info-label">Total Variance</div>
-                <div 
-                  class="info-value" 
+                <div
+                  class="info-value"
                   :class="getVarianceClass(adjustment.total_variance)"
                 >
                   {{ formatVariance(adjustment.total_variance) }}
@@ -92,9 +92,9 @@
               <form @submit.prevent="approveAdjustment">
                 <div class="form-group">
                   <div class="checkbox-group">
-                    <input 
-                      type="checkbox" 
-                      id="createAdjustment" 
+                    <input
+                      type="checkbox"
+                      id="createAdjustment"
                       v-model="approvalForm.create_adjustment"
                     />
                     <label for="createAdjustment">Process adjustment and update stock levels</label>
@@ -103,7 +103,7 @@
                     When checked, this will immediately process the adjustment and update inventory levels in each warehouse.
                   </small>
                 </div>
-                
+
                 <div class="form-group" v-if="approvalForm.create_adjustment">
                   <label for="adjustmentReason">Processing Notes</label>
                   <textarea
@@ -114,9 +114,9 @@
                     placeholder="Optional notes for this processing action"
                   ></textarea>
                 </div>
-                
+
                 <div class="approval-buttons">
-                  <button 
+                  <button
                     type="button"
                     @click="showRejectModal = true"
                     :disabled="isProcessing"
@@ -125,8 +125,8 @@
                     <i class="fas fa-times mr-2"></i>
                     Reject
                   </button>
-                  
-                  <button 
+
+                  <button
                     type="submit"
                     :disabled="isProcessing"
                     class="btn btn-success"
@@ -147,8 +147,8 @@
         <div class="card-header">
           <h3 class="card-title">Items to Adjust</h3>
           <div class="search-controls">
-            <input 
-              type="text" 
+            <input
+              type="text"
               v-model="searchQuery"
               placeholder="Search items, warehouses..."
               class="search-input"
@@ -199,8 +199,8 @@
                   </td>
                   <td class="text-right">
                     <div class="variance-display">
-                      <span 
-                        class="variance-value" 
+                      <span
+                        class="variance-value"
                         :class="getVarianceClass(line.variance)"
                       >
                         {{ formatVariance(line.variance) }}
@@ -209,7 +209,7 @@
                     </div>
                   </td>
                   <td class="text-right">
-                    <span 
+                    <span
                       class="impact-badge"
                       :class="getImpactClass(line.variance)"
                     >
@@ -249,7 +249,7 @@
               <div class="impact-label">Net Change</div>
             </div>
           </div>
-          
+
           <div class="impact-warning" v-if="hasSignificantChanges">
             <div class="warning-icon">
               <i class="fas fa-exclamation-triangle"></i>
@@ -274,10 +274,10 @@
         </div>
         <div class="modal-body">
           <p>
-            You are about to reject stock adjustment 
+            You are about to reject stock adjustment
             <strong>ID #{{ adjustmentId }}</strong>.
           </p>
-          
+
           <div class="form-group">
             <label for="rejectionReason">Rejection Reason <span class="required">*</span></label>
             <textarea
@@ -294,9 +294,9 @@
           <button class="btn btn-secondary" @click="showRejectModal = false">
             Cancel
           </button>
-          <button 
-            class="btn btn-danger" 
-            @click="rejectAdjustment" 
+          <button
+            class="btn btn-danger"
+            @click="rejectAdjustment"
             :disabled="isProcessing || !rejectForm.rejection_reason"
           >
             <i v-if="isProcessing" class="fas fa-spinner fa-spin mr-2"></i>
@@ -336,11 +336,11 @@ export default {
     },
     filteredLines() {
       if (!this.adjustment || !this.adjustment.adjustment_lines) return [];
-      
+
       if (!this.searchQuery) return this.adjustment.adjustment_lines;
-      
+
       const query = this.searchQuery.toLowerCase();
-      return this.adjustment.adjustment_lines.filter(line => 
+      return this.adjustment.adjustment_lines.filter(line =>
         (line.item?.name && line.item.name.toLowerCase().includes(query)) ||
         (line.item?.item_code && line.item.item_code.toLowerCase().includes(query)) ||
         (line.warehouse?.name && line.warehouse.name.toLowerCase().includes(query))
@@ -381,11 +381,11 @@ export default {
     async fetchAdjustment() {
       this.loading = true;
       this.error = null;
-      
+
       try {
-        const response = await axios.get(`/stock-adjustments/${this.adjustmentId}`);
+        const response = await axios.get(`/inventory/stock-adjustments/${this.adjustmentId}`);
         this.adjustment = response.data.data;
-        
+
         if (this.adjustment.status !== 'pending') {
           // Adjustment is not in pending status, no approval needed
           return;
@@ -404,17 +404,17 @@ export default {
 
     async approveAdjustment() {
       this.isProcessing = true;
-      
+
       try {
         const payload = {
           process_immediately: this.approvalForm.create_adjustment,
           processing_notes: this.approvalForm.processing_notes
         };
-        
-        await axios.post(`/stock-adjustments/${this.adjustmentId}/approve`, payload);
-        
+
+        await axios.post(`/inventory/stock-adjustments/${this.adjustmentId}/approve`, payload);
+
         this.$toast.success('Adjustment approved successfully');
-        
+
         // Redirect to the adjustment detail page
         this.$router.push(`/stock-adjustments/${this.adjustmentId}`);
       } catch (err) {
@@ -431,15 +431,15 @@ export default {
 
     async rejectAdjustment() {
       this.isProcessing = true;
-      
+
       try {
-        await axios.post(`/stock-adjustments/${this.adjustmentId}/reject`, {
+        await axios.post(`/inventory/stock-adjustments/${this.adjustmentId}/reject`, {
           rejection_reason: this.rejectForm.rejection_reason
         });
-        
+
         this.showRejectModal = false;
         this.$toast.success('Adjustment rejected successfully');
-        
+
         // Redirect to the adjustment detail page
         this.$router.push(`/stock-adjustments/${this.adjustmentId}`);
       } catch (err) {
@@ -953,32 +953,32 @@ export default {
   .approval-cards {
     grid-template-columns: 1fr;
   }
-  
+
   .info-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .impact-stats {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .lines-table-container {
     overflow-x: auto;
   }
-  
+
   .lines-table {
     min-width: 800px;
   }
-  
+
   .search-input {
     min-width: auto;
     width: 100%;
   }
-  
+
   .approval-buttons {
     flex-direction: column-reverse;
   }
-  
+
   .btn {
     width: 100%;
     justify-content: center;

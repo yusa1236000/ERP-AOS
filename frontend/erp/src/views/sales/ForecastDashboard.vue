@@ -408,7 +408,7 @@ export default {
     },
     async fetchCustomers() {
       try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || [];
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -444,7 +444,7 @@ export default {
         }
         
         // Get accuracy data
-        const accuracyResponse = await axios.get('/forecasts/accuracy', { params });
+        const accuracyResponse = await axios.get('/sales/forecasts/accuracy', { params });
         const accuracyData = accuracyResponse.data.data;
         
         // Get consolidated forecast data
@@ -456,7 +456,7 @@ export default {
           consolidatedParams.customer_id = this.filters.customerId;
         }
         
-        const consolidatedResponse = await axios.get('/forecasts/consolidated', { params: consolidatedParams });
+        const consolidatedResponse = await axios.get('/sales/forecasts/consolidated', { params: consolidatedParams });
         const consolidatedData = consolidatedResponse.data.data;
         
         // Process and transform the data for the dashboard

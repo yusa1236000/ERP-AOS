@@ -9,11 +9,11 @@
           </router-link>
         </div>
       </div>
-  
+
       <div v-if="loading" class="loading-indicator">
         <i class="fas fa-spinner fa-spin"></i> Loading quotations...
       </div>
-  
+
       <div v-else-if="!rfq" class="error-state">
       <div class="error-icon">
         <i class="fas fa-exclamation-circle"></i>
@@ -51,12 +51,12 @@
               <label>RFQ Number</label>
               <div class="detail-value">{{ rfq.rfq_number }}</div>
             </div>
-            
+
             <div class="detail-group">
               <label>RFQ Date</label>
               <div class="detail-value">{{ formatDate(rfq.rfq_date) }}</div>
             </div>
-            
+
             <div class="detail-group">
               <label>Validity Date</label>
               <div class="detail-value">{{ formatDate(rfq.validity_date) || 'N/A' }}</div>
@@ -80,7 +80,7 @@
                 <option value="vendor">By Vendor</option>
               </select>
             </div>
-            
+
             <div class="filter-group">
               <label>Sort by</label>
               <select v-model="sortBy" class="form-control">
@@ -91,12 +91,12 @@
               </select>
             </div>
           </div>
-          
+
           <!-- By Item Comparison View -->
           <div v-if="compareBy === 'item'" class="item-comparison">
-<div 
-  v-for="item in rfq.lines" 
-  :key="item.line_id" 
+<div
+  v-for="item in rfq.lines"
+  :key="item.line_id"
   class="item-comparison-card"
 >
               <div class="item-header">
@@ -108,7 +108,7 @@
                   {{ formatNumber(item.quantity) }} {{ item.unit_of_measure.symbol }}
                 </div>
               </div>
-              
+
               <div class="item-quotations">
                 <table class="comparison-table">
                   <thead>
@@ -121,8 +121,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr 
-                      v-for="quotation in sortedQuotations(item.item_id)" 
+                    <tr
+                      v-for="quotation in sortedQuotations(item.item_id)"
                       :key="`${item.item_id}-${quotation.vendor.vendor_id}`"
                       :class="{ 'best-price': isBestPrice(quotation, item.item_id) }"
                     >
@@ -133,9 +133,9 @@
                       <td>{{ formatDate(getQuotationDeliveryDate(quotation, item.item_id)) || 'Not specified' }}</td>
                       <td>{{ formatCurrency(getQuotationPrice(quotation, item.item_id) * item.quantity) }}</td>
                       <td>
-                        <button 
+                        <button
                           v-if="quotation.status !== 'accepted'"
-                          @click="acceptQuotation(quotation, item.item_id)" 
+                          @click="acceptQuotation(quotation, item.item_id)"
                           class="btn btn-outline-success btn-sm"
                         >
                           Accept
@@ -155,12 +155,12 @@
               </div>
             </div>
           </div>
-          
+
           <!-- By Vendor Comparison View -->
           <div v-else class="vendor-comparison">
-            <div 
-              v-for="quotation in quotations" 
-              :key="quotation.quotation_id" 
+            <div
+              v-for="quotation in quotations"
+              :key="quotation.quotation_id"
               class="vendor-comparison-card"
             >
               <div class="vendor-header">
@@ -173,12 +173,12 @@
                     </span>
                   </div>
                 </div>
-                
+
                 <div class="vendor-total">
                   Total: {{ formatCurrency(getVendorTotal(quotation)) }}
                 </div>
               </div>
-              
+
               <div class="vendor-items">
                 <table class="comparison-table">
                   <thead>
@@ -192,8 +192,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr 
-                      v-for="line in quotation.lines" 
+                    <tr
+                      v-for="line in quotation.lines"
                       :key="line.line_id"
                       :class="{ 'best-price': isBestPriceVendorView(quotation, line.item_id) }"
                     >
@@ -218,17 +218,17 @@
                   </tbody>
                 </table>
               </div>
-              
+
               <div class="vendor-actions">
-                <button 
+                <button
                   v-if="quotation.status !== 'accepted'"
-                  @click="acceptVendorQuotation(quotation)" 
+                  @click="acceptVendorQuotation(quotation)"
                   class="btn btn-outline-success"
                 >
                   Accept Quotation
                 </button>
-                <router-link 
-                  :to="`/purchasing/vendor-quotations/${quotation.quotation_id}`" 
+                <router-link
+                  :to="`/purchasing/vendor-quotations/${quotation.quotation_id}`"
                   class="btn btn-outline-primary"
                 >
                   View Details
@@ -243,8 +243,8 @@
         <router-link :to="`/purchasing/rfqs/${rfqId}`" class="btn btn-secondary">
           Back to RFQ
         </router-link>
-        <router-link 
-          :to="`/purchasing/po/create-from-quotation?rfq_id=${rfqId}`" 
+        <router-link
+          :to="`/purchasing/po/create-from-quotation?rfq_id=${rfqId}`"
           class="btn btn-primary"
           v-if="hasAcceptedQuotations"
         >
@@ -265,11 +265,11 @@
         </div>
         <div class="modal-body">
           <p>
-            Are you sure you want to accept the quotation from 
+            Are you sure you want to accept the quotation from
             <strong>{{ selectedQuotation?.vendor?.name }}</strong>
             {{ selectedItemId ? 'for this item' : '' }}?
           </p>
-          
+
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" @click="showAcceptModal = false">
               Cancel
@@ -325,19 +325,19 @@ export default {
   methods: {
     async loadData() {
       this.loading = true;
-      
+
       try {
-        const response = await axios.get(`/request-for-quotations/${this.rfqId}`);
-        
+        const response = await axios.get(`/procurement/request-for-quotations/${this.rfqId}`);
+
         if (response.data.status === 'success' && response.data.data) {
           this.rfq = response.data.data;
-          
+
           if (this.rfq.vendor_quotations && this.rfq.vendor_quotations.length > 0) {
             // Load detailed quotation data
-            const quotationPromises = this.rfq.vendor_quotations.map(quotation => 
-              axios.get(`/vendor-quotations/${quotation.quotation_id}`)
+            const quotationPromises = this.rfq.vendor_quotations.map(quotation =>
+              axios.get(`/procurement/vendor-quotations/${quotation.quotation_id}`)
             );
-            
+
             const quotationResponses = await Promise.all(quotationPromises);
             this.quotations = quotationResponses
               .filter(response => response.data.status === 'success')
@@ -349,7 +349,7 @@ export default {
       } catch (error) {
         console.error('Error loading RFQ data:', error);
         this.rfq = null;
-        
+
         if (error.response && error.response.status === 404) {
           this.$toast.error('Request for Quotation not found');
         } else {
@@ -361,7 +361,7 @@ export default {
     },
     formatDate(dateString) {
       if (!dateString) return null;
-      
+
       const date = new Date(dateString);
       return date.toLocaleDateString('id-ID', {
         year: 'numeric',
@@ -412,7 +412,7 @@ export default {
       const quotationsWithItem = this.quotations.filter(quotation => {
         return quotation.lines.some(line => line.item_id === itemId);
       });
-      
+
       if (this.sortBy === 'price') {
         return quotationsWithItem.sort((a, b) => {
           return this.getQuotationPrice(a, itemId) - this.getQuotationPrice(b, itemId);
@@ -429,52 +429,52 @@ export default {
         return quotationsWithItem.sort((a, b) => {
           const dateA = this.getQuotationDeliveryDate(a, itemId);
           const dateB = this.getQuotationDeliveryDate(b, itemId);
-          
+
           if (!dateA && !dateB) return 0;
           if (!dateA) return 1;
           if (!dateB) return -1;
-          
+
           return new Date(dateA) - new Date(dateB);
         });
       }
-      
+
       return quotationsWithItem;
     },
     // Check if a quotation has the best price for a specific item
     isBestPrice(quotation, itemId) {
       const sorted = this.sortedQuotations(itemId);
       if (sorted.length === 0) return false;
-      
+
       // If sorting by price, first one is the best
       if (this.sortBy === 'price') {
         return quotation.quotation_id === sorted[0].quotation_id;
       }
-      
+
       // If sorting by price descending, last one is the best
       if (this.sortBy === 'price-desc') {
         return quotation.quotation_id === sorted[sorted.length - 1].quotation_id;
       }
-      
+
       // Otherwise, compare prices
       const bestPrice = Math.min(...sorted.map(q => this.getQuotationPrice(q, itemId)));
       return this.getQuotationPrice(quotation, itemId) === bestPrice;
     },
     // Similar check for vendor view
     isBestPriceVendorView(quotation, itemId) {
-      const allQuotationsForItem = this.quotations.filter(q => 
+      const allQuotationsForItem = this.quotations.filter(q =>
         q.lines.some(line => line.item_id === itemId)
       );
-      
+
       if (allQuotationsForItem.length === 0) return false;
-      
+
       const prices = allQuotationsForItem.map(q => {
         const line = q.lines.find(l => l.item_id === itemId);
         return line ? line.unit_price : Infinity;
       });
-      
+
       const bestPrice = Math.min(...prices);
       const thisPrice = this.getQuotationPrice(quotation, itemId);
-      
+
       return thisPrice === bestPrice;
     },
     // Get total amount from a vendor quotation
@@ -520,24 +520,24 @@ export default {
     // Confirm accepting a quotation
     async confirmAcceptQuotation() {
       if (!this.selectedQuotation) return;
-      
+
       this.isProcessing = true;
-      
+
       try {
         const data = {
           status: 'accepted'
         };
-        
+
         // If item-specific acceptance
         if (this.selectedItemId) {
           data.item_id = this.selectedItemId;
         }
-        
+
         const response = await axios.patch(
-          `/vendor-quotations/${this.selectedQuotation.quotation_id}/status`, 
+          `/procurement/vendor-quotations/${this.selectedQuotation.quotation_id}/status`,
           data
         );
-        
+
         if (response.data.status === 'success') {
           this.$toast.success('Quotation accepted successfully');
           await this.loadData(); // Reload data to reflect changes
@@ -546,7 +546,7 @@ export default {
         }
       } catch (error) {
         console.error('Error accepting quotation:', error);
-        
+
         if (error.response && error.response.data && error.response.data.message) {
           this.$toast.error('Failed to accept quotation: ' + error.response.data.message);
         } else {
@@ -1074,43 +1074,43 @@ export default {
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .header-actions {
     width: 100%;
   }
-  
+
   .detail-row {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .comparison-controls {
     flex-direction: column;
   }
-  
+
   .item-header,
   .vendor-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .comparison-table {
     display: block;
     overflow-x: auto;
   }
-  
+
   .vendor-actions {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }

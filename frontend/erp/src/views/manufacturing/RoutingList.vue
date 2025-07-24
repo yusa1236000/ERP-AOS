@@ -182,7 +182,7 @@
       const loadRoutings = async () => {
         isLoading.value = true;
         try {
-          const response = await axios.get('/routings', {
+          const response = await axios.get('/manufacturing/routings', {
             params: {
               page: pagination.currentPage,
               per_page: pagination.perPage,
@@ -236,7 +236,7 @@
       // Load all available items for the filter dropdown
       const loadItems = async () => {
         try {
-          const response = await axios.get('/items');
+          const response = await axios.get('/inventory/items');
           items.value = response.data.data || response.data;
         } catch (error) {
           console.error('Error loading items:', error);
@@ -288,7 +288,7 @@
       // Delete routing
       const deleteRouting = async () => {
         try {
-          await axios.delete(`/routings/${selectedRouting.value.routing_id}`);
+          await axios.delete(`/manufacturing/routings/${selectedRouting.value.routing_id}`);
           loadRoutings();
           showDeleteModal.value = false;
         } catch (error) {

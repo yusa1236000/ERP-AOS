@@ -217,7 +217,7 @@
         this.error = null;
 
         try {
-          const response = await axios.get(`/purchase-requisitions/${this.id}`);
+          const response = await axios.get(`procurement/purchase-requisitions/${this.id}`);
           this.purchaseRequisition = response.data.data;
 
           // Check if PR is in a valid state for approval
@@ -271,7 +271,7 @@
         this.showConfirmationModal = false;
 
         try {
-          await axios.patch(`/purchase-requisitions/${this.id}/status`, {
+          await axios.patch(`/procurement/purchase-requisitions/${this.id}/status`, {
             status: this.approvalStatus,
             notes: this.approvalNotes
           });

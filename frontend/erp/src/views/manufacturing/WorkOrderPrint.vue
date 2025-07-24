@@ -951,7 +951,7 @@ export default {
       error.value = null;
 
       try {
-        const response = await axios.get(`/work-orders/${woId}`);
+        const response = await axios.get(`/manufacturing/work-orders/${woId}`);
         workOrderData.value = response.data.data;
 
         // Load BOM materials and tapes if available

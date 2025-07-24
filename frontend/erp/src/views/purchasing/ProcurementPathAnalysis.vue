@@ -363,7 +363,7 @@ export default {
     async fetchAnalysis() {
       this.loading = true
       try {
-        const response = await axios.get(`/purchase-requisitions/${this.id}/procurement-path`)
+        const response = await axios.get(`/procurement/purchase-requisitions/${this.id}/procurement-path`)
         
         this.pr = response.data.data.pr
         this.analysis = response.data.data.items_analysis

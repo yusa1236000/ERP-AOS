@@ -361,7 +361,7 @@ export default {
     async loadPurchaseOrder(poId) {
       this.isLoading = true;
       try {
-        const response = await axios.get(`/purchase-orders/${poId}`);
+        const response = await axios.get(`/procurement/orders/${poId}`);
         
         if (response.data.status === 'success') {
           this.purchaseOrder = response.data.data;
@@ -384,7 +384,7 @@ export default {
     },
     async loadOutstandingItems(poId) {
       try {
-        const response = await axios.get(`/purchase-orders/${poId}/outstanding`);
+        const response = await axios.get(`/procurement/orders/${poId}/outstanding`);
         
         if (response.data.status === 'success') {
           // Process items to calculate percentage
@@ -518,7 +518,7 @@ export default {
     async confirmStatusUpdate() {
       try {
         const response = await axios.patch(
-          `/purchase-orders/${this.purchaseOrder.po_id}/status`,
+          `/procurement/orders/${this.purchaseOrder.po_id}/status`,
           { status: this.newStatus }
         );
         

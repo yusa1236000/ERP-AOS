@@ -49,7 +49,7 @@ export default {
             console.log("Creating customer with payload:", formData);
 
             try {
-                const response = await axios.post("/customers", formData);
+                const response = await axios.post("/sales/customers", formData);
                 console.log(
                     "Customer creation successful. Response:",
                     response.data

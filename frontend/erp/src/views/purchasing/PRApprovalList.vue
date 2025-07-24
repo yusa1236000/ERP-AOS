@@ -268,7 +268,7 @@
           if (this.filters.dateFrom) params.date_from = this.filters.dateFrom;
           if (this.filters.dateTo) params.date_to = this.filters.dateTo;
           
-          const response = await axios.get('/purchase-requisitions', { params });
+          const response = await axios.get('/procurement/requisitions', { params });
           
           // Extract data and pagination info
           this.purchaseRequisitions = response.data.data.data || [];

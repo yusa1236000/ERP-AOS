@@ -162,7 +162,7 @@
         
         isLoading.value = true;
         try {
-          const response = await axios.get(`/work-centers/${workCenterId.value}`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId.value}`);
           const data = response.data.data;
           
           // Update the reactive object properties
@@ -188,9 +188,9 @@
           let response;
           
           if (isEditMode.value) {
-            response = await axios.put(`/work-centers/${workCenterId.value}`, workCenter);
+            response = await axios.put(`/manufacturing/work-centers/${workCenterId.value}`, workCenter);
           } else {
-            response = await axios.post('/work-centers', workCenter);
+            response = await axios.post('/manufacturing/work-centers', workCenter);
           }
           
           // Navigate to the detail page after successful save

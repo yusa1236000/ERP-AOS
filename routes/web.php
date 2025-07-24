@@ -15,6 +15,11 @@ Route::get('/sales/quotation', function () {
     return view('pages.sales.quotation');
 });
 */
-Route::get('/test', function() {
+
+Route::get('/test', function () {
     return "Laravel is working!";
 });
+
+Route::get('/test-module-access', function () {
+    return "Module access middleware working!";
+})->middleware('module_access:inventory');

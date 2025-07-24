@@ -227,11 +227,11 @@
       const fetchDeliveries = async () => {
         isLoading.value = true;
         try {
-          const response = await axios.get('/deliveries');
+          const response = await axios.get('/sales/deliveries');
           deliveries.value = response.data.data;
         } catch (error) {
           console.error('Error fetching deliveries:', error);
-          alert('Terjadi kesalahan saat memuat data pengiriman');
+          alert('An error occurred while loading the shipping data');
         } finally {
           isLoading.value = false;
         }
@@ -437,7 +437,7 @@
 
       const cancelDelivery = async () => {
         try {
-          await axios.put(`/deliveries/${deliveryToCancel.value.delivery_id}`, {
+          await axios.put(`/sales/deliveries/${deliveryToCancel.value.delivery_id}`, {
             ...deliveryToCancel.value,
             status: 'Cancelled'
           });
@@ -451,10 +451,10 @@
           }
 
           showCancelModal.value = false;
-          alert('Pengiriman berhasil dibatalkan!');
+          alert('The shipment has been successfully cancelled!');
         } catch (error) {
           console.error('Error cancelling delivery:', error);
-          alert('Terjadi kesalahan saat membatalkan pengiriman');
+          alert('An error occurred while cancelling the shipment');
         }
       };
 
@@ -465,7 +465,7 @@
 
       const confirmCompleteDelivery = async () => {
         try {
-          await axios.post(`/deliveries/${deliveryToComplete.value.delivery_id}/complete`);
+          await axios.post(`/sales/deliveries/${deliveryToComplete.value.delivery_id}/complete`);
 
           // Update local state
           const index = deliveries.value.findIndex(
@@ -476,10 +476,10 @@
           }
 
           showCompleteModal.value = false;
-          alert('Pengiriman berhasil diselesaikan!');
+          alert('Delivery successfully completed');
         } catch (error) {
           console.error('Error completing delivery:', error);
-          alert('Terjadi kesalahan saat menyelesaikan pengiriman');
+          alert('An error occurred while completing the delivery');
         }
       };
 

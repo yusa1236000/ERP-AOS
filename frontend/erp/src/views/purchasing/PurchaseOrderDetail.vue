@@ -527,7 +527,7 @@ export default {
     async loadPurchaseOrder(poId) {
       this.isLoading = true;
       try {
-        const response = await axios.get(`/purchase-orders/${poId}`);
+        const response = await axios.get(`/procurement/purchase-orders/${poId}`);
 
         if (response.data.status === 'success') {
           this.purchaseOrder = response.data.data;
@@ -559,7 +559,7 @@ export default {
 
     async loadOutstandingItems(poId) {
       try {
-        const response = await axios.get(`/purchase-orders/${poId}/outstanding`);
+        const response = await axios.get(`/procurement/purchase-orders/${poId}/outstanding`);
 
         if (response.data.status === 'success') {
           this.outstandingItems = response.data.data.outstanding_lines || [];
@@ -587,7 +587,7 @@ export default {
     // Method untuk load receipts secara terpisah
     async loadGoodsReceipts(poId) {
       try {
-        const response = await axios.get(`/purchase-orders/${poId}/goods-receipts`);
+        const response = await axios.get(`/procurement/purchase-orders/${poId}/goods-receipts`);
 
         if (response.data.status === 'success') {
           // Update receipts data
@@ -706,7 +706,7 @@ Check console for detailed info.
     async confirmStatusUpdate() {
       try {
         const response = await axios.patch(
-          `/purchase-orders/${this.purchaseOrder.po_id}/status`,
+          `/procurement/purchase-orders/${this.purchaseOrder.po_id}/status`,
           { status: this.newStatus }
         );
 
@@ -749,7 +749,7 @@ Check console for detailed info.
 
       try {
         const response = await axios.post(
-          `/purchase-orders/${this.purchaseOrder.po_id}/convert-currency`,
+          `/procurement/purchase-orders/${this.purchaseOrder.po_id}/convert-currency`,
           {
             currency_code: this.newCurrency,
             use_exchange_rate_date: this.useExchangeRateDate

@@ -301,7 +301,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => 'System Administrator',
             'password' => bcrypt('admin123'),
             'email_verified_at' => now(),
-            'is_active' => true,
         ]);
 
         $superAdminRole = Role::where('name', 'super_admin')->first();

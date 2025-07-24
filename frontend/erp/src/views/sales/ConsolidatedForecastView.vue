@@ -289,7 +289,7 @@ export default {
     },
     async fetchCustomers() {
       try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || [];
       } catch (error) {
         console.error('Error fetching customers:', error);
@@ -297,7 +297,7 @@ export default {
     },
     async fetchItems() {
       try {
-        const response = await axios.get('/items', {
+        const response = await axios.get('/inventory/items', {
             params: { sellable: true }
           });
         this.items = response.data.data || [];
@@ -398,7 +398,7 @@ export default {
           params.issue_date = this.filters.issueDate;
         }
 
-        const response = await axios.get('/forecasts/consolidated', { params });
+        const response = await axios.get('/sales/forecasts/consolidated', { params });
 
         if (response.data.data) {
           this.forecastData = response.data.data;

@@ -161,11 +161,11 @@ export default {
 
       try {
         // Load unit of measures for reference
-        const uomResponse = await axios.get("/unit-of-measures");
+        const uomResponse = await axios.get("/inventory/uom");
         unitOfMeasures.value = uomResponse.data.data;
 
         // Load order details
-        const orderResponse = await axios.get(`orders/${route.params.id}`);
+        const orderResponse = await axios.get(`/sales/orders/${route.params.id}`);
         console.log("Order API response data:", orderResponse.data.data);
         order.value = toCamelCase(orderResponse.data.data);
         console.log("Order description:", order.value.description);

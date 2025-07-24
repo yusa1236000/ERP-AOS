@@ -209,7 +209,7 @@ export default {
     fetchReceipt() {
       this.loading = true;
 
-      axios.get(`/goods-receipts/${this.id}`)
+      axios.get(`/procurement/goods-receipts/${this.id}`)
         .then(response => {
           const data = response.data.data;
           this.receipt = data.receipt;

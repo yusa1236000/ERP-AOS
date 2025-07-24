@@ -32,4 +32,9 @@ class RequestForQuotation extends Model
     {
         return $this->hasMany(VendorQuotation::class, 'rfq_id');
     }
+
+    public function selectedVendors()
+    {
+        return $this->hasMany(RFQVendor::class, 'rfq_id')->selected();
+    }
 }

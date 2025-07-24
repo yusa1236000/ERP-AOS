@@ -261,7 +261,7 @@
           if (this.filters.dateTo) params.date_to = this.filters.dateTo;
           if (this.filters.requesterId) params.requester_id = this.filters.requesterId;
 
-          const response = await axios.get('/purchase-requisitions', { params });
+          const response = await axios.get('/procurement/requisitions', { params });
 
           // Extract data and pagination info
           this.purchaseRequisitions = response.data.data.data || [];
@@ -283,7 +283,7 @@
       async fetchRequesters() {
         try {
           // Fetch users who can be requesters
-          const response = await axios.get('/users?role=requester');
+          const response = await axios.get('/admin/users?role=requester');
           this.requesters = response.data.data || [];
         } catch (error) {
           console.error('Error fetching requesters:', error);

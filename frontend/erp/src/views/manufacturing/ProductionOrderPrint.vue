@@ -338,7 +338,7 @@ export default {
       try {
         console.log('Fetching production order:', this.productionId);
 
-        const response = await axios.get(`/production-orders/${this.productionId}`);
+        const response = await axios.get(`/manufacturing/production-orders/${this.productionId}`);
         console.log('API Response:', response.data);
 
         this.productionOrder = response.data.data || response.data;
@@ -350,7 +350,7 @@ export default {
           console.log('No consumptions found, trying to fetch separately...');
 
           try {
-            const consumptionResponse = await axios.get(`/production-orders/${this.productionId}/consumptions`);
+            const consumptionResponse = await axios.get(`/manufacturing/production-orders/${this.productionId}/consumptions`);
             console.log('Consumption Response:', consumptionResponse.data);
 
             const consumptions = consumptionResponse.data.data || consumptionResponse.data;
@@ -391,7 +391,7 @@ export default {
       try {
         console.log('Fetching work order details:', workOrderId);
 
-        const response = await axios.get(`/work-orders/${workOrderId}`);
+        const response = await axios.get(`/manufacturing/work-orders/${workOrderId}`);
         this.workOrder = response.data.data || response.data;
 
       } catch (error) {

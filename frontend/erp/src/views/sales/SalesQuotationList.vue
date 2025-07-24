@@ -324,7 +324,7 @@ export default {
         const fetchQuotations = async () => {
             isLoading.value = true;
             try {
-                const response = await axios.get("/quotations");
+                const response = await axios.get("/sales/quotations");
                 quotations.value = response.data.data;
             } catch (error) {
                 console.error("Error fetching quotations:", error);
@@ -576,7 +576,7 @@ export default {
         const deleteQuotation = async () => {
             try {
                 await axios.delete(
-                    `/quotations/${quotationToDelete.value.quotation_id}`
+                    `/sales/quotations/${quotationToDelete.value.quotation_id}`
                 );
 
                 // Remove from local state
@@ -598,7 +598,7 @@ export default {
 
         const markAsSent = async (quotation) => {
             try {
-                await axios.put(`/quotations/${quotation.quotation_id}`, {
+                await axios.put(`/sales/quotations/${quotation.quotation_id}`, {
                     ...quotation,
                     status: "Sent",
                 });
@@ -620,7 +620,7 @@ export default {
 
         const markAsAccepted = async (quotation) => {
             try {
-                await axios.put(`/quotations/${quotation.quotation_id}`, {
+                await axios.put(`/sales/quotations/${quotation.quotation_id}`, {
                     ...quotation,
                     status: "Accepted",
                 });
@@ -642,7 +642,7 @@ export default {
 
         const markAsRejected = async (quotation) => {
             try {
-                await axios.put(`/quotations/${quotation.quotation_id}`, {
+                await axios.put(`/sales/quotations/${quotation.quotation_id}`, {
                     ...quotation,
                     status: "Rejected",
                 });

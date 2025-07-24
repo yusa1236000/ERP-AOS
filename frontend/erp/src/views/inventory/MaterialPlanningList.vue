@@ -675,7 +675,7 @@ export default {
           }
         });
 
-        const response = await axios.get('/material-planning', { params });
+        const response = await axios.get('/manufacturing/material-planning', { params });
 
         if (response.data.data) {
           // Filter data to only include our 6-month range
@@ -915,7 +915,7 @@ export default {
 
     async fetchItemOptions() {
       try {
-        const response = await axios.get('/items');
+        const response = await axios.get('/inventory/items');
         this.itemOptions = response.data.data.map(item => ({
           value: item.item_id,
           label: `${item.item_code} - ${item.name}`
@@ -939,7 +939,7 @@ export default {
           item_ids: this.generateForm.itemIds.map(item => item.value)
         };
 
-        const response = await axios.post('/material-planning/generate', payload);
+        const response = await axios.post('/manufacturing/material-planning/generate', payload);
         this.closeGenerateModal();
         this.fetchPlans();
         alert(response.data.message);
@@ -966,7 +966,7 @@ export default {
           item_id: this.selectedPlan.item_id // Add item_id for single item generation
         };
 
-        const response = await axios.post('/material-planning/work-orders', payload);
+        const response = await axios.post('/manufacturing/material-planning/generate-wo', payload);
 
         this.closeWOModal();
         this.fetchPlans();
@@ -1004,7 +1004,7 @@ export default {
           item_id: this.selectedPlan.item_id // Add item_id for single item generation
         };
 
-        const response = await axios.post('/material-planning/purchase-requisition', payload);
+        const response = await axios.post('/manufacturing/material-planning/generate-pr', payload);
 
         if (response.data.data) {
           // Redirect to PR detail page
@@ -1039,7 +1039,7 @@ export default {
           only_draft_status: this.periodWOForm.onlyDraftStatus
         };
 
-        const response = await axios.post('/material-planning/work-orders/period', payload);
+        const response = await axios.post('/manufacturing/material-planning/generate-wo-by-period', payload);
 
         this.closePeriodWOModal();
         this.fetchPlans();
@@ -1075,7 +1075,7 @@ export default {
           only_draft_status: this.periodPRForm.onlyDraftStatus
         };
 
-        const response = await axios.post('/material-planning/purchase-requisition/period', payload);
+        const response = await axios.post('/manufacturing/material-planning/generate-pr-by-period', payload);
 
         this.closePeriodPRModal();
         this.fetchPlans();
@@ -1133,7 +1133,7 @@ export default {
 
     async confirmDelete() {
       try {
-        await axios.delete(`/material-planning/${this.deleteItemId}`);
+        await axios.delete(`/manufacturing/material-planning/${this.deleteItemId}`);
         this.fetchPlans();
         alert('Material plan deleted successfully');
       } catch (error) {

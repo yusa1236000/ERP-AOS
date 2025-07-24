@@ -321,7 +321,7 @@
     methods: {
       async loadWarehouses() {
         try {
-          const response = await axios.get('/warehouses');
+          const response = await axios.get('/inventory/warehouses');
           this.warehouses = response.data.data || [];
         } catch (error) {
           console.error('Error loading warehouses:', error);
@@ -329,7 +329,7 @@
       },
       async loadItems() {
         try {
-          const response = await axios.get('/items');
+          const response = await axios.get('/inventory/items');
           this.items = response.data.data || [];
         } catch (error) {
           console.error('Error loading items:', error);
@@ -337,7 +337,7 @@
       },
       async loadCategories() {
         try {
-          const response = await axios.get('/categories');
+          const response = await axios.get('/inventory/categories');
           this.categories = response.data.data || [];
         } catch (error) {
           console.error('Error loading categories:', error);
@@ -420,7 +420,7 @@
         this.loading = true;
         
         try {
-          const response = await axios.post('/cycle-counts/generate', this.form);
+          const response = await axios.post('/inventory/cycle-counts/generate', this.form);
           
           if (response.data.success) {
             this.generatedCounts = response.data.data || [];

@@ -437,7 +437,7 @@ export default {
         
         const endPeriodStr = `${endPeriod.getFullYear()}-${String(endPeriod.getMonth() + 1).padStart(2, '0')}-01`;
         
-        const response = await axios.get('/forecasts', {
+        const response = await axios.get('/sales/forecasts', {
           params: {
             end_period: endPeriodStr,
             missing_actuals: true,
@@ -475,7 +475,7 @@ export default {
           so_status: this.updateForm.so_status
         };
         
-        const response = await axios.post('/forecasts/update-actuals', payload);
+        const response = await axios.post('/sales/forecasts/update-actuals', payload);
         
         if (response.data.message) {
           this.updateSuccess = response.data.message;
@@ -528,7 +528,7 @@ export default {
           so_status: this.updateForm.so_status
         };
         
-        const response = await axios.post('/forecasts/update-actuals', payload);
+        const response = await axios.post('/sales/forecasts/update-actuals', payload);
         
         if (response.data.message) {
           this.updateSuccess = response.data.message;
@@ -593,7 +593,7 @@ export default {
           previous_version_id: this.selectedForecast.forecast_id
         };
         
-        await axios.put(`/forecasts/${this.selectedForecast.forecast_id}`, payload);
+        await axios.put(`/sales/forecasts/${this.selectedForecast.forecast_id}`, payload);
         
         // Close modal and refresh list
         this.closeModal();

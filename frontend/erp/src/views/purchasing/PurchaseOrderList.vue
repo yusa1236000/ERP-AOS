@@ -311,7 +311,7 @@ export default {
   methods: {
     async loadVendors() {
       try {
-        const response = await axios.get('/vendors');
+        const response = await axios.get('/procurement/vendors');
         // Adjusted to handle paginated response data structure correctly
         if (Array.isArray(response.data)) {
           this.vendors = response.data.filter(vendor => vendor !== null && vendor !== undefined);
@@ -371,7 +371,7 @@ export default {
 
     console.log('Request params:', params); // For debugging
 
-    const response = await axios.get('/purchase-orders', { params });
+    const response = await axios.get('/procurement/purchase-orders', { params });
 
     if (response.data.status === 'success') {
       this.purchaseOrders = response.data.data.data;
@@ -427,7 +427,7 @@ export default {
       if (!this.poToDelete) return;
 
       try {
-        const response = await axios.delete(`/purchase-orders/${this.poToDelete.po_id}`);
+        const response = await axios.delete(`/procurement/purchase-orders/${this.poToDelete.po_id}`);
 
         if (response.data.status === 'success') {
           // Show success notification

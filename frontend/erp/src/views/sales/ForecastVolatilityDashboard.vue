@@ -155,7 +155,7 @@ export default {
     methods: {
 async loadCustomers() {
     try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || response.data;
     } catch (error) {
         console.error('Error loading customers:', error);
@@ -176,7 +176,7 @@ async loadCustomers() {
                     params.customer_id = this.filters.customer_id;
                 }
                 
-                const response = await axios.get('/forecasts/volatility-summary', { params });
+                const response = await axios.get('/sales/forecasts/volatility-summary', { params });
                 
                 this.volatileItems = response.data.data || [];
                 this.summaryStats = response.data.summary || this.summaryStats;

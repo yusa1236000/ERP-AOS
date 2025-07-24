@@ -585,7 +585,7 @@ export default {
     async fetchInvoice() {
       this.loading = true;
       try {
-        const response = await axios.get(`/invoices/${this.id}`);
+        const response = await axios.get(`/sales/invoices/${this.id}`);
         this.invoice = response.data.data;
 
         // Set payment currency to invoice currency by default
@@ -612,7 +612,7 @@ export default {
     async sendInvoice() {
       this.updating = true;
       try {
-        await axios.put(`/invoices/${this.id}`, {
+        await axios.put(`/sales/invoices/${this.id}`, {
           invoice_number: this.invoice.invoice_number,
           invoice_date: this.invoice.invoice_date,
           due_date: this.invoice.due_date,
@@ -655,7 +655,7 @@ export default {
     async markAsPaid() {
       this.updating = true;
       try {
-        await axios.put(`/invoices/${this.id}`, {
+        await axios.put(`/sales/invoices/${this.id}`, {
           invoice_number: this.invoice.invoice_number,
           invoice_date: this.invoice.invoice_date,
           due_date: this.invoice.due_date,
@@ -690,7 +690,7 @@ export default {
     async cancelInvoice() {
       this.updating = true;
       try {
-        await axios.put(`/invoices/${this.id}`, {
+        await axios.put(`/sales/invoices/${this.id}`, {
           invoice_number: this.invoice.invoice_number,
           invoice_date: this.invoice.invoice_date,
           due_date: this.invoice.due_date,
@@ -800,7 +800,7 @@ export default {
       this.deleting = true;
 
       try {
-        await axios.delete(`/invoices/${this.id}`);
+        await axios.delete(`/sales/invoices/${this.id}`);
         this.$toast.success(`Invoice ${this.invoice.invoice_number} deleted successfully`);
         this.showDeleteModal = false;
         this.$router.push('/sales/invoices');
@@ -843,7 +843,7 @@ export default {
       this.recording = true;
 
       try {
-        await axios.post(`/invoices/${this.id}/recordPayment`, {
+        await axios.post(`/sales/invoices/${this.id}/recordPayment`, {
           amount: this.paymentData.amount,
           payment_date: this.paymentData.payment_date,
           payment_method: this.paymentData.payment_method,

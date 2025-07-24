@@ -233,7 +233,7 @@ export default {
     async loadPurchaseOrder(poId) {
       this.isLoading = true;
       try {
-        const response = await axios.get(`/purchase-orders/${poId}`);
+        const response = await axios.get(`/procurement/purchase-orders/${poId}`);
 
         if (response.data.status === 'success') {
           this.purchaseOrder = response.data.data;

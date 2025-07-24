@@ -236,7 +236,7 @@ export default {
     async fetchPRData() {
       this.loading = true
       try {
-        const response = await axios.get(`/purchase-requisitions/${this.id}/vendor-recommendations`)
+        const response = await axios.get(`/procurement/purchase-requisitions/${this.id}/vendor-recommendations`)
         if (response.data && response.data.data) {
           this.pr = response.data.data.pr || {}
           this.prItems = response.data.data.recommendations || []
@@ -437,7 +437,7 @@ export default {
           });
         });
 
-        await axios.post('/purchase-orders/create-split-from-pr', {
+        await axios.post('/procurement/purchase-orders/create-split-from-pr', {
           pr_id: parseInt(this.id),
           vendor_selections: vendorSelections
         });

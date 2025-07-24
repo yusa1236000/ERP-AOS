@@ -609,7 +609,7 @@
             }
           });
 
-          const response = await axios.get('/transactions', { params });
+          const response = await axios.get('/inventory/stock-transactions', { params });
 
           transactions.value = response.data.data.data;
           pagination.value = response.data.data;
@@ -628,7 +628,7 @@
 
       const fetchSummary = async () => {
         try {
-          const response = await axios.get('/transactions/summary');
+          const response = await axios.get('/inventory/stock-transactions/summary');
           summary.value = response.data.data;
         } catch (err) {
           console.error('Error fetching summary:', err);
@@ -638,7 +638,7 @@
       const fetchItems = async () => {
         itemsLoading.value = true;
         try {
-          const response = await axios.get('/items', {
+          const response = await axios.get('/inventory/items', {
             params: { per_page: 100, active: true }
           });
           items.value = response.data.data.data || response.data.data;
@@ -652,7 +652,7 @@
       const fetchWarehouses = async () => {
         warehousesLoading.value = true;
         try {
-          const response = await axios.get('/warehouses', {
+          const response = await axios.get('/inventory/warehouses', {
             params: { per_page: 100, active: true }
           });
           warehouses.value = response.data.data.data || response.data.data;
@@ -728,7 +728,7 @@
 
       const confirmSingleTransaction = async (transactionId) => {
         try {
-          await axios.post(`/stock-transactions/${transactionId}/confirm`);
+          await axios.post(`/inventory/stock-transactions/${transactionId}/confirm`);
           await fetchTransactions(currentPage.value);
           await fetchSummary();
           activeActionMenu.value = null;
@@ -744,7 +744,7 @@
         }
 
         try {
-          await axios.post(`/stock-transactions/${transactionId}/cancel`);
+          await axios.post(`/inventory/stock-transactions/${transactionId}/cancel`);
           await fetchTransactions(currentPage.value);
           await fetchSummary();
           activeActionMenu.value = null;
@@ -760,7 +760,7 @@
         }
 
         try {
-          await axios.post('/stock-transactions/bulk-confirm', {
+          await axios.post('/inventory/stock-transactions/bulk-confirm', {
             transaction_ids: selectedTransactions.value
           });
 
@@ -780,7 +780,7 @@
         }
 
         try {
-          await axios.post('/stock-transactions/bulk-cancel', {
+          await axios.post('/inventory/stock-transactions/bulk-cancel', {
             transaction_ids: selectedTransactions.value
           });
 

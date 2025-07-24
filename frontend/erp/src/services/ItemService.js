@@ -12,7 +12,7 @@ const ItemService = {
      */
     getItems: async (params = {}) => {
         try {
-            const response = await axios.get("/items", { params });
+            const response = await axios.get("/inventory/items", { params });
             return response.data;
         } catch (error) {
             console.error("Error fetching items:", error);
@@ -27,7 +27,7 @@ const ItemService = {
      */
     getItemById: async (id) => {
         try {
-            const response = await axios.get(`/items/${id}`);
+            const response = await axios.get(`/inventory/items/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching item ${id}:`, error);
@@ -51,7 +51,11 @@ const ItemService = {
                   }
                 : {};
 
-            const response = await axios.post("/items", itemData, config);
+            const response = await axios.post(
+                "/inventory/items",
+                itemData,
+                config
+            );
             return response.data;
         } catch (error) {
             console.error("Error creating item:", error);
@@ -81,7 +85,10 @@ const ItemService = {
                 );
                 return response.data;
             } else {
-                const response = await axios.put(`/items/${id}`, itemData);
+                const response = await axios.put(
+                    `/inventory/items/${id}`,
+                    itemData
+                );
                 return response.data;
             }
         } catch (error) {
@@ -97,7 +104,7 @@ const ItemService = {
      */
     deleteItem: async (id) => {
         try {
-            const response = await axios.delete(`/items/${id}`);
+            const response = await axios.delete(`/inventory/items/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting item ${id}:`, error);
@@ -111,7 +118,7 @@ const ItemService = {
      */
     getStockStatus: async () => {
         try {
-            const response = await axios.get("/items/stock-status");
+            const response = await axios.get("/inventory/items/stock-status");
             return response.data;
         } catch (error) {
             console.error("Error fetching stock status:", error);
@@ -125,7 +132,7 @@ const ItemService = {
      */
     getCategories: async () => {
         try {
-            const response = await axios.get("/item-categories");
+            const response = await axios.get("/inventory/item-categories");
             return response.data;
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -139,7 +146,7 @@ const ItemService = {
      */
     getUnitsOfMeasure: async () => {
         try {
-            const response = await axios.get("/unit-of-measures");
+            const response = await axios.get("/inventory/unit-of-measures");
             return response.data;
         } catch (error) {
             console.error("Error fetching units of measure:", error);
@@ -184,7 +191,7 @@ const ItemService = {
             if (date) params.date = date;
 
             const response = await axios.get(
-                `/items/${id}/prices-in-currencies`,
+                `/inventory/items/${id}/prices-in-currencies`,
                 {
                     params,
                 }
@@ -203,7 +210,9 @@ const ItemService = {
      */
     getPurchasableItems: async (params = {}) => {
         try {
-            const response = await axios.get("/items/purchasable", { params });
+            const response = await axios.get("/inventory/items/purchasable", {
+                params,
+            });
             return response.data;
         } catch (error) {
             console.error("Error fetching purchasable items:", error);
@@ -218,7 +227,9 @@ const ItemService = {
      */
     getSellableItems: async (params = {}) => {
         try {
-            const response = await axios.get("/items/sellable", { params });
+            const response = await axios.get("/inventory/items/sellable", {
+                params,
+            });
             return response.data;
         } catch (error) {
             console.error("Error fetching sellable items:", error);
@@ -233,9 +244,12 @@ const ItemService = {
      */
     downloadDocument: async (id) => {
         try {
-            const response = await axios.get(`/items/${id}/document`, {
-                responseType: "blob",
-            });
+            const response = await axios.get(
+                `/inventory/items/${id}/document`,
+                {
+                    responseType: "blob",
+                }
+            );
             return response;
         } catch (error) {
             console.error(`Error downloading document for item ${id}:`, error);
@@ -250,7 +264,9 @@ const ItemService = {
      */
     getStockLevelReport: async (params = {}) => {
         try {
-            const response = await axios.get("/items/stock-levels", { params });
+            const response = await axios.get("/inventory/items/stock-levels", {
+                params,
+            });
             return response.data;
         } catch (error) {
             console.error("Error fetching stock level report:", error);
@@ -267,7 +283,7 @@ const ItemService = {
     updateStock: async (id, data) => {
         try {
             const response = await axios.post(
-                `/items/${id}/update-stock`,
+                `/inventory/items/${id}/update-stock`,
                 data
             );
             return response.data;

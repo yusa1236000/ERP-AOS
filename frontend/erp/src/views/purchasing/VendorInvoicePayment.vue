@@ -451,7 +451,7 @@
       async loadInvoice() {
         try {
           const invoiceId = this.$route.params.id;
-          const response = await axios.get(`/vendor-invoices/${invoiceId}`);
+          const response = await axios.get(`/procurement/vendor-invoices/${invoiceId}`);
           
           if (response.data.status === 'success') {
             this.invoice = response.data.data.invoice;
@@ -503,7 +503,7 @@
         }
         
         try {
-          const response = await axios.get('/currency-rates/current-rate', {
+          const response = await axios.get('/procurement/currency-rates/current-rate', {
             params: {
               currency_code: this.paymentForm.payment_currency,
               date: this.paymentForm.payment_date
@@ -625,7 +625,7 @@
             paymentData.cash_account_id = this.paymentForm.cash_account_id;
           }
           
-          await axios.post(`/vendor-invoices/${this.invoice.invoice_id}/pay`, paymentData);
+          await axios.post(`/procurement/vendor-invoices/${this.invoice.invoice_id}/pay`, paymentData);
           
           this.showConfirmModal = false;
           

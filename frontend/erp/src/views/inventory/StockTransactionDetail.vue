@@ -521,7 +521,7 @@
         error.value = null;
 
         try {
-          const response = await axios.get(`/transactions/${transactionId.value}`);
+          const response = await axios.get(`/inventory/stock-transactions/${transactionId.value}`);
           transaction.value = response.data.data;
 
           // After fetching the transaction, fetch related transactions
@@ -544,7 +544,7 @@
             limit: 5 // Limit to 5 related transactions
           };
 
-          const response = await axios.get('/transactions', { params });
+          const response = await axios.get('/inventory/stock-transactions', { params });
 
           // Filter out the current transaction and sort by date (newest first)
           relatedTransactions.value = response.data.data.data
@@ -560,7 +560,7 @@
         isConfirming.value = true;
 
         try {
-          await axios.post(`/stock-transactions/${transactionId.value}/confirm`);
+          await axios.post(`/inventory/stock-transactions/${transactionId.value}/confirm`);
 
           // Refresh transaction data
           await fetchTransaction();
@@ -583,7 +583,7 @@
         isCancelling.value = true;
 
         try {
-          await axios.post(`/stock-transactions/${transactionId.value}/cancel`);
+          await axios.post(`/inventory/stock-transactions/${transactionId.value}/cancel`);
 
           // Refresh transaction data
           await fetchTransaction();
@@ -766,7 +766,7 @@
 
         try {
           // Create the reversal transaction
-          const response = await axios.post('/transactions', {
+          const response = await axios.post('/inventory/stock-transactions', {
             item_id: transaction.value.item_id,
             warehouse_id: transaction.value.warehouse_id,
             dest_warehouse_id: transaction.value.dest_warehouse_id,

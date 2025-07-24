@@ -295,7 +295,7 @@
           params.date_to = this.filters.dateTo;
         }
 
-        axios.get('/vendor-quotations', { params })
+        axios.get('/procurement/vendors', { params })
           .then(response => {
             if (response.data.status === 'success') {
               this.quotations = response.data.data.data;
@@ -354,7 +354,7 @@
       },
 
       changeStatus(id, newStatus) {
-        axios.patch(`/vendor-quotations/${id}/status`, { status: newStatus })
+        axios.patch(`/procurement/vendors/${id}/status`, { status: newStatus })
           .then(response => {
             if (response.data.status === 'success') {
               // Update the local data to reflect the change
@@ -383,7 +383,7 @@
       deleteQuotation() {
         if (!this.quotationToDelete) return;
 
-        axios.delete(`/vendor-quotations/${this.quotationToDelete}`)
+        axios.delete(`/procurement/vendors/${this.quotationToDelete}`)
           .then(response => {
             if (response.data.status === 'success') {
               // Remove from local data

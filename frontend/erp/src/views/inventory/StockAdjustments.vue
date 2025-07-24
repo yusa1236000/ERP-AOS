@@ -21,10 +21,10 @@
               <div class="form-group span-full">
                 <label for="itemSelect">Item <span class="required">*</span></label>
                 <div class="select-wrapper">
-                  <select 
-                    id="itemSelect" 
-                    v-model="form.itemId" 
-                    @change="onItemChange" 
+                  <select
+                    id="itemSelect"
+                    v-model="form.itemId"
+                    @change="onItemChange"
                     :disabled="loading"
                     required
                   >
@@ -39,10 +39,10 @@
               <div class="form-group">
                 <label for="warehouseSelect">Warehouse <span class="required">*</span></label>
                 <div class="select-wrapper">
-                  <select 
-                    id="warehouseSelect" 
-                    v-model="form.warehouseId" 
-                    @change="onWarehouseChange" 
+                  <select
+                    id="warehouseSelect"
+                    v-model="form.warehouseId"
+                    @change="onWarehouseChange"
                     :disabled="loading || !form.itemId"
                     required
                   >
@@ -64,9 +64,9 @@
               <div class="form-group">
                 <label for="adjustmentTypeSelect">Adjustment Type <span class="required">*</span></label>
                 <div class="select-wrapper">
-                  <select 
-                    id="adjustmentTypeSelect" 
-                    v-model="form.adjustmentType" 
+                  <select
+                    id="adjustmentTypeSelect"
+                    v-model="form.adjustmentType"
                     :disabled="loading"
                     required
                   >
@@ -79,15 +79,15 @@
 
               <div class="form-group">
                 <label for="quantityInput">
-                  {{ form.adjustmentType === 'absolute' ? 'New Quantity' : 'Adjustment Amount' }} 
+                  {{ form.adjustmentType === 'absolute' ? 'New Quantity' : 'Adjustment Amount' }}
                   <span class="required">*</span>
                 </label>
-                <input 
-                  type="number" 
-                  id="quantityInput" 
-                  v-model.number="form.quantity" 
-                  min="0" 
-                  step="0.01" 
+                <input
+                  type="number"
+                  id="quantityInput"
+                  v-model.number="form.quantity"
+                  min="0"
+                  step="0.01"
                   :disabled="loading || !form.warehouseId"
                   required
                 />
@@ -102,9 +102,9 @@
               <div class="form-group span-full">
                 <label for="reasonSelect">Reason <span class="required">*</span></label>
                 <div class="select-wrapper">
-                  <select 
-                    id="reasonSelect" 
-                    v-model="form.reason" 
+                  <select
+                    id="reasonSelect"
+                    v-model="form.reason"
                     :disabled="loading"
                     required
                   >
@@ -122,11 +122,11 @@
 
               <div v-if="form.reason === 'other'" class="form-group span-full">
                 <label for="otherReasonInput">Specify Reason <span class="required">*</span></label>
-                <input 
-                  type="text" 
-                  id="otherReasonInput" 
-                  v-model="form.otherReason" 
-                  placeholder="Specify other reason for adjustment" 
+                <input
+                  type="text"
+                  id="otherReasonInput"
+                  v-model="form.otherReason"
+                  placeholder="Specify other reason for adjustment"
                   :disabled="loading"
                   required
                 />
@@ -134,11 +134,11 @@
 
               <div class="form-group span-full">
                 <label for="referenceInput">Reference Number</label>
-                <input 
-                  type="text" 
-                  id="referenceInput" 
-                  v-model="form.referenceNumber" 
-                  placeholder="Optional reference number" 
+                <input
+                  type="text"
+                  id="referenceInput"
+                  v-model="form.referenceNumber"
+                  placeholder="Optional reference number"
                   :disabled="loading"
                   maxlength="50"
                 />
@@ -146,28 +146,28 @@
 
               <div class="form-group span-full">
                 <label for="notesInput">Notes</label>
-                <textarea 
-                  id="notesInput" 
-                  v-model="form.notes" 
-                  rows="3" 
-                  placeholder="Additional notes for this adjustment" 
+                <textarea
+                  id="notesInput"
+                  v-model="form.notes"
+                  rows="3"
+                  placeholder="Additional notes for this adjustment"
                   :disabled="loading"
                 ></textarea>
               </div>
             </div>
 
             <div class="form-actions">
-              <button 
-                type="button" 
-                class="btn btn-secondary" 
-                @click="resetForm" 
+              <button
+                type="button"
+                class="btn btn-secondary"
+                @click="resetForm"
                 :disabled="loading"
               >
                 Reset
               </button>
-              <button 
-                type="submit" 
-                class="btn btn-primary" 
+              <button
+                type="submit"
+                class="btn btn-primary"
                 :disabled="loading || !isFormValid"
               >
                 <i v-if="loading" class="fas fa-spinner fa-spin"></i>
@@ -192,20 +192,20 @@
                   <div class="stock-label">Current Stock:</div>
                   <div class="stock-value">{{ currentStock }} {{ selectedItem?.uom?.symbol || '' }}</div>
                 </div>
-                
+
                 <div class="adjustment-arrow" v-if="form.adjustmentType !== 'absolute'">
-                  <i 
+                  <i
                     :class="form.adjustmentType === 'increase' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"
                     :style="{color: form.adjustmentType === 'increase' ? 'var(--success-color)' : 'var(--danger-color)'}"
                   ></i>
-                  <div 
+                  <div
                     class="adjustment-value"
                     :style="{color: form.adjustmentType === 'increase' ? 'var(--success-color)' : 'var(--danger-color)'}"
                   >
                     {{ form.adjustmentType === 'increase' ? '+' : '-' }}{{ form.quantity }} {{ selectedItem?.uom?.symbol || '' }}
                   </div>
                 </div>
-                
+
                 <div class="stock-level result">
                   <div class="stock-label">{{ form.adjustmentType === 'absolute' ? 'New Stock:' : 'Result:' }}</div>
                   <div class="stock-value">{{ calculateResultStock() }} {{ selectedItem?.uom?.symbol || '' }}</div>
@@ -213,7 +213,7 @@
               </div>
             </div>
           </div>
-          
+
           <div class="adjustment-details">
             <div class="detail-item">
               <div class="detail-label">Type:</div>
@@ -337,15 +337,15 @@ export default {
       if (!this.form.itemId || !this.form.warehouseId || this.form.quantity < 0 || !this.form.reason) {
         return false;
       }
-      
+
       if (this.form.reason === 'other' && !this.form.otherReason) {
         return false;
       }
-      
+
       if (this.form.adjustmentType === 'decrease' && this.form.quantity > this.currentStock) {
         return false;
       }
-      
+
       return true;
     },
     warehouseName() {
@@ -360,16 +360,16 @@ export default {
   methods: {
     async fetchData() {
       this.loading = true;
-      
+
       try {
         // Fetch all items
-        const itemsResponse = await axios.get('/items');
+        const itemsResponse = await axios.get('/inventory/items');
         if (itemsResponse.data && itemsResponse.data.data) {
           this.items = itemsResponse.data.data;
         }
-        
+
         // Fetch all warehouses
-        const warehousesResponse = await axios.get('/warehouses');
+        const warehousesResponse = await axios.get('/inventory/warehouses');
         if (warehousesResponse.data && warehousesResponse.data.data) {
           this.warehouses = warehousesResponse.data.data;
         }
@@ -384,14 +384,14 @@ export default {
     initFromQuery() {
       // If item and/or warehouse passed in query parameters, initialize the form
       const { item, warehouse } = this.$route.query;
-      
+
       if (item) {
         this.form.itemId = parseInt(item, 10) || '';
         this.$nextTick(() => {
           this.onItemChange();
         });
       }
-      
+
       if (warehouse) {
         this.form.warehouseId = parseInt(warehouse, 10) || '';
         this.$nextTick(() => {
@@ -405,16 +405,16 @@ export default {
         this.currentStock = 0;
         return;
       }
-      
+
       this.loading = true;
-      
+
       try {
         // Get the selected item details
-        const itemResponse = await axios.get(`/items/${this.form.itemId}`);
+        const itemResponse = await axios.get(`/inventory/items/${this.form.itemId}`);
         if (itemResponse.data && itemResponse.data.data) {
           this.selectedItem = itemResponse.data.data;
         }
-        
+
         // If warehouse is already selected, get current stock
         if (this.form.warehouseId) {
           this.onWarehouseChange();
@@ -432,20 +432,20 @@ export default {
         this.currentStock = 0;
         return;
       }
-      
+
       this.loading = true;
-      
+
       try {
         // Get the item's stock in the selected warehouse
-        const stockResponse = await axios.get(`/item-stocks/item/${this.form.itemId}`);
+        const stockResponse = await axios.get(`/inventory/item-stocks/item/${this.form.itemId}`);
         if (stockResponse.data && stockResponse.data.data) {
           const itemStock = stockResponse.data.data;
-          
+
           // Find stock in the selected warehouse
           const warehouseStock = itemStock.warehouse_stocks.find(
             stock => stock.warehouse_id == this.form.warehouseId
           );
-          
+
           this.currentStock = warehouseStock ? warehouseStock.quantity : 0;
         }
       } catch (err) {
@@ -478,7 +478,7 @@ export default {
       if (this.form.reason === 'other' && this.form.otherReason) {
         return this.form.otherReason;
       }
-      
+
       switch(this.form.reason) {
         case 'inventory_count': return 'Inventory Count';
         case 'damaged': return 'Damaged/Expired Goods';
@@ -491,30 +491,30 @@ export default {
     },
     validateForm() {
       this.quantityError = '';
-      
+
       if (isNaN(this.form.quantity) || this.form.quantity < 0) {
         this.quantityError = 'Quantity must be greater than or equal to zero';
         return false;
       }
-      
+
       if (this.form.adjustmentType === 'decrease' && this.form.quantity > this.currentStock) {
         this.quantityError = `Quantity to decrease exceeds current stock (${this.currentStock})`;
         return false;
       }
-      
+
       if (this.form.reason === 'other' && !this.form.otherReason.trim()) {
         this.errorMessage = 'Please specify a reason for the adjustment';
         this.showErrorModal = true;
         return false;
       }
-      
+
       return true;
     },
     async submitAdjustment() {
       if (!this.validateForm()) return;
-      
+
       this.loading = true;
-      
+
       try {
         // Determine the actual new quantity based on the adjustment type
         let newQuantity = this.form.quantity;
@@ -523,11 +523,11 @@ export default {
         } else if (this.form.adjustmentType === 'decrease') {
           newQuantity = Math.max(0, this.currentStock - parseFloat(this.form.quantity));
         }
-        
+
         // Reason with proper formatting
         const reason = this.form.reason === 'other' ? this.form.otherReason : this.form.reason;
-        
-        const response = await axios.post('/item-stocks/adjust', {
+
+        const response = await axios.post('/inventory/item-stocks/adjust', {
           item_id: this.form.itemId,
           warehouse_id: this.form.warehouseId,
           new_quantity: newQuantity,
@@ -535,7 +535,7 @@ export default {
           reference_number: this.form.referenceNumber || undefined,
           notes: this.form.notes || undefined
         });
-        
+
         if (response.data && response.data.message) {
           // Show success modal
           this.showSuccessModal = true;
@@ -1049,7 +1049,7 @@ export default {
   .form-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .form-group.span-full {
     grid-column: span 1;
   }

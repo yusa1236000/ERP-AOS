@@ -277,6 +277,7 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import SalesReturnService from "@/services/SalesReturnService";
 import UnitOfMeasureService from "@/services/UnitOfMeasureService";
+import axios from 'axios';
 
 export default {
     name: "SalesReturnForm",
@@ -352,9 +353,10 @@ export default {
         const loadReferenceData = async () => {
             try {
                 // Load customers
-                const response = await fetch("/customers");
-                const data = await response.json();
-                customers.value = data.data;
+                const response = await axios.get("/sales/customers");
+                customers.value = response.data.data || response.data || [];
+                // const data = await response.json();
+                // customers.value = data.data;
 
                 // Load UOM
                 const uomResponse = await UnitOfMeasureService.getAll();
@@ -404,11 +406,11 @@ export default {
 
                 // Get invoice lines
                 const invoice = response.data;
-                if (invoice && invoice.salesInvoiceLines) {
-                    invoiceLines.value = invoice.salesInvoiceLines;
+                if (invoice && invoice.sales_invoice_lines) {
+                    invoiceLines.value = invoice.sales_invoice_lines;
 
                     // Initialize form lines
-                    form.value.lines = invoice.salesInvoiceLines.map(
+                    form.value.lines = invoice.sales_invoice_lines.map(
                         (line) => ({
                             invoice_line_id: line.line_id,
                             returned_quantity: 0,

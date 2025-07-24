@@ -304,7 +304,7 @@ export default {
       this.error = null;
       
       try {
-        const response = await axios.get(`/quality-inspections/${this.id}`);
+        const response = await axios.get(`/manufacturing/quality/inspections/${this.id}`);
         this.inspection = response.data;
         this.loading = false;
       } catch (err) {
@@ -451,7 +451,7 @@ export default {
         this.showReportModal = true;
         this.reportError = null;
         
-        const response = await axios.get(`/quality-inspections/${this.id}/report`, {
+        const response = await axios.get(`/manufacturing/quality/inspections/${this.id}/report`, {
           responseType: 'blob'
         });
         

@@ -12,7 +12,9 @@ const CategoryService = {
      */
     getCategories: async (params = {}) => {
         try {
-            const response = await axios.get("/item-categories", { params });
+            const response = await axios.get("/inventory/categories", {
+                params,
+            });
             return response.data;
         } catch (error) {
             console.error("axios Error getCategories:", error);
@@ -27,7 +29,7 @@ const CategoryService = {
      */
     getCategoryById: async (id) => {
         try {
-            const response = await axios.get(`/item-categories/${id}`);
+            const response = await axios.get(`/inventory/categories/${id}`);
             return response.data;
         } catch (error) {
             console.error(`axios Error getCategoryById(${id}):`, error);
@@ -42,7 +44,10 @@ const CategoryService = {
      */
     createCategory: async (categoryData) => {
         try {
-            const response = await axios.post("/item-categories", categoryData);
+            const response = await axios.post(
+                "/inventory/categories",
+                categoryData
+            );
             return response.data;
         } catch (error) {
             console.error("axios Error createCategory:", error);
@@ -76,7 +81,7 @@ const CategoryService = {
      */
     deleteCategory: async (id) => {
         try {
-            const response = await axios.delete(`/item-categories/${id}`);
+            const response = await axios.delete(`/inventory/categories/${id}`);
             return response.data;
         } catch (error) {
             console.error(`axios Error deleteCategory(${id}):`, error);
@@ -91,7 +96,7 @@ const CategoryService = {
     getCategoryHierarchy: async () => {
         try {
             // In a real implementation, you might have a specialized endpoint for this
-            const response = await axios.get("/item-categories");
+            const response = await axios.get("/inventory/categories");
             const categories = response.data.data || [];
 
             // Create a hierarchy from flat list

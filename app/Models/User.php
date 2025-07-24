@@ -52,7 +52,8 @@ class User extends Authenticatable
             'id'  // Local key on roles table
         )->join('role_permission', 'permissions.id', '=', 'role_permission.permission_id')
             ->join('user_role', 'roles.id', '=', 'user_role.role_id')
-            ->where('user_role.user_id', $this->id);
+            ->where('user_role.user_id', $this->id)
+            ->select('permissions.*'); // pastikan select dari permissions saja untuk menghindari ambiguitas
     }
 
     // Role checking methods
@@ -83,9 +84,9 @@ class User extends Authenticatable
     public function hasPermission($permissionName)
     {
         if (is_array($permissionName)) {
-            return $this->permissions()->whereIn('name', $permissionName)->exists();
+            return $this->permissions()->whereIn('permissions.name', $permissionName)->exists();
         }
-        return $this->permissions()->where('name', $permissionName)->exists();
+        return $this->permissions()->where('permissions.name', $permissionName)->exists();
     }
 
     public function hasAnyPermission($permissions)

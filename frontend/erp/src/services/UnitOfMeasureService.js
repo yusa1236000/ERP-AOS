@@ -11,7 +11,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with units of measure
      */
     getAll: async (params = {}) => {
-        const response = await axios.get("/unit-of-measures", { params });
+        const response = await axios.get("/inventory/uom", { params });
         return response.data;
     },
 
@@ -21,7 +21,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with unit of measure
      */
     getById: async (id) => {
-        const response = await axios.get(`/unit-of-measures/${id}`);
+        const response = await axios.get(`/inventory/uom/${id}`);
         return response.data;
     },
 
@@ -31,7 +31,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with created unit of measure
      */
     create: async (data) => {
-        const response = await axios.post("/unit-of-measures", data);
+        const response = await axios.post("/inventory/uom", data);
         return response.data;
     },
 
@@ -42,7 +42,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with updated unit of measure
      */
     update: async (id, data) => {
-        const response = await axios.put(`/unit-of-measures/${id}`, data);
+        const response = await axios.put(`/inventory/uom/${id}`, data);
         return response.data;
     },
 
@@ -52,7 +52,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with delete response
      */
     delete: async (id) => {
-        const response = await axios.delete(`/unit-of-measures/${id}`);
+        const response = await axios.delete(`/inventory/uom/${id}`);
         return response.data;
     },
 
@@ -63,7 +63,7 @@ const UnitOfMeasureService = {
      * @returns {Promise} Promise with usage data
      */
     getUsage: async (id) => {
-        const response = await axios.get(`/unit-of-measures/${id}/usage`);
+        const response = await axios.get(`/inventory/uom/${id}/usage`);
         return response.data;
     },
 };

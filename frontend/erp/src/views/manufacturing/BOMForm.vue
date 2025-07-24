@@ -619,11 +619,11 @@ export default {
     const fetchReferenceData = async () => {
       try {
         // Fetch items
-        const itemsResponse = await axios.get('/items');
+        const itemsResponse = await axios.get('/inventory/items');
         items.value = itemsResponse.data.data || itemsResponse.data;
 
         // Fetch UOMs
-        const uomsResponse = await axios.get('/unit-of-measures');
+        const uomsResponse = await axios.get('inventory/uom');
         uoms.value = uomsResponse.data.data || uomsResponse.data;
       } catch (error) {
         console.error('Error fetching reference data:', error);
@@ -637,7 +637,7 @@ export default {
       isLoading.value = true;
 
       try {
-        const response = await axios.get(`/boms/${bomId}`);
+        const response = await axios.get(`/manufacturing/boms/${bomId}`);
         const bomData = response.data.data;
 
         // Update form with BOM data
@@ -680,7 +680,7 @@ export default {
     // Fetch BOM lines separately
     const fetchBOMLines = async () => {
       try {
-        const response = await axios.get(`/boms/${bomId}/lines`);
+        const response = await axios.get(`/inventory/boms/${bomId}/lines`);
         form.bom_lines = response.data.data.map(line => ({
           line_id: line.line_id,
           item_id: line.item_id,
@@ -871,7 +871,7 @@ export default {
         bom_lines: form.bom_lines
       };
 
-      await axios.post('/boms', payload);
+      await axios.post('/manufacturing/boms', payload);
     };
 
     // Update an existing BOM
@@ -886,7 +886,7 @@ export default {
         status: form.status
       };
 
-      await axios.put(`/boms/${bomId}`, bomPayload);
+      await axios.put(`/manufacturing/boms/${bomId}`, bomPayload);
 
       const updatePromises = [];
 
@@ -903,9 +903,9 @@ export default {
         };
 
         if (line.line_id) {
-          updatePromises.push(axios.put(`/boms/${bomId}/lines/${line.line_id}`, linePayload));
+          updatePromises.push(axios.put(`/manufacturing/boms/${bomId}/lines/${line.line_id}`, linePayload));
         } else {
-          updatePromises.push(axios.post(`/boms/${bomId}/lines`, linePayload));
+          updatePromises.push(axios.post(`/manufacturing/boms/${bomId}/lines`, linePayload));
         }
       }
 

@@ -528,7 +528,7 @@ export default {
     const loadRouting = async () => {
       isLoading.value = true;
       try {
-        const response = await axios.get(`/routings/${routingId.value}`);
+        const response = await axios.get(`/manufacturing/routings/${routingId.value}`);
         routing.value = response.data.data;
       } catch (error) {
         console.error('Error loading routing:', error);
@@ -542,7 +542,7 @@ export default {
     const loadOperations = async () => {
       isLoadingOperations.value = true;
       try {
-        const response = await axios.get(`/routings/${routingId.value}/operations`);
+        const response = await axios.get(`/manufacturing/routings/${routingId.value}/operations`);
         console.log('Operations data:', response.data.data);
         // Map operations to add work_center_name property and format total_time
         operations.value = response.data.data.map(op => ({
@@ -560,7 +560,7 @@ export default {
     // Load work centers for dropdown
     const loadWorkCenters = async () => {
       try {
-        const response = await axios.get('/work-centers');
+        const response = await axios.get('/manufacturing/work-centers');
         workCenters.value = response.data.data;
       } catch (error) {
         console.error('Error loading work centers:', error);
@@ -570,7 +570,7 @@ export default {
     // Load units of measure for dropdown
     const loadUnitOfMeasures = async () => {
       try {
-        const response = await axios.get('/uoms');
+        const response = await axios.get('/inventory/uom');
         unitOfMeasures.value = response.data.data;
       } catch (error) {
         console.error('Error loading units of measure:', error);
@@ -628,13 +628,13 @@ export default {
         if (selectedOperation.value) {
           // Update existing operation
           await axios.put(
-            `/routings/${routingId.value}/operations/${selectedOperation.value.operation_id}`,
+            `/manufacturing/routings/${routingId.value}/operations/${selectedOperation.value.operation_id}`,
             operationForm
           );
         } else {
           // Create new operation
           await axios.post(
-            `/routings/${routingId.value}/operations`,
+            `/manufacturing/routings/${routingId.value}/operations`,
             operationForm
           );
         }
@@ -663,7 +663,7 @@ export default {
     // Delete routing
     const deleteRouting = async () => {
       try {
-        await axios.delete(`/routings/${routingId.value}`);
+        await axios.delete(`/manufacturing/routings/${routingId.value}`);
         router.push('/manufacturing/routings');
       } catch (error) {
         console.error('Error deleting routing:', error);
@@ -688,7 +688,7 @@ export default {
     const deleteOperation = async () => {
       try {
         await axios.delete(
-          `/routings/${routingId.value}/operations/${selectedOperation.value.operation_id}`
+          `/manufacturing/routings/${routingId.value}/operations/${selectedOperation.value.operation_id}`
         );
         await loadOperations(); // Reload operations
         showDeleteOperationModal.value = false;

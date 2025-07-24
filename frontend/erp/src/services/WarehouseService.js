@@ -12,7 +12,9 @@ const WarehouseService = {
      */
     getWarehouses: async (params = {}) => {
         try {
-            const response = await axios.get("/warehouses", { params });
+            const response = await axios.get("/inventory/warehouses", {
+                params,
+            });
             return response.data;
         } catch (error) {
             console.error("Error fetching warehouses:", error);
@@ -27,7 +29,7 @@ const WarehouseService = {
      */
     getWarehouseById: async (id) => {
         try {
-            const response = await axios.get(`/warehouses/${id}`);
+            const response = await axios.get(`/inventory/warehouses/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error fetching warehouse ${id}:`, error);
@@ -42,7 +44,10 @@ const WarehouseService = {
      */
     createWarehouse: async (warehouseData) => {
         try {
-            const response = await axios.post("/warehouses", warehouseData);
+            const response = await axios.post(
+                "/inventory/warehouses",
+                warehouseData
+            );
             return response.data;
         } catch (error) {
             console.error("Error creating warehouse:", error);
@@ -76,7 +81,7 @@ const WarehouseService = {
      */
     deleteWarehouse: async (id) => {
         try {
-            const response = await axios.delete(`/warehouses/${id}`);
+            const response = await axios.delete(`/inventory/warehouses/${id}`);
             return response.data;
         } catch (error) {
             console.error(`Error deleting warehouse ${id}:`, error);
@@ -92,7 +97,7 @@ const WarehouseService = {
     getWarehouseZones: async (warehouseId) => {
         try {
             const response = await axios.get(
-                `/warehouses/${warehouseId}/zones`
+                `/inventory/warehouses/${warehouseId}/zones`
             );
             return response.data;
         } catch (error) {
@@ -112,7 +117,7 @@ const WarehouseService = {
     getWarehouseItemCount: async (warehouseId) => {
         try {
             const response = await axios.get(
-                `/stock-transactions/warehouse/${warehouseId}`
+                `/inventory/stock-transactions/warehouse/${warehouseId}`
             );
             // Group by item_id to get unique items
             const uniqueItems = new Set(

@@ -542,7 +542,7 @@ async fetchCategories() {
 this.loadingCategories = true;
 
 try {
-const response = await axios.get('/quality-parameters/categories');
+const response = await axios.get('/manufacturing/quality/parameters/categories');
 this.categories = response.data.data;
 } catch (err) {
 console.error('Failed to load categories:', err);
@@ -556,7 +556,7 @@ this.loadingProducts = true;
 
 try {
 // Menggunakan endpoint items yang sesuai dengan controller Anda
-const response = await axios.get('/quality-parameters/items');
+const response = await axios.get('/manufacturing/quality/parameters/items');
 this.allProducts = response.data.data;
 this.filteredProducts = [...this.allProducts];
 } catch (err) {
@@ -571,7 +571,7 @@ this.loading = true;
 this.error = null;
 
 try {
-const response = await axios.get(`/quality-parameters/${this.id}`);
+const response = await axios.get(`/manufacturing/quality/parameters/${this.id}`);
 
 // Map API data to form structure
 const parameter = response.data;
@@ -787,9 +787,9 @@ this.error = null;
 
 try {
 if (this.isEditMode) {
-  await axios.put(`/quality-parameters/${this.id}`, this.form);
+  await axios.put(`/manufacturing/quality/parameters/${this.id}`, this.form);
 } else {
-  await axios.post('/quality-parameters', this.form);
+  await axios.post('/manufacturing/quality/parameters', this.form);
 }
 
 // Redirect to parameters list with success message

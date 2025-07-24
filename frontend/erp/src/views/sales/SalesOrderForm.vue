@@ -489,7 +489,7 @@ export default {
         const loadNextSalesOrderNumber = async () => {
             if (!isEditMode.value) {
                 try {
-                    const response = await axios.get('/orders/next-number');
+                    const response = await axios.get('/sales/orders/next-number');
                     nextSoNumber.value = response.data.next_so_number;
                 } catch (error) {
                     console.error('Error loading next sales order number:', error);
@@ -504,12 +504,12 @@ export default {
                 console.log('🔄 Loading reference data...');
 
                 // Load customers
-                const customersResponse = await axios.get("/customers");
+                const customersResponse = await axios.get("/sales/customers");
                 customers.value = customersResponse.data.data || [];
                 console.log('✅ Customers loaded:', customers.value.length);
 
                 // Load items
-                const itemsResponse = await axios.get("/items");
+                const itemsResponse = await axios.get("/inventory/items");
                 items.value = itemsResponse.data.data || [];
                 console.log('✅ Items loaded:', items.value.length);
 
@@ -521,7 +521,7 @@ export default {
                 }
 
                 // Load unit of measures
-                const uomResponse = await axios.get("/unit-of-measures");
+                const uomResponse = await axios.get("/inventory/uom");
                 unitOfMeasures.value = uomResponse.data.data || [];
                 console.log('✅ UOMs loaded:', unitOfMeasures.value.length);
 
@@ -556,7 +556,7 @@ export default {
             error.value = "";
 
             try {
-                const response = await axios.get(`/orders/${route.params.id}`);
+                const response = await axios.get(`/sales/orders/${route.params.id}`);
                 let order = response.data.data;
 
                 // Convert order keys to camelCase
@@ -733,7 +733,7 @@ export default {
             try {
                 if (form.value.customer_id) {
                     // Try to get best price from API
-                    const response = await axios.get(`/items/${item.item_id}/best-sale-price`, {
+                    const response = await axios.get(`/inventory/items/${item.item_id}/best-sale-price`, {
                         params: {
                             customer_id: form.value.customer_id,
                             quantity: safeParseFloat(line.quantity) || 1,
@@ -925,10 +925,10 @@ export default {
                 delete orderData.so_number;
 
                 if (isEditMode.value) {
-                    await axios.put(`/orders/${form.value.so_id}`, orderData);
+                    await axios.put(`/sales/orders/${form.value.so_id}`, orderData);
                     alert("Order successfully updated!");
                 } else {
-                    await axios.post("/orders", orderData);
+                    await axios.post("/sales/orders", orderData);
                     alert("Order successfully created!");
                 }
 

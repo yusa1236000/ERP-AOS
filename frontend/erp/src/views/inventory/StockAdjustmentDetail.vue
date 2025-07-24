@@ -349,7 +349,7 @@ export default {
       this.error = null;
       
       try {
-        const response = await axios.get(`/stock-adjustments/${this.adjustmentId}`);
+        const response = await axios.get(`/inventory/stock-adjustments/${this.adjustmentId}`);
         this.adjustment = response.data.data;
       } catch (err) {
         console.error('Error fetching adjustment:', err);
@@ -371,7 +371,7 @@ export default {
       this.isProcessing = true;
       
       try {
-        await axios.post(`/stock-adjustments/${this.adjustmentId}/submit`);
+        await axios.post(`/inventory/stock-adjustments/${this.adjustmentId}/submit`);
         this.adjustment.status = 'pending';
         this.$toast.success('Adjustment submitted for approval');
       } catch (err) {
@@ -390,7 +390,7 @@ export default {
       this.isProcessing = true;
       
       try {
-        await axios.post(`/stock-adjustments/${this.adjustmentId}/process`);
+        await axios.post(`/inventory/stock-adjustments/${this.adjustmentId}/process`);
         this.adjustment.status = 'completed';
         this.$toast.success('Adjustment processed successfully');
       } catch (err) {
@@ -405,7 +405,7 @@ export default {
       this.isProcessing = true;
       
       try {
-        await axios.delete(`/stock-adjustments/${this.adjustmentId}`);
+        await axios.delete(`/inventory/stock-adjustments/${this.adjustmentId}`);
         this.$toast.success('Stock adjustment deleted successfully');
         this.$router.push('/stock-adjustments');
       } catch (err) {

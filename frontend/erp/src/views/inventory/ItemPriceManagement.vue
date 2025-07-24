@@ -987,7 +987,7 @@ export default {
     // Data Loading Functions
     async loadItems() {
       try {
-        const response = await axios.get('items');
+        const response = await axios.get('/inventory/items');
         this.items = response.data.data || [];
       } catch (error) {
         console.error('Failed to load items:', error);
@@ -998,7 +998,7 @@ export default {
 
     async loadVendors() {
       try {
-        const response = await axios.get('/vendors');
+        const response = await axios.get('/procurement/vendors');
         const vendorsData = response.data.data.data;
         this.vendors = Array.isArray(vendorsData) ? vendorsData.filter(v => v) : [];
       } catch (error) {
@@ -1009,7 +1009,7 @@ export default {
 
     async loadCustomers() {
       try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         const customersData = response.data.data;
         this.customers = Array.isArray(customersData) ? customersData.filter(c => c) : [];
       } catch (error) {
@@ -1254,7 +1254,7 @@ export default {
 
       try {
         this.isLoading = true;
-        const response = await axios.get(`items/${this.selectedItemId}/prices`);
+        const response = await axios.get(`/inventory/items/${this.selectedItemId}/prices`);
         this.prices = response.data.data || [];
         this.applyFilters();
       } catch (error) {
@@ -1317,13 +1317,13 @@ export default {
         this.comparisonLoading = true;
 
         const [purchaseResponse, saleResponse, currenciesResponse] = await Promise.all([
-          axios.get(`items/${this.comparisonItemId}/best-purchase-price`, {
+          axios.get(`/inventory/items/${this.comparisonItemId}/best-purchase-price`, {
             params: { quantity: this.comparisonQuantity, currency_code: this.comparisonCurrency }
           }),
-          axios.get(`items/${this.comparisonItemId}/best-sale-price`, {
+          axios.get(`/inventory/items/${this.comparisonItemId}/best-sale-price`, {
             params: { quantity: this.comparisonQuantity, currency_code: this.comparisonCurrency }
           }),
-          axios.get(`items/${this.comparisonItemId}/prices-in-currencies`, {
+          axios.get(`/inventory/items/${this.comparisonItemId}/prices-in-currencies`, {
             params: { currencies: this.currencies }
           })
         ]);
@@ -1459,8 +1459,8 @@ export default {
         this.saveLoading = true;
 
         const url = this.isEditing
-          ? `items/${this.selectedItemId}/prices/${this.selectedPriceId}`
-          : `items/${this.selectedItemId}/prices`;
+          ? `/inventory/items/${this.selectedItemId}/prices/${this.selectedPriceId}`
+          : `/inventory/items/${this.selectedItemId}/prices`;
 
         const method = this.isEditing ? 'put' : 'post';
 
@@ -1495,7 +1495,7 @@ export default {
       try {
         this.deleteLoading = true;
 
-        await axios.delete(`items/${this.selectedItemId}/prices/${this.priceToDelete.price_id}`);
+        await axios.delete(`/inventory/items/${this.selectedItemId}/prices/${this.priceToDelete.price_id}`);
 
         this.showDeleteModal = false;
         this.priceToDelete = null;

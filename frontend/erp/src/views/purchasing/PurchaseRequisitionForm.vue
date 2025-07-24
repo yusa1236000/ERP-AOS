@@ -502,14 +502,14 @@ export default {
           this.users = [];
         }
 
-        const itemsResponse = await axios.get('/items/purchasable');
+        const itemsResponse = await axios.get('/inventory/items/purchasable');
         this.items = itemsResponse.data.data || [];
 
         if (this.items.length > 0) {
           console.log('Item structure example:', this.items[0]);
         }
 
-        const uomsResponse = await axios.get('/uoms');
+        const uomsResponse = await axios.get('/inventory/uom');
         this.uoms = uomsResponse.data.data || [];
       } catch (error) {
         console.error('Error fetching dropdown data:', error);
@@ -528,7 +528,7 @@ export default {
 
     async fetchPRData() {
       try {
-        const response = await axios.get(`/purchase-requisitions/${this.id}`);
+        const response = await axios.get(`/procurement/purchase-requisitions/${this.id}`);
         const prData = response.data.data;
 
         this.form = {
@@ -593,10 +593,10 @@ export default {
         const formData = this.prepareFormData();
 
         if (this.isEditMode) {
-          response = await axios.put(`/purchase-requisitions/${this.id}`, formData);
+          response = await axios.put(`/procurement/purchase-requisitions/${this.id}`, formData);
           this.showAlert('success', 'Purchase Requisition updated successfully.');
         } else {
-          response = await axios.post('/purchase-requisitions', formData);
+          response = await axios.post('/procurement/purchase-requisitions', formData);
           this.showAlert('success', 'Purchase Requisition created successfully.');
 
           setTimeout(() => {
@@ -626,7 +626,7 @@ export default {
       try {
         await this.saveForm();
 
-        const response = await axios.patch(`/purchase-requisitions/${this.id}/status`, {
+        const response = await axios.patch(`/procurement/purchase-requisitions/${this.id}/status`, {
           status: 'pending'
         });
 

@@ -387,7 +387,7 @@ export default {
     fetchQuotation() {
       this.loading = true;
       
-      axios.get(`/vendor-quotations/${this.quotationId}`)
+      axios.get(`/procurement/vendor-quotations/${this.quotationId}`)
         .then(response => {
           if (response.data.status === 'success') {
             this.quotation = response.data.data;
@@ -408,7 +408,7 @@ export default {
     changeStatus(newStatus) {
       this.processingAction = true;
       
-      axios.patch(`/vendor-quotations/${this.quotationId}/status`, { status: newStatus })
+      axios.patch(`/procurement/vendor-quotations/${this.quotationId}/status`, { status: newStatus })
         .then(response => {
           if (response.data.status === 'success') {
             this.quotation.status = newStatus;
@@ -432,7 +432,7 @@ export default {
       
       this.converting = true;
       
-      axios.post(`/vendor-quotations/${this.quotationId}/convert-currency`, {
+      axios.post(`/procurement/vendor-quotations/${this.quotationId}/convert-currency`, {
         currency_code: this.conversionCurrency,
         use_quotation_date: this.useQuotationDate
       })

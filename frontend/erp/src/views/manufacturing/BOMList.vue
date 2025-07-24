@@ -150,7 +150,7 @@ export default {
       isLoading.value = true;
       
       try {
-            const response = await axios.get('/boms', {
+            const response = await axios.get('/manufacturing/boms', {
               params: {
                 page: currentPage.value,
                 per_page: perPage.value,
@@ -235,7 +235,7 @@ export default {
       if (!bomToDelete.value) return;
       
       try {
-        await axios.delete(`/boms/${bomToDelete.value.bom_id}`);
+        await axios.delete(`/manufacturing/boms/${bomToDelete.value.bom_id}`);
         loadBOMs();
       } catch (error) {
         console.error('Error deleting BOM:', error);

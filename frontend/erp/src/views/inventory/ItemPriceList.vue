@@ -341,7 +341,7 @@ export default {
     async loadItems() {
       try {
         this.isLoading = true;
-        const response = await axios.get('/items');
+        const response = await axios.get('/inventory/items');
         this.items = response.data.data;
       } catch (error) {
         console.error('Failed to load items:', error);
@@ -352,7 +352,7 @@ export default {
     },
     async loadVendors() {
       try {
-        const response = await axios.get('/vendors');
+        const response = await axios.get('/procurement/vendors');
         this.vendors = response.data.data || [];
       } catch (error) {
         console.error('Failed to load vendors:', error);
@@ -360,7 +360,7 @@ export default {
     },
     async loadCustomers() {
       try {
-        const response = await axios.get('/customers');
+        const response = await axios.get('/sales/customers');
         this.customers = response.data.data || [];
       } catch (error) {
         console.error('Failed to load customers:', error);
@@ -380,7 +380,7 @@ export default {
         if (this.activeFilter !== '') params.is_active = this.activeFilter;
         if (this.currentOnlyFilter) params.current_only = 1;
 
-        const response = await axios.get(`/items/${this.selectedItemId}/prices`, { params });
+        const response = await axios.get(`/inventory/items/${this.selectedItemId}/prices`, { params });
         this.prices = response.data.data;
         this.filterPrices();
       } catch (error) {
@@ -478,7 +478,7 @@ export default {
     },
     async deletePrice() {
       try {
-        await axios.delete(`/items/${this.selectedItemId}/prices/${this.deleteItem.price_id}`);
+        await axios.delete(`/inventory/items/${this.selectedItemId}/prices/${this.deleteItem.price_id}`);
         this.$toast.success('Harga berhasil dihapus');
         this.showDeleteModal = false;
         this.deleteItem = null;

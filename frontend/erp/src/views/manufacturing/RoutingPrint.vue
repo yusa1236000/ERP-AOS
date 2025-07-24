@@ -268,11 +268,11 @@ export default {
       isLoading.value = true;
       try {
         // Load routing basic info
-        const routingResponse = await axios.get(`/routings/${routingId.value}`);
+        const routingResponse = await axios.get(`/manufacturing/routings/${routingId.value}`);
         routing.value = routingResponse.data.data;
 
         // Load operations
-        const operationsResponse = await axios.get(`/routings/${routingId.value}/operations`);
+        const operationsResponse = await axios.get(`/manufacturing/routings/${routingId.value}/operations`);
         operations.value = operationsResponse.data.data || [];
 
         currentUser.value = getCurrentUser();

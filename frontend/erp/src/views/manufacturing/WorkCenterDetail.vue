@@ -238,7 +238,7 @@
       const loadWorkCenter = async () => {
         isLoading.value = true;
         try {
-          const response = await axios.get(`/work-centers/${workCenterId}`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId}`);
           const data = response.data.data;
           
           // Update the reactive object properties
@@ -263,7 +263,7 @@
       const loadMaintenanceSchedules = async () => {
         isLoadingSchedules.value = true;
         try {
-          const response = await axios.get(`/work-centers/${workCenterId}/maintenance-schedules`);
+          const response = await axios.get(`/manufacturing/work-centers/${workCenterId}/maintenance-schedules`);
           maintenanceSchedules.value = response.data.data;
         } catch (error) {
           console.error('Error loading maintenance schedules:', error);
@@ -276,7 +276,7 @@
         isLoadingOperations.value = true;
         try {
           // This endpoint might need to be adjusted based on your actual API structure
-          const response = await axios.get(`/routings/operations?workcenter_id=${workCenterId}`);
+          const response = await axios.get(`/manufacturing/routings/operations?workcenter_id=${workCenterId}`);
           routingOperations.value = response.data.data;
         } catch (error) {
           console.error('Error loading routing operations:', error);
@@ -291,7 +291,7 @@
       
       const deleteWorkCenter = async () => {
         try {
-          await axios.delete(`/work-centers/${workCenterId}`);
+          await axios.delete(`manufacturing/work-centers/${workCenterId}`);
           showDeleteModal.value = false;
           router.push('/manufacturing/work-centers');
         } catch (error) {
