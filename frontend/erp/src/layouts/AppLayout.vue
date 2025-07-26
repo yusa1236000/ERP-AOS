@@ -498,6 +498,10 @@
                                     <i class="fas fa-cogs"></i>
                                     <span>System Settings</span>
                                 </router-link>
+                                <!-- <router-link to="/admin/settings" class="submenu-link">
+                                    <i class="fas fa-cogs"></i>
+                                    <span>System Settings</span>
+                                </router-link> -->
                             </div>
                         </div>
                     </div>

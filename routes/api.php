@@ -76,6 +76,7 @@ use App\Http\Controllers\Api\Accounting\BudgetController;
 use App\Http\Controllers\Api\Accounting\BankAccountController;
 use App\Http\Controllers\Api\Accounting\BankReconciliationController;
 use App\Http\Controllers\Api\Accounting\FinancialReportController;
+use App\Http\Controllers\Api\Admin\CurrencySettingController;
 
 // Special Controllers
 use App\Http\Controllers\Api\PDFOrderCaptureController;
@@ -1207,6 +1208,14 @@ Route::middleware('auth:sanctum')->group(function () {
                 'message' => 'User activity retrieved successfully'
             ]);
         });
+    });
+
+    Route::prefix('admin/currency')->middleware(['auth:sanctum'])->group(function () {
+        Route::get('/settings', [CurrencySettingController::class, 'getCurrencySettings']);
+        Route::post('/base-currency', [CurrencySettingController::class, 'updateBaseCurrency']);
+        Route::post('/preview', [CurrencySettingController::class, 'getCurrencyPreview']);
+        Route::get('/all-settings', [CurrencySettingController::class, 'getAllCurrencySettings']);
+        Route::put('/settings', [CurrencySettingController::class, 'updateCurrencySettings']);
     });
 });
 

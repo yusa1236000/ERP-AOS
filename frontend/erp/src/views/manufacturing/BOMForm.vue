@@ -111,18 +111,18 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="uom_id">Unit of Measure <span class="required">*</span></label>
-                      <select
-                        id="uom_id"
-                        v-model="form.uom_id"
-                        class="form-control"
-                        :class="{ 'is-invalid': errors.uom_id }"
-                        required
-                      >
-                        <option value="">Select UOM</option>
-                        <option v-if="selectedItemUOM" :value="selectedItemUOM.uom_id">
-                          {{ selectedItemUOM.name }} ({{ selectedItemUOM.symbol }})
-                        </option>
-                      </select>
+<select
+  id="uom_id"
+  v-model="form.uom_id"
+  class="form-control"
+  :class="{ 'is-invalid': errors.uom_id }"
+  required
+>
+  <option value="">Select UOM</option>
+  <option v-for="uom in uoms" :key="uom.uom_id" :value="uom.uom_id">
+    {{ uom.name }} ({{ uom.symbol }})
+  </option>
+</select>
                       <div v-if="errors.uom_id" class="invalid-feedback">{{ errors.uom_id }}</div>
                     </div>
                   </div>
@@ -558,20 +558,20 @@ export default {
     // Computed property untuk mendapatkan UOM dari main item yang dipilih
     const selectedItemUOM = computed(() => {
       const selectedItem = items.value.find(item => item.item_id === form.item_id);
-      return selectedItem ? selectedItem.unit_of_measure : null;
+      return selectedItem ? selectedItem.unitOfMeasure : null;
     });
 
     // Computed property untuk mendapatkan UOM dari component item yang dipilih
     const selectedComponentItemUOM = computed(() => {
       const selectedItem = items.value.find(item => item.item_id === componentForm.item_id);
-      return selectedItem ? selectedItem.unit_of_measure : null;
+      return selectedItem ? selectedItem.unitOfMeasure : null;
     });
 
     // Watch perubahan main item_id untuk auto-set UOM
     watch(() => form.item_id, (newItemId) => {
       const selectedItem = items.value.find(item => item.item_id === newItemId);
-      if (selectedItem && selectedItem.unit_of_measure) {
-        form.uom_id = selectedItem.unit_of_measure.uom_id;
+      if (selectedItem && selectedItem.unitOfMeasure) {
+        form.uom_id = selectedItem.unitOfMeasure.uom_id;
       } else {
         form.uom_id = '';
       }
@@ -580,8 +580,8 @@ export default {
     // Watch perubahan component item_id untuk auto-set UOM
     watch(() => componentForm.item_id, (newItemId) => {
       const selectedItem = items.value.find(item => item.item_id === newItemId);
-      if (selectedItem && selectedItem.unit_of_measure) {
-        componentForm.uom_id = selectedItem.unit_of_measure.uom_id;
+      if (selectedItem && selectedItem.unitOfMeasure) {
+        componentForm.uom_id = selectedItem.unitOfMeasure.uom_id;
       } else {
         componentForm.uom_id = '';
       }

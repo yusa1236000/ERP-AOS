@@ -1615,6 +1615,17 @@ const routes = [
                         name: "UserList",
                         component: () => import("../views/admin/UsersList.vue"),
                     },
+                    // {
+                    //     path: "/admin/settings/currency",
+                    //     name: "CurrencySettings",
+                    //     component: () =>
+                    //         import("@/components/admin/CurrencySettings.vue"),
+                    //     meta: {
+                    //         requiresAuth: true,
+                    //         roles: ["admin"],
+                    //         title: "Currency Settings",
+                    //     },
+                    // },
                     // Add other admin routes as needed
                 ],
             },
